@@ -1,0 +1,28 @@
+{
+  "name": "polymer-starter-kit-custom-build",
+  "version": "0.0.0",
+  "description": "A starting point for Polymer 1.0 custom build apps",
+  "license": "BSD-3-Clause",
+  "scripts": {
+    "lint": "eslint . --ext js,html --ignore-path .gitignore",
+    "test": "npm run lint && polymer test",
+    "build": "gulp build"
+  },
+  "devDependencies": {
+    "del": "^2.2.0",
+    "eslint": "^3.12.0",
+    "eslint-config-google": "^0.7.0",
+    "eslint-plugin-html": "^1.7.0",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^2.1.1",
+    "gulp": "gulpjs/gulp#4.0",
+    "gulp-if": "^2.0.0",
+    "gulp-imagemin": "^3.1.0",
+    "merge-stream": "^1.0.0",
+    "polymer-build": "^0.6.0"
+  },
+  "engines": {
+    "node": ">=4.0"
+  },
+  "private": true
+}

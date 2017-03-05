@@ -1,0 +1,19 @@
+{
+  "extends": "standard",
+  "env": {
+    "browser": true
+  },
+  "plugins": [
+    "html",
+    "standard",
+    "promise"
+  ],
+  "rules": {
+    "no-var": "off",
+    "new-cap": ["error", { "capIsNewExceptions": ["Polymer"] }],
+    "semi": [2, "always"]
+  },
+  "globals": {
+    "Polymer": true
+  }
+}
