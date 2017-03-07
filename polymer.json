@@ -1,11 +1,14 @@
 {
   "entrypoint": "index.html",
-  "shell": "src/my-app.html",
+  "shell": "src/gc-shell/gc-shell.html",
   "fragments": [
-    "src/my-view1.html",
-    "src/my-view2.html",
-    "src/my-view3.html",
-    "src/my-view404.html"
+    "src/gc-landing-page/gc-landing-page.html",
+    "src/gc-app/gc-app-loader-shell.html",
+    "src/gc-app/gc-app.html",
+    "src/gc-donate-app/gc-donate-app-loader-shell.html",
+    "src/gc-donate-app/gc-donate-app.html",
+    "src/gc-repo/gc-repo-shell.html",
+    "src/gc-user/gc-user-shell.html"
   ],
   "sourceGlobs": [
     "src/**/*",

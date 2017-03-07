@@ -1,0 +1,20 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../gc-dashboard/gc-repos.html">
+<dom-module id="gc-dashboard-shell">
+  <template>
+    <style></style>
+    Dashboard
+    <gc-repos></gc-repos>
+  </template>
+  <script>
+  (() => {
+    'use strict';
+    class GcDashboardShell {
+      get is() {
+        return 'gc-dashboard-shell';
+      }
+    }
+    new Polymer(GcDashboardShell);
+  })();
+  </script>
+</dom-module>

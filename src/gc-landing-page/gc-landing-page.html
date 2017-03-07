@@ -1,0 +1,19 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<dom-module id="gc-landing-page">
+  <template>
+    <style></style>
+    <a href="/app">app</a>
+    <a href="/donate">donate</a>
+  </template>
+  <script>
+  (() => {
+    'use strict';
+    class GcLandingPage {
+      get is() {
+        return 'gc-landing-page';
+      }
+    }
+    new Polymer(GcLandingPage);
+  })();
+  </script>
+</dom-module>

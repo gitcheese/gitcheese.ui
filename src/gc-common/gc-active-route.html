@@ -1,0 +1,46 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<dom-module id="gc-active-route">
+  <template>
+    <content select="app-route"></content>
+  </template>
+</dom-module>
+<script>
+(() => {
+  class GcActiveRoute {
+    get is() {
+      return 'gc-active-route';
+    }
+    get properties() {
+      return {
+        pattern: {
+          type: String,
+          readOnly: true,
+          notify: true
+        },
+        fallbackPattern: {
+          type: String
+        },
+        routes: {
+          type: Array
+        }
+      };
+    }
+    attached() {
+      this.routes = this.getEffectiveChildren();
+      this.routes.forEach((route) => {
+        route.addEventListener('active-changed',
+          () => this._handleActiveChanged(route));
+        if (route.active) this._setPattern(route.pattern);
+      });
+    }
+    _handleActiveChanged(route) {
+      let activeRoute = this.routes.find((r) => r.active);
+      if (activeRoute) {
+        this._setPattern(activeRoute.pattern);
+      } else
+        this._setPattern(this.fallbackPattern);
+    }
+  }
+  new Polymer(GcActiveRoute);
+})();
+</script>
