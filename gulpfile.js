@@ -7,21 +7,23 @@
  * Code distributed by Google as part of the polymer project is also
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
-
 'use strict';
-
 const del = require('del');
 const gulp = require('gulp');
 const gulpif = require('gulp-if');
+const uglify = require('gulp-uglify');
+const babel = require('gulp-babel');
 const imagemin = require('gulp-imagemin');
+const htmlmin = require('gulp-html-minifier');
+const cssSlam = require('css-slam').gulp;
 const mergeStream = require('merge-stream');
 const polymerBuild = require('polymer-build');
-
 const swPrecacheConfig = require('./sw-precache-config.js');
 const polymerJson = require('./polymer.json');
-const polymerProject = new polymerBuild.PolymerProject(polymerJson);
+const project = new polymerBuild.PolymerProject(polymerJson);
+const sourcesHtmlSplitter = new polymerBuild.HtmlSplitter();
+const dependenciesHtmlSplitter = new polymerBuild.HtmlSplitter();
 const buildDirectory = 'build';
-
 /**
  * Waits for the given ReadableStream
  */
@@ -33,63 +35,44 @@ function waitFor(stream) {
 }
 
 function build() {
-  return new Promise((resolve, reject) => { // eslint-disable-line no-unused-vars
-    // Okay, so first thing we do is clear the build directory
+  return new Promise((resolve, reject) => {
     console.log(`Deleting ${buildDirectory} directory...`);
     del([buildDirectory])
       .then(() => {
-        // Okay, now let's get your source files
-        let sourcesStream = polymerProject.sources()
-          // Oh, well do you want to minify stuff? Go for it!
-          // Here's how splitHtml & gulpif work
-          .pipe(polymerProject.splitHtml())
-          // .pipe(gulpif(/\.js$/, uglify()))
-          // .pipe(gulpif(/\.css$/, cssSlam()))
-          // .pipe(gulpif(/\.html$/, htmlMinifier()))
+        let sourcesStream = project.sources()
+          .pipe(sourcesHtmlSplitter.split())
+          .pipe(gulpif(/\.js$/, babel({
+            presets: ['es2015']
+          })))
+          .pipe(gulpif(/\.js$/, uglify()))
+          .pipe(gulpif(/\.html$/, cssSlam()))
+          .pipe(gulpif(/\.html$/, htmlmin({ removeComments: true })))
           .pipe(gulpif(/\.(png|gif|jpg|svg)$/, imagemin()))
-          .pipe(polymerProject.rejoinHtml());
-
-        // Okay, now let's do the same to your dependencies
-        let dependenciesStream = polymerProject.dependencies()
-          .pipe(polymerProject.splitHtml())
-          // .pipe(gulpif(/\.js$/, uglify()))
-          // .pipe(gulpif(/\.css$/, cssSlam()))
-          // .pipe(gulpif(/\.html$/, htmlMinifier()))
-          .pipe(polymerProject.rejoinHtml());
-
-        // Okay, now let's merge them into a single build stream
-        let buildStream = mergeStream(sourcesStream, dependenciesStream)
-          .once('data', () => {
-            console.log('Analyzing build dependencies...');
-          });
-
-        // If you want bundling, pass the stream to polymerProject.bundler.
-        // This will bundle dependencies into your fragments so you can lazy
-        // load them.
-        buildStream = buildStream.pipe(polymerProject.bundler);
-
-        // Okay, time to pipe to the build directory
-        buildStream = buildStream.pipe(gulp.dest(buildDirectory));
-
-        // waitFor the buildStream to complete
-        return waitFor(buildStream);
+          .pipe(sourcesHtmlSplitter.rejoin());
+        let dependenciesStream = project.dependencies()
+          .pipe(dependenciesHtmlSplitter.split())
+          .pipe(gulpif(/\.js$/, uglify()))
+          .pipe(gulpif(/\.html$/, cssSlam()))
+          .pipe(gulpif(/\.html$/, htmlmin({ removeComments: true })))
+          .pipe(dependenciesHtmlSplitter.rejoin());
+        let bundled = mergeStream(sourcesStream, dependenciesStream)
+          .pipe(project.bundler)
+          .pipe(gulp.dest('build/'));
+        return waitFor(bundled);
       })
       .then(() => {
-        // Okay, now let's generate the Service Worker
         console.log('Generating the Service Worker...');
         return polymerBuild.addServiceWorker({
-          project: polymerProject,
+          project: project,
           buildRoot: buildDirectory,
           bundled: true,
           swPrecacheConfig: swPrecacheConfig
         });
       })
       .then(() => {
-        // You did it!
         console.log('Build complete!');
         resolve();
       });
   });
 }
-
 gulp.task('build', build);

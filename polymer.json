@@ -3,19 +3,17 @@
   "shell": "src/gc-shell/gc-shell.html",
   "fragments": [
     "src/gc-landing-page/gc-landing-page.html",
-    "src/gc-app/gc-app-loader-shell.html",
     "src/gc-app/gc-app.html",
-    "src/gc-donate-app/gc-donate-app-loader-shell.html",
     "src/gc-donate-app/gc-donate-app.html",
     "src/gc-repo/gc-repo-shell.html",
     "src/gc-user/gc-user-shell.html"
   ],
-  "sourceGlobs": [
+  "sources": [
     "src/**/*",
     "images/**/*",
     "bower.json"
   ],
-  "includeDependencies": [
+  "extraDependencies": [
     "manifest.json",
     "bower_components/webcomponentsjs/webcomponents-lite.min.js"
   ]
