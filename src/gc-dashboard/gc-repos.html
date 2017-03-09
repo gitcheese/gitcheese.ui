@@ -1,8 +1,24 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../gc-common/gc-app-context-behavior.html">
+<link rel="import" href="../gc-styles/gc-shared-styles.html">
+<link rel="import" href="../gc-common/gc-api-ajax.html">
 <dom-module id="gc-repos">
   <template>
-    <style></style>
-    repos list
+    <style include="shared-styles"></style>
+    <gc-api-ajax id="get" url="/user/repos" auth-user="[[authUser]]" last-response="{{repos}}"></gc-api-ajax>
+    <paper-material elevation="1">
+      <p>Your Repositories</p>
+      <paper-listbox>
+        <template is="dom-repeat" items="[[repos]]">
+          <a href="/app/repos/[[item.id]]">
+            <paper-item>[[item.fullname]]</paper-item>
+          </a>
+        </template>
+      </paper-listbox>
+    </paper-material>
   </template>
   <script>
   (() => {
@@ -10,6 +26,14 @@
     class GcRepos {
       get is() {
         return 'gc-repos';
+      }
+      get behaviors() {
+        return [
+          GitcheeseBehaviors.AppContextBehavior
+        ];
+      }
+      loadData() {
+        this.$.get.generateRequest();
       }
     }
     new Polymer(GcRepos);

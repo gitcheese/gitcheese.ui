@@ -1,0 +1,108 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
+<link rel="import" href="../gc-styles/gc-shared-styles.html">
+<link rel="import" href="../gc-common/gc-app-context-behavior.html">
+<dom-module id="gc-login">
+  <template>
+    <style include="shared-styles"></style>
+    <style>
+    :host {
+      display: block;
+      text-align: center;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--primary-background-color);
+      transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 999999999;
+      @apply(--layout-vertical);
+      color: var(--primary-text-color);
+      --iron-icon-fill-color: var(--primary-text-color);
+      padding: 2rem;
+    }
+    
+    section {
+      @apply(--layout-flex);
+      @apply(--layout-vertical);
+      @apply(--layout-center-center);
+    }
+    
+    :host([is-authenticated]) {
+      opacity: 0;
+      pointer-events: none;
+    }
+    </style>
+    <iron-localstorage id="localStorage" name="gc-auth-user" value="{{authUser}}"></iron-localstorage>
+
+    <app-route id="login" route="{{route}}" pattern="/login/success" query-params="{{_queryParams}}" active="{{_successRouteActive}}"></app-route>
+    <app-route route="{{route}}" pattern="/login/error" query-params="{{_queryParams}}" active="{{_errorRouteActive}}"></app-route>
+    <app-route route="{{route}}" pattern="/logout" active="{{_logoutRouteActive}}"></app-route>
+
+    <gc-user id="gcUser" user="{{user}}"></gc-user>
+    <section>
+      <paper-button on-tap="_login">
+        <iron-icon icon="account-circle"></iron-icon>Login With GitHub
+      </paper-button>
+      <template is="dom-if" if="[[_errorMessage]]">
+        <h3>[[_errorMessage]]</h3>
+      </template>
+    </section>
+
+  </template>
+  <script>
+  (() => {
+    'use strict';
+    class GcLogin {
+      get is() {
+        return 'gc-login';
+      }
+      get behaviors() {
+        return [GitcheeseBehaviors.AppContextBehavior];
+      }
+      get properties() {
+        return {
+          _queryParams: {
+            type: Object
+          },
+          _errorMessage: {
+            type: String
+          }
+        };
+      }
+      get observers() {
+        return [
+          '_handleLogin(_successRouteActive, _queryParams.token)',
+          '_handleLoginError(_errorRouteActive, _queryParams.message)',
+          '_handleLogout(_logoutRouteActive)'
+        ];
+      }
+      _handleLogin(active, token) {
+        if (!active) return;
+        this.authUser = {
+          authToken: token
+        };
+        this.$.localStorage.save();
+        window.history.pushState(null, 'root', '/app');
+      }
+      _handleLoginError(active, message) {
+        if (!active) return;
+        this._errorMessage = message;
+      }
+      _handleLogout(active) {
+        if (!active) return;
+        this.authUser = null;
+        this.$.localStorage.save();
+      }
+      _login() {
+        let url = 'https://pxh869rmo6.execute-api.us-east-1.amazonaws.com/v1';
+        url += '/tokens/github';
+        window.location = url;
+      }
+    }
+    new Polymer(GcLogin);
+  })();
+  </script>
+</dom-module>

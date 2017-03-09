@@ -10,16 +10,31 @@
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../gc-styles/gc-theme.html">
 <link rel="import" href="../gc-styles/gc-shared-styles.html">
+<link rel="import" href="../gc-common/gc-app-context-behavior.html">
+<link rel="import" href="../gc-app/gc-login.html">
 <link rel="import" href="../gc-dashboard/gc-dashboard-shell.html">
 
 <dom-module id="gc-app">
   <template>
     <style include="shared-styles"></style>
+    <style>
+    .content {
+      @apply(--layout-horizontal);
+      @apply(--layout-center-justified);
+    }
+    
+    iron-pages {
+      max-width: 840px;
+      @apply(--layout-flex);
+    }
+    </style>
+    <gc-login route="[[route]]" auth-user="{{authUser}}"></gc-login>
 
     <gc-active-route pattern="{{activePattern}}" fallback-pattern="/">
       <app-route route="{{route}}" pattern="/"></app-route>
@@ -39,6 +54,14 @@
               </paper-icon-item>
             </paper-item>
           </a>
+          <a href="/app/user">
+            <paper-item>
+              <paper-icon-item>
+                <iron-icon icon="home" item-icon></iron-icon>
+                User
+              </paper-icon-item>
+            </paper-item>
+          </a>
         </paper-menu>
       </app-drawer>
       <app-header-layout has-scrolling-region>
@@ -48,11 +71,13 @@
             <div main-title>Gitcheese</div>
           </app-toolbar>
         </app-header>
-        <iron-pages selected="[[activePattern]]" attr-for-selected="for-pattern" selected-attribute="active">
-          <gc-dashboard-shell for-pattern="/"></gc-dashboard-shell>
-          <gc-repo-shell for-pattern="/repos/:id" route="[[appSubroute]]"></gc-repo-shell>
-          <gc-user-shell for-pattern="/user"></gc-user-shell>
-        </iron-pages>
+        <div class="content">
+          <iron-pages selected="[[_activePage]]" attr-for-selected="for-pattern" selected-attribute="active">
+            <gc-dashboard-shell id="dashboard" auth-user="[[authUser]]" for-pattern="/"></gc-dashboard-shell>
+            <gc-repo-shell auth-user="[[authUser]]" for-pattern="/repos/:id" route="[[appSubroute]]"></gc-repo-shell>
+            <gc-user-shell auth-user="[[authUser]]" for-pattern="/user"></gc-user-shell>
+          </iron-pages>
+        </div>
       </app-header-layout>
     </app-drawer-layout>
   </template>
@@ -64,11 +89,30 @@
       get is() {
         return 'gc-app';
       }
+      get behaviors() {
+        return [GitcheeseBehaviors.AppContextBehavior];
+      }
+      get properties() {
+        return {
+          activePattern: {
+            type: String
+          },
+          _activePage: {
+            type: String,
+            computed: '_computeActivePage(authUser, activePattern)'
+          }
+        }
+      }
       ready() {
         Polymer.RenderStatus.afterNextRender(this, () => {
           this.importHref(this.resolveUrl('../gc-repo/gc-repo-shell.html'), null, null, true);
           this.importHref(this.resolveUrl('../gc-user/gc-user-shell.html'), null, null, true);
         });
+      }
+      _computeActivePage(authUser, activePattern) {
+        if (!this.isAuthenticated) return;
+        if (!this.$.dashboard.authUser) this.$.dashboard.authUser = this.authUser;
+        return activePattern;
       }
     }
     new Polymer(GcApp);

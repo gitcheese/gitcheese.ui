@@ -1,10 +1,11 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../gc-common/gc-app-context-behavior.html">
+<link rel="import" href="../gc-common/gc-shell-behavior.html">
 <link rel="import" href="../gc-dashboard/gc-repos.html">
 <dom-module id="gc-dashboard-shell">
   <template>
-    <style></style>
-    Dashboard
-    <gc-repos></gc-repos>
+    <style include="shared-styles"></style>
+    <gc-repos id="repos" auth-user="[[authUser]]"></gc-repos>
   </template>
   <script>
   (() => {
@@ -12,6 +13,15 @@
     class GcDashboardShell {
       get is() {
         return 'gc-dashboard-shell';
+      }
+      get behaviors() {
+        return [
+          GitcheeseBehaviors.AppContextBehavior,
+          GitcheeseBehaviors.ShellBehavior
+        ];
+      }
+      activated() {
+        this.$.repos.loadData();
       }
     }
     new Polymer(GcDashboardShell);

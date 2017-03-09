@@ -1,0 +1,58 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../gc-common/gc-app-context-behavior.html">
+
+<dom-module id="gc-api-ajax">
+  <template>
+    <iron-ajax id="ajax" url="https://pxh869rmo6.execute-api.us-east-1.amazonaws.com/v1[[url]]" body="[[body]]" headers="[[apiHeaders]]" loading="{{loading}}" last-response="{{lastResponse}}" method="[[method]]" bubbles="true " content-type="application/json" handle-as="json"></iron-ajax>
+  </template>
+</dom-module>
+<script>
+(() => {
+  class GcApijax {
+    get is() {
+      return 'gc-api-ajax';
+    }
+    get behaviors() {
+      return [GitcheeseBehaviors.AppContextBehavior];
+    }
+    get properties() {
+      return {
+        url: {
+          type: String
+        },
+        method: {
+          type: String,
+          value: 'GET'
+        },
+        body: {
+          type: Object,
+          value: null
+        },
+        loading: {
+          type: Boolean,
+          notify: true
+        },
+        lastResponse: {
+          type: Object,
+          notify: true
+        },
+        apiHeaders: {
+          type: Object,
+          computed: '_computeApiHeaders(authUser)'
+        }
+      };
+    }
+    _computeApiHeaders(authUser) {
+      if (!authUser) return;
+      return {
+        authorization: authUser.authToken
+      };
+    }
+    generateRequest() {
+      return this.$.ajax.generateRequest();
+    }
+  }
+  new Polymer(GcApijax);
+})();
+</script>
