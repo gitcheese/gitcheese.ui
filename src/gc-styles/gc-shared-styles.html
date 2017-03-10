@@ -14,11 +14,18 @@
     paper-material {
       background-color: var(--primary-background-color);
       padding: 1rem;
+      margin: 1rem;
     }
     
     a {
       color: initial;
       text-decoration: initial;
+    }
+    
+    @media (max-width: 640px) {
+      paper-material {
+        margin: 0;
+      }
     }
     </style>
   </template>

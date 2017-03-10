@@ -1,11 +1,14 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../gc-layouts/gc-app-fragment-layout.html">
 <link rel="import" href="../gc-common/gc-app-context-behavior.html">
 <link rel="import" href="../gc-common/gc-shell-behavior.html">
 <link rel="import" href="../gc-dashboard/gc-repos.html">
 <dom-module id="gc-dashboard-shell">
   <template>
     <style include="shared-styles"></style>
-    <gc-repos id="repos" auth-user="[[authUser]]"></gc-repos>
+    <gc-app-fragment-layout title="Dashboard">
+      <gc-repos id="repos" auth-user="[[authUser]]"></gc-repos>
+    </gc-app-fragment-layout>
   </template>
   <script>
   (() => {

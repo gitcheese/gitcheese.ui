@@ -1,0 +1,43 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../gc-common/gc-app-context-behavior.html">
+<link rel="import" href="../gc-styles/gc-shared-styles.html">
+<link rel="import" href="../gc-common/gc-api-ajax.html">
+
+<dom-module id="gc-repo">
+  <template>
+    <style include="shared-styles"></style>
+    <gc-api-ajax id="get" url="/user/repos/[[repoId]]" auth-user="[[authUser]]" last-response="{{repo}}"></gc-api-ajax>
+    <paper-material elevation="1">
+      <p>Donations</p>
+    </paper-material>
+    <paper-material elevation="1">
+      <p>Badge</p>
+    </paper-material>
+  </template>
+  <script>
+  (() => {
+    'use strict';
+    class GcRepo {
+      get is() {
+        return 'gc-repo';
+      }
+      get behaviors() {
+        return [GitcheeseBehaviors.AppContextBehavior];
+      }
+      get properties() {
+        return {
+          repo: {
+            type: Object,
+            notify: true
+          }
+        };
+      }
+      loadData() {
+        this.$.get.generateRequest();
+      }
+    }
+    new Polymer(GcRepo);
+  })();
+  </script>
+</dom-module>

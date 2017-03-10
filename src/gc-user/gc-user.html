@@ -1,0 +1,37 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../gc-common/gc-app-context-behavior.html">
+<link rel="import" href="../gc-styles/gc-shared-styles.html">
+<dom-module id="gc-user">
+  <template>
+    <style include="shared-styles"></style>
+    <gc-api-ajax id="get" url="/user" auth-user="[[authUser]]" last-response="{{user}}"></gc-api-ajax>
+
+    <paper-material elevation="1" class="edge-breaking">
+      <p>Profile</p>
+      <paper-input value="{{user.email}}"></paper-input>
+    </paper-material>
+
+    <paper-material elevation="1">
+      <p>Stripe Identity</p>
+    </paper-material>
+  </template>
+  <script>
+  (() => {
+    'use strict';
+    class GcUser {
+      get is() {
+        return 'gc-user';
+      }
+      get behaviors() {
+        return [GitcheeseBehaviors.AppContextBehavior];
+      }
+      loadData() {
+        this.$.get.generateRequest();
+      }
+    }
+    new Polymer(GcUser);
+  })();
+  </script>
+</dom-module>

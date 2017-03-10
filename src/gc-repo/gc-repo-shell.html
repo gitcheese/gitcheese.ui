@@ -1,9 +1,14 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../gc-layouts/gc-app-fragment-layout.html">
 <link rel="import" href="../gc-common/gc-app-context-behavior.html">
+<link rel="import" href="../gc-common/gc-shell-behavior.html">
+<link rel="import" href="../gc-repo/gc-repo.html">
 <dom-module id="gc-repo-shell">
   <template>
     <style></style>
-    repo shell
+    <gc-app-fragment-layout title="[[repo.name]]" back-button>
+      <gc-repo id="repo" repo-id="[[repoId]]" auth-user="[[authUser]]" repo="{{repo}}"></gc-repo>
+    </gc-app-fragment-layout>
   </template>
   <script>
   (() => {
@@ -13,7 +18,10 @@
         return 'gc-repo-shell';
       }
       get behaviors() {
-        return [GitcheeseBehaviors.AppContextBehavior];
+        return [GitcheeseBehaviors.AppContextBehavior, GitcheeseBehaviors.ShellBehavior];
+      }
+      activated() {
+        this.$.repo.loadData();
       }
     }
     new Polymer(GcRepoShell);
