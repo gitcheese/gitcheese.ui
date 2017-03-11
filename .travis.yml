@@ -6,7 +6,7 @@ before_install:
   - export PATH=$PATH:$HOME/.local/bin
 install:
   - npm install
-  - bower install
+  - node_modules/.bin/bower install --allow-root
 before_script:
   - npm run build
 script:
