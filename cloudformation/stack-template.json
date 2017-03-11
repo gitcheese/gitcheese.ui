@@ -1,0 +1,69 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Transform": "AWS::Serverless-2016-10-31",
+  "Parameters": {
+    "ProjectName": {
+      "Type": "String"
+    },
+    "ServiceName": {
+      "Type": "String"
+    },
+    "BranchName": {
+      "Type": "String"
+    }
+  },
+  "Resources": {
+    "GitcheeseUiBucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": { "Fn::Sub": "${ProjectName}-${ServiceName}-${BranchName}" },
+        "AccessControl": "PublicRead",
+        "WebsiteConfiguration": {
+          "IndexDocument": "index.html",
+          "ErrorDocument": "error.html"
+        }
+      }
+    },
+    "Distribution": {
+      "Type": "AWS::CloudFront::Distribution",
+      "Properties": {
+        "DistributionConfig": {
+          "Origins": [{
+            "DomainName": { "Fn::Sub": "${GitcheeseUiBucket}.s3.amazonaws.com" },
+            "Id": "S3Origin",
+            "CustomOriginConfig": {
+              "HTTPPort": 80,
+              "HTTPSPort": 443,
+              "OriginProtocolPolicy": "http-only"
+            }
+          }],
+          "Enabled": "true",
+          "DefaultRootObject": "index.html",
+          "ViewerCertificate": {
+            "CloudFrontDefaultCertificate": "true"
+          },
+          "HttpVersion": "http2",
+          "CustomErrorResponses": [{
+            "ErrorCachingMinTTL": 5,
+            "ErrorCode": 404,
+            "ResponseCode": 200,
+            "ResponsePagePath": "/index.html"
+          }],
+          "DefaultCacheBehavior": {
+            "TargetOriginId": "S3Origin",
+            "AllowedMethods": ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"],
+            "ForwardedValues": {
+              "QueryString": "false",
+              "Cookies": { "Forward": "none" }
+            },
+            "DefaultTTL": 60,
+            "MaxTTL": 8400,
+            "MinTTL": 0,
+            "Compress": "true",
+            "ViewerProtocolPolicy": "redirect-to-https",
+          }
+        }
+      }
+    }
+  }
+}
