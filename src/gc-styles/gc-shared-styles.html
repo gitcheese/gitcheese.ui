@@ -1,8 +1,10 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../bower_components/paper-material/paper-material-shared-styles.html">
 <dom-module id="shared-styles">
   <template>
-    <style is="custom-style">
+    <style is="custom-style" include="iron-flex">
     :root {
       /*
      * You can use these generic variables in your elements for easy theming.
@@ -74,10 +76,15 @@
       text-decoration: initial;
     }
     
+    [actions] {
+      @apply(--layout-horizontal);
+      @apply(--layout-end-justified);
+    }
+    
     @media (max-width: 640px) {
-      paper-material {
+/*      paper-material {
         margin: 0;
-      }
+      }*/
     }
     /* Breakpoints */
     /* Small */

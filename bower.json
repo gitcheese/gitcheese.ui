@@ -26,7 +26,9 @@
     "paper-tabs": "PolymerElements/paper-tabs#^1.8.0",
     "paper-input": "PolymerElements/paper-input#^1.1.23",
     "iron-signals": "polymerelements/iron-signals#^1.0.3",
-    "iron-image": "polymerelements/iron-image#^1.2.5"
+    "iron-image": "polymerelements/iron-image#^1.2.5",
+    "iron-form": "polymerelements/iron-form#^1.1.4",
+    "gold-email-input": "polymerelements/gold-email-input#^1.0.9"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
