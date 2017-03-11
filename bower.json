@@ -12,7 +12,7 @@
     "iron-icon": "PolymerElements/iron-icon#^1.0.0",
     "iron-iconset-svg": "PolymerElements/iron-iconset-svg#^1.0.0",
     "iron-localstorage": "PolymerElements/iron-localstorage#^1.0.0",
-    "iron-media-query": "PolymerElements/iron-media-query#^1.0.0",
+    "iron-media-query": "polymerelements/iron-media-query#^1.0.8",
     "iron-pages": "PolymerElements/iron-pages#^1.0.0",
     "iron-selector": "PolymerElements/iron-selector#^1.0.0",
     "iron-icons": "polymerelements/iron-icons#^1.2.0",
@@ -24,7 +24,9 @@
     "paper-listbox": "PolymerElements/paper-listbox#^1.1.2",
     "paper-material": "PolymerElements/paper-material#^1.0.6",
     "paper-tabs": "PolymerElements/paper-tabs#^1.8.0",
-    "paper-input": "PolymerElements/paper-input#^1.1.23"
+    "paper-input": "PolymerElements/paper-input#^1.1.23",
+    "iron-signals": "polymerelements/iron-signals#^1.0.3",
+    "iron-image": "polymerelements/iron-image#^1.2.5"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
