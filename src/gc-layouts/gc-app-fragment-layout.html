@@ -7,6 +7,7 @@
 <link rel="import" href="../../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-progress/paper-progress.html">
 <link rel="import" href="../gc-styles/gc-shared-styles.html">
 <dom-module id="gc-app-fragment-layout">
   <template>
@@ -20,6 +21,19 @@
     .content {
       max-width: 800px;
       @apply(--layout-flex);
+    }
+    
+    paper-progress {
+      background-color: var(--primary-background-color);
+      transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 100%;
+      margin-bottom: -4px;
+      z-index: 103;
+    }
+    
+    paper-progress[hide] {
+      opacity: 0;
+      pointer-events: none;
     }
     
     iron-image {
@@ -54,6 +68,7 @@
       </template>
 
     </app-header>
+    <paper-progress hide$="{{!loading}}" indeterminate></paper-progress>
     <div class="content-wrapper">
       <div class="content">
         <content></content>
@@ -72,7 +87,24 @@
           backButton: {
             type: Boolean,
             value: false
+          },
+          loading: {
+            type: Boolean,
+            notify: true,
+            value: false,
+            computed: '_computeLoading(_requestsCounter)'
+          },
+          _requestsCounter: {
+            type: Number,
+            value: 0
           }
+        };
+      }
+      get listeners() {
+        return {
+          'iron-ajax-request': '_handleRequestStarted',
+          'iron-ajax-response': '_handleRequestEnded',
+          'iron-ajax-error': '_handleRequestEnded'
         };
       }
       _handleBackTap() {
@@ -82,6 +114,18 @@
         this.fire('iron-signal', {
           name: 'toggle-drawer'
         });
+      }
+      _handleRequestStarted() {
+        console.log('add')
+        this._requestsCounter++;
+      }
+      _handleRequestEnded() {
+        console.log('sub')
+        this._requestsCounter--;
+      }
+      _computeLoading(counter) {
+        console.log(counter)
+        return counter > 0;
       }
     }
     new Polymer(GcAppFragmentLayout);
