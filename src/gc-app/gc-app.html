@@ -6,12 +6,14 @@
 <link rel="import" href="../gc-layouts/gc-app-shell-layout.html">
 <link rel="import" href="../gc-common/gc-app-context-behavior.html">
 <link rel="import" href="../gc-app/gc-login.html">
+<link rel="import" href="../gc-app/gc-account-setup.html">
 <link rel="import" href="../gc-dashboard/gc-dashboard-shell.html">
 
 <dom-module id="gc-app">
   <template>
     <style include="shared-styles"></style>
     <gc-login route="[[route]]" auth-user="{{authUser}}"></gc-login>
+    <gc-account-setup auth-user="[[authUser]]"></gc-account-setup>
     <gc-active-route pattern="{{activePattern}}" fallback-pattern="/">
       <app-route route="{{route}}" pattern="/"></app-route>
       <app-route route="{{route}}" pattern="/repos/:id" data="{{repoRouteData}}"></app-route>

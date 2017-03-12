@@ -1,0 +1,162 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../gc-styles/gc-shared-styles.html">
+<link rel="import" href="../gc-common/gc-app-context-behavior.html">
+<link rel="import" href="../gc-common/gc-api-ajax.html">
+<dom-module id="gc-account-setup">
+  <template>
+    <style include="shared-styles"></style>
+    <style>
+    :host(:not([setup-required])) {
+      opacity: 0;
+      pointer-events: none;
+    }
+    
+    :host {
+      @apply(--dark-theme);
+      @apply(--layout-fit);
+      @apply(--layout-vertical);
+      z-index: 888888888;
+      padding: 2rem;
+    }
+    
+    paper-dropdown-menu {
+      --paper-input-container-input-color: #fff;
+    }
+    </style>
+    <gc-api-ajax id="get" url="/user/managed-accounts" auth-user="[[authUser]]" last-response="{{managedAccount}}" on-response="_handleGetResponse"></gc-api-ajax>
+    <gc-api-ajax id="post" method="POST" url="/user/managed-accounts" auth-user="[[authUser]]" on-response="_handlePostResponse"></gc-api-ajax>
+
+    <h2>Hello!</h2>
+    <p>To set up your account we just need your country:</p>
+    <paper-dropdown-menu label="Country">
+      <paper-listbox id="countryListbox" class="dropdown-content" selected="0">
+        <template is="dom-repeat" items="[[countries]]">
+          <paper-item country="[[item]]">[[item.name]]</paper-item>
+        </template>
+      </paper-listbox>
+    </paper-dropdown-menu>
+    <i>This information is crucial for us to propperly setup Stripe account and be ablle to send your donations back to your bank account.</i>
+    <i>Please select country that match you have your bank account in.</i>
+    <div actions>
+      <paper-button on-tap="_submit">submit</paper-button>
+    </div>
+  </template>
+  <script>
+  (() => {
+    'use strict';
+    class GcAccountSetup {
+      get is() {
+        return 'gc-account-setup';
+      }
+      get behaviors() {
+        return [GitcheeseBehaviors.AppContextBehavior];
+      }
+      get properties() {
+        return {
+          setupRequired: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true
+          },
+          countries: {
+            type: Array,
+            value: [{
+              code: 'US',
+              name: 'United States',
+              default: true
+            }, {
+              code: 'AT',
+              name: 'Austria'
+            }, {
+              code: 'AU',
+              name: 'Australia'
+            }, {
+              code: 'BE',
+              name: 'Belgium'
+            }, {
+              code: 'CA',
+              name: 'Canada'
+            }, {
+              code: 'CH',
+              name: 'Switzerland'
+            }, {
+              code: 'DE',
+              name: 'Germany'
+            }, {
+              code: 'DK',
+              name: 'Denmark'
+            }, {
+              code: 'ES',
+              name: 'Spain'
+            }, {
+              code: 'FI',
+              name: 'Finland'
+            }, {
+              code: 'FR',
+              name: 'France'
+            }, {
+              code: 'GB',
+              name: 'United Kingdom'
+            }, {
+              code: 'HK',
+              name: 'Hong Kong'
+            }, {
+              code: 'IE',
+              name: 'Ireland'
+            }, {
+              code: 'IT',
+              name: 'Italy'
+            }, {
+              code: 'JP',
+              name: 'Japan'
+            }, {
+              code: 'LU',
+              name: 'Luxembourg'
+            }, {
+              code: 'NL',
+              name: 'Netherlands'
+            }, {
+              code: 'NO',
+              name: 'Norway'
+            }, {
+              code: 'NZ',
+              name: 'New Zealand'
+            }, {
+              code: 'PT',
+              name: 'Portugal'
+            }, {
+              code: 'SE',
+              name: 'Sweden'
+            }, {
+              code: 'SG',
+              name: 'Singapore'
+            }]
+          }
+        }
+      }
+      get observers() {
+        return ['_handleAuthUserChanged(authUser)'];
+      }
+      _handleAuthUserChanged() {
+        if (!this.authUser) return;
+        this.$.get.generateRequest();
+      }
+      _handleGetResponse() {
+        this.setupRequired = !this.managedAccount;
+      }
+      _submit() {
+        this.$.post.body = {
+          country: this.$.countryListbox.selectedItem.country.code
+        };
+        this.$.post.generateRequest();
+      }
+      _handlePostResponse() {
+        this.$.get.generateRequest();
+      }
+    }
+    new Polymer(GcAccountSetup);
+  })();
+  </script>
+</dom-module>

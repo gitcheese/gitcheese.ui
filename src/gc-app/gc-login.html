@@ -8,20 +8,17 @@
   <template>
     <style include="shared-styles"></style>
     <style>
+    :host([is-authenticated]) {
+      opacity: 0;
+      pointer-events: none;
+    }
+    
     :host {
-      display: block;
-      text-align: center;
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: var(--primary-color);
-      transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      z-index: 999999999;
+      @apply(--dark-theme);
+      @apply(--layout-fit);
       @apply(--layout-vertical);
-      color: var(--dark-theme-text-color);
-      --iron-icon-fill-color: var(--dark-theme-text-color);
+      z-index: 999999999;
+      transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       padding: 2rem;
     }
     
@@ -29,11 +26,6 @@
       @apply(--layout-flex);
       @apply(--layout-vertical);
       @apply(--layout-center-center);
-    }
-    
-    :host([is-authenticated]) {
-      opacity: 0;
-      pointer-events: none;
     }
     
     [hero-title] {

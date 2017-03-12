@@ -54,6 +54,11 @@
      */
       --text-primary-color: var(--dark-theme-text-color);
       --default-primary-color: var(--primary-color);
+      --dark-theme: {
+        background-color: var(--primary-color);
+        color: var(--dark-theme-text-color);
+        --iron-icon-fill-color: var(--dark-theme-text-color);
+      }
     }
     
     app-header {
@@ -82,7 +87,7 @@
     }
     
     @media (max-width: 640px) {
-/*      paper-material {
+      /*      paper-material {
         margin: 0;
       }*/
     }
