@@ -13,7 +13,8 @@
 <dom-module id="gc-user">
   <template>
     <style include="shared-styles"></style>
-    <gc-api-ajax id="getProfile" url="/user" auth-user="[[authUser]]" last-response="{{user}}"></gc-api-ajax>
+    <gc-api-ajax id="getUser" url="/user" auth-user="[[authUser]]" last-response="{{user}}"></gc-api-ajax>
+    <gc-api-ajax id="putUser" url="/user" method="put" auth-user="[[authUser]]" body="{{user}}"></gc-api-ajax>
     <gc-api-ajax id="getManagedAccount" url="/user/managed-accounts" auth-user="[[authUser]]" last-response="{{managedAccount}}"></gc-api-ajax>
 
     <paper-material elevation="1" class="edge-breaking">
@@ -51,11 +52,14 @@
         return [GitcheeseBehaviors.AppContextBehavior];
       }
       loadData() {
-        this.$.getProfile.generateRequest();
+        this.$.getUser.generateRequest();
         this.$.getManagedAccount.generateRequest();
       }
       _saveProfile() {
-        console.log(this.$.profileForm.validate())
+        if (!this.$.profileForm.validate()) {
+          return;
+        }
+        this.$.putUser.generateRequest();
       }
     }
     new Polymer(GcUser);
