@@ -116,15 +116,12 @@
         });
       }
       _handleRequestStarted() {
-        console.log('add')
         this._requestsCounter++;
       }
       _handleRequestEnded() {
-        console.log('sub')
         this._requestsCounter--;
       }
       _computeLoading(counter) {
-        console.log(counter)
         return counter > 0;
       }
     }
