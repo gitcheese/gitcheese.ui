@@ -4,20 +4,37 @@
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../gc-styles/gc-shared-styles.html">
+<link rel="import" href="../gc-common/gc-app-context-behavior.html">
 <link rel="import" href="../gc-common/gc-api-ajax.html">
+<link rel="import" href="../gc-user/gc-user-managed-accounts-info-behavior.html">
+
 <dom-module id="gc-user-managed-accounts-terms-of-service-info">
   <template>
     <style include="shared-styles"></style>
-    <div class="layout horizontal">
+    <style>
+    :host {
+      cursor: pointer;
+    }
+    </style>
+    <gc-api-ajax id="put" url="/user/managed-accounts/terms-of-service" method="put" auth-user="[[authUser]]" on-response="_handleInfoUpdatedResponse"></gc-api-ajax>
+
+    <div class="layout horizontal" on-tap="toggle">
       <p class="flex">
         <iron-icon icon="[[_statusIcon]]"></iron-icon>
         Terms Of Service
       </p>
-
-      <paper-icon-button icon="[[_chevronIcon]]" on-tap="toggle"></paper-icon-button>
+      <paper-icon-button icon="[[_chevronIcon]]"></paper-icon-button>
     </div>
     <iron-collapse opened="[[_expanded]]">
-
+      <template is="dom-if" if="[[!fieldsMissing]]">
+        <i>You already accepted Terms Of Service.</i>
+      </template>
+      <template is="dom-if" if="[[fieldsMissing]]">
+        <i>Payment processing services on Gitcheese are provided by Stripe and are subject to the Stripe Connected Account Agreement, which includes the Stripe Terms of Service (collectively, the “Stripe Services Agreement”). By agreeing to these terms or continuing to operate as a user on Gitcheese, you agree to be bound by the Stripe Services Agreement, as the same may be modified by Stripe from time to time. As a condition of Gitcheese enabling payment processing services through Stripe, you agree to provide Gitcheese accurate and complete information about you and your business.</i>
+        <div actions>
+          <paper-button on-tap="_submit">accept</paper-button>
+        </div>
+      </template>
     </iron-collapse>
   </template>
   <script>
@@ -27,53 +44,18 @@
       get is() {
         return 'gc-user-managed-accounts-terms-of-service-info';
       }
-      get properties() {
-        return {
-          status: {
-            type: String,
-            value: 'ok'
-          },
-          managedAccount: {
-            type: Object,
-            observer: '_managedAccountChanged'
-          },
-          _expanded: {
-            type: Boolean,
-            value: false
-          },
-          _chevronIcon: {
-            type: String,
-            computed: '_computeChevronIcon(_expanded)'
-          },
-          _statusIcon: {
-            type: String,
-            computed: '_computeStatusIcon(status)'
-          }
-        };
+      get behaviors() {
+        return [
+          GitcheeseBehaviors.AppContextBehavior,
+          GitcheeseBehaviors.UserManagedAccountsInfoBehavior
+        ];
       }
-      toggle() {
-        this._expanded = !this._expanded;
+      ready() {
+        this.fields.push('tos_acceptance.date',
+          'tos_acceptance.ip');
       }
-      _computeChevronIcon(expanded) {
-        return expanded ? 'expand-less' : 'expand-more';
-      }
-      _computeStatusIcon(status) {
-        let icons = {
-          'ok': 'check-circle',
-          'required': 'report-problem',
-          'past-due': 'report'
-        }
-        return icons[status];
-      }
-      _managedAccountChanged(account) {
-        if (!account.verification.fields_needed ||
-          !account.verification.fields_needed.find((f) => f.startsWith('tos_acceptance.'))) {
-          this.status = 'ok';
-        } else if (account.verification.disabled_reason) {
-          this.status = 'past-due';
-        } else {
-          this.status = 'required';
-        }
+      _submit() {
+        this.$.put.generateRequest();
       }
     }
     new Polymer(GcUserManagedAccountsTermsOfServiceInfo);

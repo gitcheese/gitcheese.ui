@@ -1,0 +1,43 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<dom-module id="gc-config">
+  <script>
+  (() => {
+    let config = {
+      api: {
+        'localhost:8080': 'https://pxh869rmo6.execute-api.us-east-1.amazonaws.com/v1'
+      },
+      stripe: {
+        uri: 'https://api.stripe.com/v1',
+        key: {
+          'localhost:8080': 'pk_test_icwCSxTloCbsT3QvNHL4uumW'
+        }
+      }
+    };
+    class GcConfig {
+      get is() {
+        return 'gc-config';
+      }
+      get properties() {
+        return {
+          apiUri: {
+            type: String,
+            notify: true,
+            value: () => config.api[window.location.host]
+          },
+          stripeUri: {
+            type: String,
+            notify: true,
+            value: () => config.stripe.uri
+          },
+          stripeKey: {
+            type: String,
+            notify: true,
+            value: () => config.stripe.key[window.location.host]
+          }
+        };
+      }
+    }
+    new Polymer(GcConfig);
+  })();
+  </script>
+</dom-module>

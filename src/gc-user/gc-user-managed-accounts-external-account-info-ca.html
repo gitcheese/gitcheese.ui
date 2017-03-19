@@ -1,0 +1,30 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../gc-styles/gc-shared-styles.html">
+<link rel="import" href="../gc-user/gc-user-managed-accounts-external-account-info-behavior.html">
+
+<dom-module id="gc-user-managed-accounts-external-account-info-ca">
+  <template>
+    <style include="shared-styles"></style>
+    <div class="layout horizontal">
+      <paper-input class="flex" value="{{_data.account_number}}" label="Account Number" required auto-validate error-message="Account Number is required."></paper-input>
+      <paper-input class="flex" value="{{_data.routing_number}}" label="Transit & Institution Number" required auto-validate error-message="Transit & Institution Number is required."></paper-input>
+    </div>
+  </template>
+  <script>
+  (() => {
+    'use strict';
+    class GcUserManagedAccountsExternalAccountInfoCa {
+      get is() {
+        return 'gc-user-managed-accounts-external-account-info-ca';
+      }
+      get behaviors() {
+        return [
+          GitcheeseBehaviors.UserManagedAccountsExternalAccountInfoBehavior
+        ];
+      }
+    }
+    new Polymer(GcUserManagedAccountsExternalAccountInfoCa);
+  })();
+  </script>
+</dom-module>

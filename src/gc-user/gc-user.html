@@ -33,11 +33,11 @@
         <p class="flex">Stripe Identity</p>
         <p><i>[[managedAccount.country]]</i></p>
       </div>
-      <gc-user-managed-accounts-legal-entity-info managed-account="[[managedAccount]]" auth-user="[[authUser]]">
+      <gc-user-managed-accounts-legal-entity-info managed-account="[[managedAccount]]" auth-user="[[authUser]]" on-info-updated="_refreshManagedAccount">
       </gc-user-managed-accounts-legal-entity-info>
-      <gc-user-managed-accounts-external-account-info managed-account="[[managedAccount]]" auth-user="[[authUser]]">
+      <gc-user-managed-accounts-external-account-info managed-account="[[managedAccount]]" auth-user="[[authUser]]" on-info-updated="_refreshManagedAccount">
       </gc-user-managed-accounts-external-account-info>
-      <gc-user-managed-accounts-terms-of-service-info managed-account="[[managedAccount]]" auth-user="[[authUser]]">
+      <gc-user-managed-accounts-terms-of-service-info managed-account="[[managedAccount]]" auth-user="[[authUser]]" on-info-updated="_refreshManagedAccount">
       </gc-user-managed-accounts-terms-of-service-info>
     </paper-material>
   </template>
@@ -60,6 +60,9 @@
           return;
         }
         this.$.putUser.generateRequest();
+      }
+      _refreshManagedAccount() {
+        this.$.getManagedAccount.generateRequest();
       }
     }
     new Polymer(GcUser);

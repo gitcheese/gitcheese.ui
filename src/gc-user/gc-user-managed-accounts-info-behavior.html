@@ -1,0 +1,54 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<script>
+(function() {
+  window.GitcheeseBehaviors = window.GitcheeseBehaviors || {};
+  GitcheeseBehaviors.UserManagedAccountsInfoBehavior = {
+    properties: {
+      status: {
+        type: String,
+        value: 'ok'
+      },
+      managedAccount: {
+        type: Object,
+        observer: '_managedAccountChanged'
+      },
+      fieldsMissing: {
+        type: Boolean,
+        value: false
+      },
+      fields: {
+        type: Array,
+        value: () => []
+      },
+      _expanded: {
+        type: Boolean,
+        value: false
+      },
+      _chevronIcon: {
+        type: String,
+        computed: '_computeChevronIcon(_expanded)'
+      },
+      _statusIcon: {
+        type: String,
+        computed: '_computeStatusIcon(fieldsMissing)'
+      }
+    },
+    toggle: function() {
+      this._expanded = !this._expanded;
+    },
+    _managedAccountChanged: function(account) {
+      this.fieldsMissing = account.verification.fields_needed &&
+        account.verification.fields_needed.filter(x => this.fields.includes(x)).length > 0;
+    },
+    _computeChevronIcon: function(expanded) {
+      return expanded ? 'expand-less' : 'expand-more';
+    },
+    _computeStatusIcon: function(fieldsMissing) {
+      return fieldsMissing ? 'report-problem' : 'check-circle';
+    },
+    _handleInfoUpdatedResponse: function() {
+      this.fire('info-updated');
+    }
+  };
+}());
+</script>

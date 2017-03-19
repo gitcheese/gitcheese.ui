@@ -1,0 +1,33 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<script>
+(function() {
+  window.GitcheeseBehaviors = window.GitcheeseBehaviors || {};
+  GitcheeseBehaviors.UserManagedAccountsExternalAccountInfoBehavior = {
+    properties: {
+      tokenRequest: {
+        type: Object,
+        computed: '_computeTokenRequest(_data.*)',
+        notify: true
+      },
+      country: {
+        type: String
+      },
+      _data: {
+        type: Object,
+        value: {}
+      }
+    },
+    _computeTokenRequest: function() {
+      if (!this._data) return;
+      let result = {
+        'bank_account[country]': this.country
+      };
+      Object.keys(this._data).forEach((key) => {
+        result[`bank_account[${key}]`] = this._data[key];
+      });
+      console.log(result);
+      return result;
+    }
+  };
+}());
+</script>

@@ -7,44 +7,56 @@
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../gc-common/gc-app-context-behavior.html">
 <link rel="import" href="../gc-styles/gc-shared-styles.html">
+<link rel="import" href="../gc-common/gc-app-context-behavior.html">
 <link rel="import" href="../gc-common/gc-api-ajax.html">
+<link rel="import" href="../gc-user/gc-user-managed-accounts-info-behavior.html">
+
 <dom-module id="gc-user-managed-accounts-legal-entity-info">
   <template>
     <style include="shared-styles"></style>
-    <gc-api-ajax id="put" url="/user/managed-accounts/legal-entity/basic" method="put" auth-user="[[authUser]]" body="[[newInfo]]"></gc-api-ajax>
+    <style>
+    :host {
+      cursor: pointer;
+    }
+    </style>
+    <gc-api-ajax id="put" url="/user/managed-accounts/legal-entity/basic" method="put" auth-user="[[authUser]]" body="[[newInfo]]" on-response="_handleInfoUpdatedResponse"></gc-api-ajax>
 
-    <div class="layout horizontal">
+    <div class="layout horizontal" on-tap="toggle">
       <p class="flex">
         <iron-icon icon="[[_statusIcon]]"></iron-icon>
         Personal Information
       </p>
-      <paper-icon-button icon="[[_chevronIcon]]" on-tap="toggle"></paper-icon-button>
+      <paper-icon-button icon="[[_chevronIcon]]"></paper-icon-button>
     </div>
     <iron-collapse opened="[[_expanded]]">
-      <form id="form" is="iron-form">
-        <div class="layout horizontal">
-          <paper-dropdown-menu class="flex" label="Type">
-            <paper-listbox class="dropdown-content" selected="0" on-selected-item-changed="_handleTypeChanged">
-              <paper-item type="individual">Individual</paper-item>
-              <paper-item type="company">Company</paper-item>
-            </paper-listbox>
-          </paper-dropdown-menu>
-        </div>
-        <div class="layout horizontal">
-          <paper-input class="flex" value="{{newInfo.legalEntityFirstName}}" label="First Name" required auto-validate error-message="First Name is required."></paper-input>
-          <paper-input class="flex" value="{{newInfo.legalEntityLastName}}" label="Last Name" required auto-validate error-message="Last Name is required."></paper-input>
-        </div>
-        <div class="layout horizontal flex">
-          <paper-input class="flex" value="{{newInfo.legalEntityDobDay}}" label="Date Of Birth - Day" type="number" required auto-validate error-message="Date Of Birth - Day is required."></paper-input>
-          <paper-input class="flex" value="{{newInfo.legalEntityDobMonth}}" label="Date Of Birth - Month" type="number" required auto-validate error-message="Date Of Birth - Month is required."></paper-input>
-          <paper-input class="flex" value="{{newInfo.legalEntityDobYear}}" label="Date Of Birth - Year" type="number" required auto-validate error-message="Date Of Birth - Year is required."></paper-input>
-        </div>
-        <div actions>
-          <paper-button on-tap="_submit">submit</paper-button>
-        </div>
-      </form>
+      <template is="dom-if" if="[[!fieldsMissing]]">
+        <i>You already submited personal informations</i>
+      </template>
+      <template is="dom-if" if="[[fieldsMissing]]">
+        <form id="form" is="iron-form">
+          <div class="layout horizontal">
+            <paper-dropdown-menu class="flex" label="Type">
+              <paper-listbox class="dropdown-content" selected="0" on-selected-item-changed="_handleTypeChanged">
+                <paper-item type="individual">Individual</paper-item>
+                <paper-item type="company">Company</paper-item>
+              </paper-listbox>
+            </paper-dropdown-menu>
+          </div>
+          <div class="layout horizontal">
+            <paper-input class="flex" value="{{newInfo.legalEntityFirstName}}" label="First Name" required auto-validate error-message="First Name is required."></paper-input>
+            <paper-input class="flex" value="{{newInfo.legalEntityLastName}}" label="Last Name" required auto-validate error-message="Last Name is required."></paper-input>
+          </div>
+          <div class="layout horizontal flex">
+            <paper-input class="flex" value="{{newInfo.legalEntityDobDay}}" label="Date Of Birth - Day" type="number" required auto-validate error-message="Date Of Birth - Day is required."></paper-input>
+            <paper-input class="flex" value="{{newInfo.legalEntityDobMonth}}" label="Date Of Birth - Month" type="number" required auto-validate error-message="Date Of Birth - Month is required."></paper-input>
+            <paper-input class="flex" value="{{newInfo.legalEntityDobYear}}" label="Date Of Birth - Year" type="number" required auto-validate error-message="Date Of Birth - Year is required."></paper-input>
+          </div>
+          <div actions>
+            <paper-button on-tap="_submit">submit</paper-button>
+          </div>
+        </form>
+      </template>
     </iron-collapse>
   </template>
   <script>
@@ -55,66 +67,32 @@
         return 'gc-user-managed-accounts-legal-entity-info';
       }
       get behaviors() {
-        return [GitcheeseBehaviors.AppContextBehavior];
+        return [
+          GitcheeseBehaviors.AppContextBehavior,
+          GitcheeseBehaviors.UserManagedAccountsInfoBehavior
+        ];
       }
       get properties() {
         return {
-          status: {
-            type: String,
-            value: 'ok'
-          },
-          managedAccount: {
-            type: Object,
-            observer: '_managedAccountChanged'
-          },
           newInfo: {
             type: Object,
             value: {}
-          },
-          _expanded: {
-            type: Boolean,
-            value: false
-          },
-          _chevronIcon: {
-            type: String,
-            computed: '_computeChevronIcon(_expanded)'
-          },
-          _statusIcon: {
-            type: String,
-            computed: '_computeStatusIcon(status)'
           }
         };
       }
-      toggle() {
-        this._expanded = !this._expanded;
-      }
-      _computeChevronIcon(expanded) {
-        return expanded ? 'expand-less' : 'expand-more';
-      }
-      _computeStatusIcon(status) {
-        let icons = {
-          'ok': 'check-circle',
-          'required': 'report-problem',
-          'past-due': 'report'
-        }
-        return icons[status];
-      }
-      _managedAccountChanged(account) {
-        if (!account.verification.fields_needed ||
-          !account.verification.fields_needed.find((f) => f.startsWith('legal_entity.'))) {
-          this.status = 'ok';
-        } else if (account.verification.disabled_reason) {
-          this.status = 'past-due';
-        } else {
-          this.status = 'required';
-        }
+      ready() {
+        this.fields.push('legal_entity.last_name',
+          'legal_entity.first_name',
+          'legal_entity.dob.year',
+          'legal_entity.dob.month',
+          'legal_entity.dob.day');
       }
       _handleTypeChanged(e, data) {
         if (!data.value) return;
         this.newInfo.legalEntityType = data.value.attributes['type'].value;
       }
       _submit() {
-        if (!this.$.form.validate()) return;
+        if (!this.$$('#form').validate()) return;
         this.$.put.generateRequest();
       }
     }
