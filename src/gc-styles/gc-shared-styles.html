@@ -1,6 +1,9 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/paper-styles/color.html">
+<link rel="import" href="../../bower_components/paper-styles/shadow.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
 <link rel="import" href="../../bower_components/paper-material/paper-material-shared-styles.html">
 <dom-module id="shared-styles">
   <template>
@@ -55,7 +58,7 @@
       --text-primary-color: var(--dark-theme-text-color);
       --default-primary-color: var(--primary-color);
       --dark-theme: {
-        background-color: var(--primary-color);
+        background-color: var(--default-primary-color);
         color: var(--dark-theme-text-color);
         --iron-icon-fill-color: var(--dark-theme-text-color);
       }
@@ -81,6 +84,11 @@
     a {
       color: initial;
       text-decoration: initial;
+    }
+    
+    [hero-title] {
+      text-transform: uppercase;
+      font-size: xx-large;
     }
     
     [actions] {

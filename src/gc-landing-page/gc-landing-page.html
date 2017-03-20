@@ -1,9 +1,37 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../gc-styles/gc-shared-styles.html">
+
 <dom-module id="gc-landing-page">
   <template>
-    <style></style>
-    <a href="/app">app</a>
-    <a href="/donate">donate</a>
+    <style include="shared-styles"></style>
+    <style>
+    :host {
+      @apply(--dark-theme);
+      @apply(--layout-fit);
+      @apply(--layout-vertical);
+    }
+    
+    section {
+      @apply(--layout-flex);
+      @apply(--layout-vertical);
+      @apply(--layout-center-center);
+    }
+    
+    iron-image {
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+      height: 250px;
+      width: 277px;
+      --iron-image-height: 250px;
+    }
+    </style>
+    <section>
+      <h1 hero-title>Gitcheese</h1>
+      <iron-image sizing="contain" preload fade src="../../images/logo.svg" placeholder="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAADCAYAAABWKLW/AAAAAXNSR0IArs4c6QAAAAlwSFlzAAAK6wAACusBgosNWgAAAC9JREFUCB1jnNaX2Swpwmz1/M3fuSxKcuKmTGwiwtLMj40Z9u/fz3Hu3DkXBiAAAAj5DM/0IBh2AAAAAElFTkSuQmCC"></iron-image>
+      <h3>New Gitcheese is comming soon!</h3>
+      <i>gitcheese@gitcheese.com</i>
+    </section>
   </template>
   <script>
   (() => {

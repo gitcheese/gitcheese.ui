@@ -2,7 +2,6 @@
   "entrypoint": "index.html",
   "shell": "src/gc-shell/gc-shell.html",
   "fragments": [
-    "src/gc-landing-page/gc-landing-page.html",
     "src/gc-app/gc-app.html",
     "src/gc-donate-app/gc-donate-app.html",
     "src/gc-repo/gc-repo-shell.html",
