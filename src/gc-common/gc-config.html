@@ -11,6 +11,11 @@
         key: {
           'localhost:8080': 'pk_test_icwCSxTloCbsT3QvNHL4uumW'
         }
+      },
+      s3Bucket: {
+        uri: {
+          'localhost:8080': 'https://s3.amazonaws.com/gitcheese-ui-dev'
+        }
       }
     };
     class GcConfig {
@@ -33,6 +38,11 @@
             type: String,
             notify: true,
             value: () => config.stripe.key[window.location.host]
+          },
+          s3BucketUri: {
+            type: String,
+            notify: true,
+            value: () => config.s3Bucket.uri[window.location.host]
           }
         };
       }

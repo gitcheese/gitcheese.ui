@@ -4,6 +4,7 @@
 <link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-progress/paper-progress.html">
 <link rel="import" href="../gc-styles/gc-shared-styles.html">
 <link rel="import" href="../gc-donate-app/stripe-checkout-importer.html">
 <link rel="import" href="../gc-common/gc-config.html">
@@ -26,7 +27,7 @@
       @apply(--layout-center-center);
     }
     
-    iron-image {
+    iron-image.feed-the-cat {
       margin-top: 1rem;
       margin-bottom: 1rem;
       height: 150px;
@@ -37,26 +38,47 @@
       @apply(--layout-horizontal);
     }
     
+    iron-image.logo {
+      --iron-image-height: 50px;
+    }
+    
     paper-button {
       @apply(--dark-theme);
     }
+    
+    paper-progress {
+      background-color: var(--primary-background-color);
+      transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 100%;
+      margin-bottom: -4px;
+      z-index: 103;
+    }
+    
+    paper-progress[hide] {
+      opacity: 0;
+      pointer-events: none;
+    }
     </style>
-    <app-route route="{{route}}" pattern="/users/:userId/repos/:repoId" data="{{routeData}}" on-active-changed="_handleRouteActiveChanged"></app-route>
+    <app-route route="{{route}}" pattern="/users/:userId/repos/:repoId" data="{{routeData}}"></app-route>
 
-    <gc-api-ajax id="get" url="/users/[[routeData.userId]]/repos/[[routeData.repoId]]" last-response="{{repo}}"></gc-api-ajax>
-    <gc-api-ajax id="post" url="/users/[[routeData.userId]]/repos/[[routeData.repoId]]/donations" method="post" body="[[donation]]" on-response="_handleDonationResponse"></gc-api-ajax>
-    <gc-config stripe-key="{{stripeKey}}"></gc-config>
+    <gc-api-ajax id="get" url="/users/[[routeData.userId]]/repos/[[routeData.repoId]]" last-response="{{repo}}" loading="{{loading}}"></gc-api-ajax>
+    <gc-api-ajax id="post" url="/users/[[routeData.userId]]/repos/[[routeData.repoId]]/donations" method="post" body="[[donation]]" loading="{{loading}}" on-response="_handleDonationResponse"></gc-api-ajax>
+    <gc-config stripe-key="{{stripeKey}}" s3-bucket-uri="{{s3BucketUri}}"></gc-config>
 
     <app-header-layout fullbleed>
       <app-header condenses reveals effects="waterfall">
         <app-toolbar>
-          <div main-title>hey yo</div>
+          <div main-title>Gitcheese</div>
+          <iron-image class="logo" src="../../images/logo.svg"></iron-image>
         </app-toolbar>
       </app-header>
+
+      <paper-progress hide$="{{!loading}}" indeterminate></paper-progress>
+
       <div class="content">
         <template is="dom-if" if="[[!success]]">
           <paper-material elevation="1">
-            <iron-image src="../../images/feed-the-cat.svg" preload sizing="cover"></iron-image>
+            <iron-image class="feed-the-cat" src="../../images/feed-the-cat.svg" preload sizing="cover"></iron-image>
             <p>Repo '[[repo.fullname]]' awaits your contribution!</p>
             <div class="donate-buttons">
               <paper-button data-amount="200" raised on-tap="_donateTapped">$2</paper-button>
@@ -65,12 +87,12 @@
               <paper-button data-amount="2000" raised on-tap="_donateTapped">$20</paper-button>
               <paper-button data-amount="5000" raised on-tap="_donateTapped">$50</paper-button>
             </div>
-            <i> Every penny makes a huge difference.</i>
+            <i>Every penny makes a huge difference.</i>
           </paper-material>
         </template>
         <template is="dom-if" if="[[success]]">
           <paper-material hidden$="[[!success]]" elevation="1">
-            <iron-image src="../../images/feed-the-cat.svg" preload sizing="cover"></iron-image>
+            <iron-image class="feed-the-cat" src="../../images/feed-the-cat.svg" preload sizing="cover"></iron-image>
             <p>Your donation is on the way!</p>
             <i>Repo '[[repo.fullname]]' should get your $$ soon. We would like to thank you on behalf of repo owner and ourselves.</i>
           </paper-material>
@@ -123,6 +145,7 @@
         this.stripe.open({
           name: 'Gitcheese',
           description: `Donation for ${this.repo.name}`,
+          image: `${this.s3BucketUri}/images/logo.svg`,
           zipCode: true,
           allowRememberMe: false,
           amount: this.donation.amount

@@ -1,6 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../gc-common/gc-config.html">
 <link rel="import" href="../gc-common/gc-app-context-behavior.html">
 <link rel="import" href="../gc-styles/gc-shared-styles.html">
 <link rel="import" href="../gc-common/gc-api-ajax.html">
@@ -15,6 +16,8 @@
     </style>
     <gc-api-ajax id="get" url="/user/repos/[[repoId]]" auth-user="[[authUser]]" last-response="{{repo}}"></gc-api-ajax>
     <gc-api-ajax id="getUser" url="/user" auth-user="[[authUser]]" last-response="{{user}}"></gc-api-ajax>
+    <gc-config s3-bucket-uri="{{s3BucketUri}}"></gc-config>
+
     <paper-material elevation="1">
       <p>Donations</p>
     </paper-material>
@@ -24,7 +27,7 @@
         <iron-image src="../../images/badge.svg"></iron-image>
       </div>
       <p>
-        <code>[![gitcheese.com](https://s3.amazonaws.com/gitcheese-ui-dev/images/badge.svg)](https://www.gitcheese.com/donate/users/[[user.id]]/repos/[[repo.id]])</code>
+        <code>[![gitcheese.com]([[s3BucketUri]]/images/badge.svg)](https://www.gitcheese.com/donate/users/[[user.id]]/repos/[[repo.id]])</code>
       </p>
     </paper-material>
   </template>
