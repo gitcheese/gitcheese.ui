@@ -5,6 +5,9 @@
 <link rel="import" href="../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-progress/paper-progress.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animated-pages.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/slide-from-right-animation.html">
 <link rel="import" href="../gc-styles/gc-shared-styles.html">
 <link rel="import" href="../gc-donate-app/stripe-checkout-importer.html">
 <link rel="import" href="../gc-common/gc-config.html">
@@ -16,10 +19,18 @@
     <style>
     .content {
       @apply(--layout-flex);
+      @apply(--layout-horizontal);
+      @apply(--layout-center-justified);
     }
     
     footer {
       @apply(--dark-theme);
+    }
+    
+    neon-animated-pages {
+      max-width: 800px;
+      @apply(--layout-flex);
+      @apply(--layout-self-start);
     }
     
     paper-material {
@@ -76,27 +87,29 @@
       <paper-progress hide$="{{!loading}}" indeterminate></paper-progress>
 
       <div class="content">
-        <template is="dom-if" if="[[!success]]">
-          <paper-material elevation="1">
-            <iron-image class="feed-the-cat" src="../../images/feed-the-cat.svg" preload sizing="cover"></iron-image>
-            <p>Repo '[[repo.fullname]]' awaits your contribution!</p>
-            <div class="donate-buttons">
-              <paper-button data-amount="200" raised on-tap="_donateTapped">$2</paper-button>
-              <paper-button data-amount="500" raised on-tap="_donateTapped">$5</paper-button>
-              <paper-button data-amount="1000" raised on-tap="_donateTapped">$10</paper-button>
-              <paper-button data-amount="2000" raised on-tap="_donateTapped">$20</paper-button>
-              <paper-button data-amount="5000" raised on-tap="_donateTapped">$50</paper-button>
-            </div>
-            <i>Every penny makes a huge difference.</i>
-          </paper-material>
-        </template>
-        <template is="dom-if" if="[[success]]">
-          <paper-material hidden$="[[!success]]" elevation="1">
-            <iron-image class="feed-the-cat" src="../../images/feed-the-cat.svg" preload sizing="cover"></iron-image>
-            <p>Your donation is on the way!</p>
-            <i>Repo '[[repo.fullname]]' should get your $$ soon. We would like to thank you on behalf of repo owner and ourselves.</i>
-          </paper-material>
-        </template>
+        <neon-animated-pages selected="[[currentPage]]" fallback-selection="0" entry-animation="slide-from-right-animation" exit-animation="fade-out-animation">
+          <neon-animatable>
+            <paper-material elevation="1">
+              <iron-image class="feed-the-cat" src="../../images/feed-the-cat.svg" preload sizing="cover"></iron-image>
+              <p>Repo '[[repo.fullname]]' awaits your contribution!</p>
+              <div class="donate-buttons">
+                <paper-button data-amount="200" raised on-tap="_donateTapped">$2</paper-button>
+                <paper-button data-amount="500" raised on-tap="_donateTapped">$5</paper-button>
+                <paper-button data-amount="1000" raised on-tap="_donateTapped">$10</paper-button>
+                <paper-button data-amount="2000" raised on-tap="_donateTapped">$20</paper-button>
+                <paper-button data-amount="5000" raised on-tap="_donateTapped">$50</paper-button>
+              </div>
+              <i>Every penny makes a huge difference.</i>
+            </paper-material>
+          </neon-animatable>
+          <neon-animatable>
+            <paper-material hidden$="[[!success]]" elevation="1">
+              <iron-image class="feed-the-cat" src="../../images/feed-the-cat.svg" preload sizing="cover"></iron-image>
+              <p>Your donation is on the way!</p>
+              <i>Repo '[[repo.fullname]]' should get your $$ soon. We would like to thank you on behalf of repo owner and ourselves.</i>
+            </paper-material>
+          </neon-animatable>
+        </neon-animated-pages>
       </div>
       <footer>
         <app-toolbar>
@@ -157,7 +170,7 @@
         this.$.post.generateRequest();
       }
       _handleDonationResponse() {
-        this.success = true;
+        this.currentPage = 1;
       }
     }
     new Polymer(GcDonateApp);
