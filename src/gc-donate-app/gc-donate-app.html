@@ -1,8 +1,88 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../gc-styles/gc-shared-styles.html">
+<link rel="import" href="../gc-donate-app/stripe-checkout-importer.html">
+<link rel="import" href="../gc-common/gc-config.html">
+<link rel="import" href="../gc-common/gc-api-ajax.html">
+
 <dom-module id="gc-donate-app">
   <template>
-    <style></style>
-    donate app
+    <style include="shared-styles"></style>
+    <style>
+    .content {
+      @apply(--layout-flex);
+    }
+    
+    footer {
+      @apply(--dark-theme);
+    }
+    
+    paper-material {
+      @apply(--layout-vertical);
+      @apply(--layout-center-center);
+    }
+    
+    iron-image {
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+      height: 150px;
+      width: 150px;
+    }
+    
+    .donate-buttons {
+      @apply(--layout-horizontal);
+    }
+    
+    paper-button {
+      @apply(--dark-theme);
+    }
+    </style>
+    <app-route route="{{route}}" pattern="/users/:userId/repos/:repoId" data="{{routeData}}" on-active-changed="_handleRouteActiveChanged"></app-route>
+
+    <gc-api-ajax id="get" url="/users/[[routeData.userId]]/repos/[[routeData.repoId]]" last-response="{{repo}}"></gc-api-ajax>
+    <gc-api-ajax id="post" url="/users/[[routeData.userId]]/repos/[[routeData.repoId]]/donations" method="post" body="[[donation]]" on-response="_handleDonationResponse"></gc-api-ajax>
+    <gc-config stripe-key="{{stripeKey}}"></gc-config>
+
+    <app-header-layout fullbleed>
+      <app-header condenses reveals effects="waterfall">
+        <app-toolbar>
+          <div main-title>hey yo</div>
+        </app-toolbar>
+      </app-header>
+      <div class="content">
+        <template is="dom-if" if="[[!success]]">
+          <paper-material elevation="1">
+            <iron-image src="../../images/feed-the-cat.svg" preload sizing="cover"></iron-image>
+            <p>Repo '[[repo.fullname]]' awaits your contribution!</p>
+            <div class="donate-buttons">
+              <paper-button data-amount="200" raised on-tap="_donateTapped">$2</paper-button>
+              <paper-button data-amount="500" raised on-tap="_donateTapped">$5</paper-button>
+              <paper-button data-amount="1000" raised on-tap="_donateTapped">$10</paper-button>
+              <paper-button data-amount="2000" raised on-tap="_donateTapped">$20</paper-button>
+              <paper-button data-amount="5000" raised on-tap="_donateTapped">$50</paper-button>
+            </div>
+            <i> Every penny makes a huge difference.</i>
+          </paper-material>
+        </template>
+        <template is="dom-if" if="[[success]]">
+          <paper-material hidden$="[[!success]]" elevation="1">
+            <iron-image src="../../images/feed-the-cat.svg" preload sizing="cover"></iron-image>
+            <p>Your donation is on the way!</p>
+            <i>Repo '[[repo.fullname]]' should get your $$ soon. We would like to thank you on behalf of repo owner and ourselves.</i>
+          </paper-material>
+        </template>
+      </div>
+      <footer>
+        <app-toolbar>
+          one - two -tree
+        </app-toolbar>
+      </footer>
+    </app-header-layout>
+
   </template>
   <script>
   (() => {
@@ -10,6 +90,51 @@
     class GcDonateApp {
       get is() {
         return 'gc-donate-app';
+      }
+      get properties() {
+        return {
+          routeData: {
+            type: Object,
+            observer: '_handleRouteDataChanged'
+          },
+          donation: {
+            type: Object,
+            value: {}
+          },
+          success: {
+            type: Boolean,
+            value: false
+          }
+        };
+      }
+      ready() {
+        this.stripe = StripeCheckout.configure({
+          key: this.stripeKey,
+          locale: 'auto',
+          token: this._tokenHandler.bind(this)
+        });
+      }
+      _handleRouteDataChanged(routeData) {
+        if (!routeData) return;
+        this.$.get.generateRequest();
+      }
+      _donateTapped(e) {
+        this.donation.amount = Number(e.currentTarget.dataset.amount);
+        this.stripe.open({
+          name: 'Gitcheese',
+          description: `Donation for ${this.repo.name}`,
+          zipCode: true,
+          allowRememberMe: false,
+          amount: this.donation.amount
+        });
+      }
+      _tokenHandler(token) {
+        this.donation.email = token.email;
+        this.donation.token = token.id;
+        this.$.post.generateRequest();
+      }
+      _handleDonationResponse() {
+        this.success = true;
       }
     }
     new Polymer(GcDonateApp);

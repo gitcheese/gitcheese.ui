@@ -44,7 +44,7 @@
       };
     }
     _computeApiHeaders(authUser) {
-      if (!authUser) return;
+      if (!authUser) return {};
       return {
         authorization: authUser.authToken
       };
