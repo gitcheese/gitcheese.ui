@@ -47,6 +47,7 @@
     
     .donate-buttons {
       @apply(--layout-horizontal);
+      @apply(--layout-wrap);
     }
     
     iron-image.logo {
@@ -55,6 +56,7 @@
     
     paper-button {
       @apply(--dark-theme);
+      margin-bottom: 1rem;
     }
     
     paper-progress {
@@ -158,7 +160,7 @@
         this.stripe.open({
           name: 'Gitcheese',
           description: `Donation for ${this.repo.name}`,
-          image: `${this.s3BucketUri}/images/logo.svg`,
+          image: `${this.s3BucketUri}/images/logo-128x123.png`,
           zipCode: true,
           allowRememberMe: false,
           amount: this.donation.amount
