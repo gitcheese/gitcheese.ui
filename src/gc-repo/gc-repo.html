@@ -1,5 +1,8 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
 <link rel="import" href="../../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../gc-common/gc-config.html">
 <link rel="import" href="../gc-common/gc-app-context-behavior.html">
@@ -15,11 +18,25 @@
     }
     </style>
     <gc-api-ajax id="get" url="/user/repos/[[repoId]]" auth-user="[[authUser]]" last-response="{{repo}}"></gc-api-ajax>
+    <gc-api-ajax id="getDonations" url="/user/repos/[[repoId]]/donations" auth-user="[[authUser]]" last-response="{{donations}}"></gc-api-ajax>
     <gc-api-ajax id="getUser" url="/user" auth-user="[[authUser]]" last-response="{{user}}"></gc-api-ajax>
     <gc-config s3-bucket-uri="{{s3BucketUri}}"></gc-config>
 
     <paper-material elevation="1">
-      <p>Donations</p>
+      <p class="layout horizontal">
+        <span class="flex">Donations</span>
+        <span>[[donatedAmount]]</span>
+      </p>
+      <paper-listbox>
+        <template is="dom-repeat" items="[[donations]]" sort="_sortDonations">
+          <paper-item>
+            <paper-item-body>
+              [[_formatTimeStamp(item.created)]]
+            </paper-item-body>
+            <span>[[_formatAmount(item.amount)]]</span>
+          </paper-item>
+        </template>
+      </paper-listbox>
     </paper-material>
     <paper-material elevation="1">
       <div class="layout horizontal">
@@ -46,12 +63,42 @@
           repo: {
             type: Object,
             notify: true
+          },
+          donatedAmount: {
+            type: String,
+            computed: '_formatAmount(repo.donatedAmount)'
+          },
+          currencyFormatter: {
+            type: Object,
+            value: () => {
+              return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2,
+              });
+            }
+          },
+          dateTimeFormatter: {
+            type: Object,
+            value: () => {
+              return new Intl.DateTimeFormat();
+            }
           }
         };
       }
       loadData() {
         this.$.get.generateRequest();
         this.$.getUser.generateRequest();
+        this.$.getDonations.generateRequest();
+      }
+      _formatAmount(amount) {
+        return this.currencyFormatter.format(amount / 100);
+      }
+      _formatTimeStamp(timeStamp) {
+        return this.dateTimeFormatter.format(new Date(timeStamp * 1000));
+      }
+      _sortDonations(a, b) {
+        return b.created > a.created ? 1 : -1;
       }
     }
     new Polymer(GcRepo);
