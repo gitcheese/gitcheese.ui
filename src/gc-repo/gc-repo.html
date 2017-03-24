@@ -92,7 +92,7 @@
         this.$.getDonations.generateRequest();
       }
       _formatAmount(amount) {
-        return this.currencyFormatter.format(amount / 100);
+        return this.currencyFormatter.format((amount || 0) / 100);
       }
       _formatTimeStamp(timeStamp) {
         return this.dateTimeFormatter.format(new Date(timeStamp * 1000));
