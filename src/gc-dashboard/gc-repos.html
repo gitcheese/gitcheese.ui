@@ -1,6 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../gc-common/gc-app-context-behavior.html">
 <link rel="import" href="../gc-styles/gc-shared-styles.html">
@@ -9,8 +10,12 @@
   <template>
     <style include="shared-styles"></style>
     <gc-api-ajax id="get" url="/user/repos" auth-user="[[authUser]]" last-response="{{repos}}"></gc-api-ajax>
+    <gc-api-ajax id="put" method="put" url="/user/repos" auth-user="[[authUser]]" on-response="_handlePutResponse" last-response="{{_newRepos}}"></gc-api-ajax>
     <paper-material elevation="1">
-      <p>Your Repositories</p>
+      <div class="layout horizontal">
+        <p class="flex">Your Repositories</p>
+        <paper-icon-button icon="refresh" on-tap="updateRepos"></paper-icon-button>
+      </div>
       <paper-listbox>
         <template is="dom-repeat" items="[[repos]]">
           <a href="/app/repos/[[item.id]]">
@@ -34,6 +39,12 @@
       }
       loadData() {
         this.$.get.generateRequest();
+      }
+      updateRepos() {
+        this.$.put.generateRequest();
+      }
+      _handlePutResponse() {
+        this.push('repos', ...this._newRepos)
       }
     }
     new Polymer(GcRepos);

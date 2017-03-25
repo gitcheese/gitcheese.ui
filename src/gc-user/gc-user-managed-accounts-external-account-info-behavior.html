@@ -25,7 +25,6 @@
       Object.keys(this._data).forEach((key) => {
         result[`bank_account[${key}]`] = this._data[key];
       });
-      console.log(result);
       return result;
     }
   };
