@@ -1,0 +1,63 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../gc-styles/gc-shared-styles.html">
+<dom-module id="gc-landing-page-scroll-down-button">
+  <template>
+    <style include="shared-styles"></style>
+    <style>
+    :host {
+      display: block;
+    }
+    
+    .prev-section {
+      height: 32px;
+      @apply(--dark-theme);
+    }
+    
+    .next-section {
+      background-color: var(--primary-background-color);
+      @apply(--layout-vertical);
+      @apply(--layout-center-center);
+    }
+    
+    :host([alt]) .prev-section {
+      background-color: var(--primary-background-color);
+    }
+    
+    :host([alt]) .next-section {
+      @apply(--dark-theme);
+    }
+    
+    paper-fab {
+      margin-top: -28px;
+    }
+    </style>
+    <div class="prev-section"></div>
+    <div class="next-section">
+      <paper-fab on-tap="scroll" icon="expand-more"></paper-fab>
+    </div>
+  </template>
+  <script>
+  (() => {
+    'use strict';
+    class GcLandingPageScrollDownButton {
+      get is() {
+        return 'gc-landing-page-scroll-down-button';
+      }
+      get properties() {
+        return {
+          scrollTo: {
+            type: Object
+          }
+        };
+      }
+      scroll(e) {
+        this.scrollTo.scrollIntoView({
+          behavior: 'smooth'
+        });
+      }
+    }
+    new Polymer(GcLandingPageScrollDownButton);
+  })();
+  </script>
+</dom-module>

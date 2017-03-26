@@ -17,6 +17,9 @@
         <paper-icon-button icon="refresh" on-tap="updateRepos"></paper-icon-button>
       </div>
       <paper-listbox>
+        <template is="dom-if" if="[[noRepos]]">
+          <paper-item><i>So lonely here :( You can always refresh to fetch repos from GitHub</i></paper-item>
+        </template>
         <template is="dom-repeat" items="[[repos]]">
           <a href="/app/repos/[[item.id]]">
             <paper-item>[[item.fullname]]</paper-item>
@@ -37,11 +40,25 @@
           GitcheeseBehaviors.AppContextBehavior
         ];
       }
+      get properties() {
+        return {
+          repos: {
+            type: Array
+          },
+          noRepos: {
+            type: Boolean,
+            computed: '_computeNoRepos(repos.*)'
+          }
+        };
+      }
       loadData() {
         this.$.get.generateRequest();
       }
       updateRepos() {
         this.$.put.generateRequest();
+      }
+      _computeNoRepos() {
+        return this.repos && this.repos.length === 0;
       }
       _handleGetResponse() {
         if (this.repos.length === 0)

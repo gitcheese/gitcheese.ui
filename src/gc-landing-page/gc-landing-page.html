@@ -1,37 +1,182 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="../../bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="../gc-styles/gc-shared-styles.html">
-
+<link rel="import" href="../gc-landing-page/gc-landing-page-section.html">
+<link rel="import" href="../gc-landing-page/gc-landing-page-scroll-down-button.html">
 <dom-module id="gc-landing-page">
   <template>
     <style include="shared-styles"></style>
     <style>
     :host {
-      @apply(--dark-theme);
-      @apply(--layout-fit);
-      @apply(--layout-vertical);
+      display: block;
     }
     
-    section {
-      @apply(--layout-flex);
+    .hero-toolbar {
+      height: calc(100vh - 128px);
       @apply(--layout-vertical);
       @apply(--layout-center-center);
+      text-transform: uppercase;
+      text-align: center;
     }
     
-    iron-image {
-      margin-top: 1rem;
-      margin-bottom: 2rem;
-      height: 250px;
-      width: 277px;
-      --iron-image-height: 250px;
+    .hero-toolbar paper-button {
+      color: var(--light-theme-base-color);
+      background: var(--accent-color);
+    }
+    
+    .supported-countries-list {
+      @apply(--layout-horizontal);
+      @apply(--layout-wrap);
+    }
+    
+    .supported-countries-list paper-icon-item {
+      flex-basis: 28%;
+    }
+    
+    paper-material {
+      margin: 1rem;
+      min-width: 200px;
+    }
+    
+    iron-image.flag {
+      width: 21px;
+      height: 15px;
+      border-radius: 2px;
+    }
+    
+    @media (min-width: 601px) {
+      [drawer-toggle] {
+        display: none;
+      }
     }
     </style>
-    <section>
-      <h1 hero-title>Gitcheese</h1>
-      <iron-image sizing="contain" preload fade src="../../images/logo.svg" placeholder="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAADCAYAAABWKLW/AAAAAXNSR0IArs4c6QAAAAlwSFlzAAAK6wAACusBgosNWgAAAC9JREFUCB1jnNaX2Swpwmz1/M3fuSxKcuKmTGwiwtLMj40Z9u/fz3Hu3DkXBiAAAAj5DM/0IBh2AAAAAElFTkSuQmCC"></iron-image>
-      <h3>New Gitcheese is comming soon!</h3>
-      <i>gitcheese@gitcheese.com</i>
-    </section>
+    <app-drawer-layout force-narrow>
+      <app-drawer>
+        drawer-content
+      </app-drawer>
+      <app-header-layout>
+        <app-header condenses reveals shadow effects="waterfall">
+          <app-toolbar>
+            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+            <div main-title>
+              Gitcheese
+            </div>
+            <paper-tabs menu selected="0">
+              <paper-tab data-target="about" on-tap="scroll">About</paper-tab>
+              <paper-tab data-target="how" on-tap="scroll">How</paper-tab>
+              <paper-tab data-target="why" on-tap="scroll">Why Us</paper-tab>
+              <paper-tab data-target="pricing" on-tap="scroll">Pricing</paper-tab>
+              <paper-tab data-target="contact" on-tap="scroll">Contact</paper-tab>
+            </paper-tabs>
+
+          </app-toolbar>
+          <app-toolbar class="hero-toolbar">
+            <h2>Make Some Cheese With Your GIT!</h2>
+            <p><i>Donations for open source projects</i></p>
+            <paper-button rised>Start Making It</paper-button>
+          </app-toolbar>
+        </app-header>
+        <div class="layout vertical">
+          <gc-landing-page-scroll-down-button scroll-to="[[aboutSection]]">
+          </gc-landing-page-scroll-down-button>
+          <gc-landing-page-section id="about" title="simplest donation platform">
+            <p>Gitcheese is simple way to tip open source developers!</p>
+            <p>We believe that software should be free (as in free speech) but that doesn’t mean there is not a place for tips! And who hasn’t wanted to tip another developer some cheese for having an awesome solution.</p>
+          </gc-landing-page-section>
+          <gc-landing-page-section id="how" title="how" alt>
+            <div class="layout horizontal">
+              <paper-material elevation="3">
+                <h2>Login With GitHub</h2>
+                <div>
+                  <p>
+                    All you need is a GitHub acccount - just login and enjoy Gitcheese!
+                  </p>
+                </div>
+              </paper-material>
+              <paper-material elevation="3">
+                <h2>Add Badge</h2>
+                <p>
+                  Add Gitcheese donate badge to your repo readme file. We even prepared a standard code snippet for that!
+                </p>
+              </paper-material>
+              <paper-material elevation="3">
+                <h2>Make $$</h2>
+                <p>
+                  Sit and wait for donations!
+                </p>
+              </paper-material>
+            </div>
+          </gc-landing-page-section>
+          <gc-landing-page-section id="why" title="why gitcheese">
+            <div class="layout horizontal">
+              <paper-material elevation="3">
+                <h2>Simple</h2>
+                <div>
+                  <p>
+                    Our mission is to engage open source donations so it has to be simple! Just login, put badge and wait :)
+                  </p>
+                </div>
+              </paper-material>
+              <paper-material elevation="3">
+                <h2>Secure</h2>
+                <p>
+                  We don't store your sesitive data - we almost dont store any data! We gather bare minimum, send to Stripe and forget about it!
+                </p>
+                <p>
+                  You dont trust us?! Thats fine! Gitcheese is open source, so its 100% transparent for you!
+                </p>
+              </paper-material>
+              <paper-material elevation="3">
+                <h2>Open Source</h2>
+                <p>
+                  This platform is for you, so feel free to contribute to Gitcheese.
+                </p>
+              </paper-material>
+            </div>
+          </gc-landing-page-section>
+          <gc-landing-page-section id="pricing" title="pricing" alt>
+            <h2>Free</h2>
+            <h3>What do we mean by Free?</h3>
+            <p>Exactly like it sounds: Free as in Speech! There is a small cost for processing the payments which we cannot avoid - but we are not currently taking any money from the donations. As an example: a $5 tip pledge will give $4.55 to a happy developer (91%).</p>
+          </gc-landing-page-section>
+          <gc-landing-page-section id="countries" title="suported countries">
+            <h2>23 Countries all around the world!</h2>
+            <p>Gitcheese supports all the countries that Stripe supports</p>
+            <div class="supported-countries-list">
+              <template is="dom-repeat" items="[[supportedCountries]]" sort="_sortCountries">
+                <paper-icon-item>
+                  <iron-image item-icon class="flag" src="../../bower_components/flag-icon-css/flags/1x1/[[item.code]].svg" preload sizing="cover"></iron-image>
+                  [[item.name]]
+                </paper-icon-item>
+              </template>
+            </div>
+          </gc-landing-page-section>
+          <gc-landing-page-section id="contact" title="contact" alt>
+            <paper-input label="Your e-mail"></paper-input>
+            <paper-textarea label="Message" rows="5"></paper-textarea>
+            <paper-button>Send</paper-button>
+          </gc-landing-page-section>
+        </div>
+        <footer>
+
+        </footer>
+      </app-header-layout>
+    </app-drawer-layout>
   </template>
   <script>
   (() => {
@@ -40,6 +185,98 @@
       get is() {
         return 'gc-landing-page';
       }
+      get properties() {
+        return {
+          aboutSection: {
+            type: Object,
+            value: () => this.$.about
+          },
+          supportedCountries: {
+            type: Array,
+            value: [{
+              name: 'Australia',
+              code: 'au'
+            }, {
+              name: 'United States',
+              code: 'us'
+            }, {
+              name: 'Canada',
+              code: 'ca'
+            }, {
+              name: 'Austria',
+              code: 'at'
+            }, {
+              name: 'Denmark',
+              code: 'dk'
+            }, {
+              name: 'Belgium',
+              code: 'be'
+            }, {
+              name: 'Finland',
+              code: 'fi'
+            }, {
+              name: 'Germany',
+              code: 'de'
+            }, {
+              name: 'France',
+              code: 'fr'
+            }, {
+              name: 'Hong Kong',
+              code: 'hk'
+            }, {
+              name: 'Ireland',
+              code: 'ir'
+            }, {
+              name: 'Italy',
+              code: 'it'
+            }, {
+              name: 'Japan',
+              code: 'jp'
+            }, {
+              name: 'Luxembourg',
+              code: 'lu'
+            }, {
+              name: 'Norway',
+              code: 'no'
+            }, {
+              name: 'Netherlands',
+              code: 'ne'
+            }, {
+              name: 'Singapore',
+              code: 'sg'
+            }, {
+              name: 'New Zealand',
+              code: 'nz'
+            }, {
+              name: 'Spain',
+              code: 'es'
+            }, {
+              name: 'Portugal',
+              code: 'pt'
+            }, {
+              name: 'Sweden',
+              code: 'se'
+            }, {
+              name: 'Switzerland',
+              code: 'ch'
+            }, {
+              name: 'United Kingdom',
+              code: 'gb'
+            }]
+          }
+        };
+      }
+      scroll(e) {
+        this.$[e.currentTarget.dataset.target].scrollIntoView();
+      }
+      _sortCountries(a, b) {
+          return a.name > b.name ? 1 : -1;
+        }
+        // scroll position and tabs
+        // function testScroll(ev){
+        //     if(window.pageYOffset>400)alert('User has scrolled at least 400 px!');
+        // }
+        // window.onscroll=testScroll
     }
     new Polymer(GcLandingPage);
   })();

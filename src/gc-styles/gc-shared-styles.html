@@ -57,17 +57,21 @@
      */
       --text-primary-color: var(--dark-theme-text-color);
       --default-primary-color: var(--primary-color);
+      --paper-progress-active-color: var(--accent-color);
+      color: var(--primary-text-color);
       --dark-theme: {
         background-color: var(--default-primary-color);
         color: var(--dark-theme-text-color);
         --iron-icon-fill-color: var(--dark-theme-text-color);
       }
-      ;
-      --paper-progress-active-color:var(--accent-color);
     }
     
-    app-header {
+    app-header * {
       color: #fff;
+    }
+    
+    app-header,
+    app-header a {
       background-color: var(--primary-color)
     }
     
@@ -77,6 +81,7 @@
     
     paper-material {
       background-color: var(--primary-background-color);
+      color: var(--primary-text-color);
       padding: 1rem;
       margin: 1rem;
     }

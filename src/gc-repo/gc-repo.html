@@ -28,6 +28,9 @@
         <span>[[donatedAmount]]</span>
       </p>
       <paper-listbox>
+        <template is="dom-if" if="[[noDonations]]">
+          <paper-item><i>No one donated yet - keep pushing!</i></paper-item>
+        </template>
         <template is="dom-repeat" items="[[donations]]" sort="_sortDonations">
           <paper-item>
             <paper-item-body>
@@ -64,9 +67,16 @@
             type: Object,
             notify: true
           },
+          donations: {
+            type: Array
+          },
           donatedAmount: {
             type: String,
             computed: '_formatAmount(repo.donatedAmount)'
+          },
+          noDonations: {
+            type: Boolean,
+            computed: '_computeNoDonations(donations.*)'
           },
           currencyFormatter: {
             type: Object,
@@ -99,6 +109,9 @@
       }
       _sortDonations(a, b) {
         return b.created > a.created ? 1 : -1;
+      }
+      _computeNoDonations() {
+        return this.donations && this.donations.length === 0;
       }
     }
     new Polymer(GcRepo);

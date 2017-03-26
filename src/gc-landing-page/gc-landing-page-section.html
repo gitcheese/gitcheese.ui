@@ -1,0 +1,73 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../gc-styles/gc-shared-styles.html">
+<dom-module id="gc-landing-page-section">
+  <template>
+    <style include="shared-styles"></style>
+    <style>
+    :host {
+      display: block;
+      background-color: var(--primary-background-color);
+      @apply(--layout-vertical);
+      @apply(--layout-center-center);
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+    }
+    
+    :host([alt]),
+    :host([alt]) * {
+      @apply(--dark-theme);
+    }
+    
+    section {
+      max-width: 800px;
+    }
+    
+    section > h1 {
+      text-transform: uppercase;
+      text-align: center;
+    }
+    
+    section > h1:after {
+      content: '';
+      display: block;
+      background: var(--primary-color);
+      height: 3px;
+      max-width: 4rem;
+      width: 100%;
+      margin: 0 auto;
+      margin-top: 1rem;
+    }
+    
+    :host([alt]) section > h1:after {
+      background: var(--accent-color);
+    }
+    </style>
+
+    <section>
+      <h1>[[title]]</h1>
+      <content></content>
+    </section>
+  </template>
+  <script>
+  (() => {
+    'use strict';
+    class GcLandingPageSection {
+      get is() {
+        return 'gc-landing-page-section';
+      }
+      get properties() {
+        return {
+          alt: {
+            type: Boolean,
+            reflectToAttribute: true
+          },
+          title: {
+            type: String
+          }
+        };
+      }
+    }
+    new Polymer(GcLandingPageSection);
+  })();
+  </script>
+</dom-module>

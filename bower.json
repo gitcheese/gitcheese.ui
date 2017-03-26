@@ -31,7 +31,10 @@
     "gold-email-input": "polymerelements/gold-email-input#^1.0.9",
     "paper-dialog": "polymerelements/paper-dialog#^1.1.0",
     "paper-dropdown-menu": "polymerelements/paper-dropdown-menu#^1.5.0",
-    "paper-progress": "polymerelements/paper-progress#^1.0.11"
+    "paper-progress": "polymerelements/paper-progress#^1.0.11",
+    "paper-fab": "polymerelements/paper-fab#^1.2.1",
+    "paper-card": "polymerelements/paper-card#^1.1.4",
+    "flag-icon-css": "^2.8.0"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
