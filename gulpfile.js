@@ -16,6 +16,7 @@ const babel = require('gulp-babel');
 const imagemin = require('gulp-imagemin');
 const htmlmin = require('gulp-html-minifier');
 const cssSlam = require('css-slam').gulp;
+const autoprefixer = require('gulp-html-autoprefixer');
 const mergeStream = require('merge-stream');
 const polymerBuild = require('polymer-build');
 const swPrecacheConfig = require('./sw-precache-config.js');
@@ -45,6 +46,7 @@ function build() {
             presets: ['es2015']
           })))
           .pipe(gulpif(/\.js$/, uglify()))
+          .pipe(gulpif(/\.html$/, autoprefixer()))
           .pipe(gulpif(/\.html$/, cssSlam()))
           .pipe(gulpif(/\.html$/, htmlmin({ removeComments: true })))
           .pipe(gulpif(/\.(png|gif|jpg|svg)$/, imagemin()))
