@@ -54,6 +54,7 @@ function build() {
         let dependenciesStream = project.dependencies()
           .pipe(dependenciesHtmlSplitter.split())
           .pipe(gulpif(/\.js$/, uglify()))
+          .pipe(gulpif(/\.html$/, autoprefixer()))
           .pipe(gulpif(/\.html$/, cssSlam()))
           .pipe(gulpif(/\.html$/, htmlmin({ removeComments: true })))
           .pipe(dependenciesHtmlSplitter.rejoin());
