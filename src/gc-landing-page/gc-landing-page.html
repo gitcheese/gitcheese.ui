@@ -1,6 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/editor-icons.html">
 <link rel="import" href="../../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
 <link rel="import" href="../../bower_components/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="../../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
@@ -15,6 +16,7 @@
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../gc-styles/gc-shared-styles.html">
 <link rel="import" href="../gc-landing-page/gc-landing-page-section.html">
 <link rel="import" href="../gc-landing-page/gc-landing-page-scroll-down-button.html">
@@ -35,7 +37,7 @@
     }
     
     .hero-toolbar paper-button {
-      color: var(--light-theme-base-color);
+      color: var(--primary-text-color);
       background: var(--accent-color);
     }
     
@@ -48,15 +50,72 @@
       flex-basis: 28%;
     }
     
+    #how > div > paper-material,
+    #how > div > paper-card {
+      flex-basis: 25%;
+    }
+    
     paper-material {
+      border-radius: 2px;
+      text-align: center;
       margin: 1rem;
       min-width: 200px;
+    }
+    
+    paper-material > header {
+      font-size: 1.5em;
+      text-align: center;
     }
     
     iron-image.flag {
       width: 21px;
       height: 15px;
       border-radius: 2px;
+    }
+    
+    gc-landing-page-section[alt] paper-input,
+    gc-landing-page-section[alt] paper-textarea {
+      --paper-input-container-color: var(--dark-theme-text-color);
+      --paper-input-container-focus-color: var(--dark-theme-text-color);
+      --paper-input-container-input-color: var(--dark-theme-text-color);
+    }
+    
+    paper-material > iron-image {
+      height: 80px;
+      width: 80px;
+    }
+    
+    .price-plan {
+      text-align: initial;
+      max-width: 200px;
+    }
+    
+    .price-plan > header {
+      margin-bottom: 2rem;
+    }
+    
+    .price-plan > header::after {
+      content: "";
+      display: block;
+      background: var(--divider-color);
+      height: 1px;
+      width: 100%;
+      margin: 0 auto;
+      margin-top: 1rem;
+    }
+    
+    .price-plan footer {
+      text-align: center;
+    }
+    
+    .price-plan paper-button {
+      color: var(--dark-theme-text-color);
+      background-color: var(--primary-color);
+    }
+    
+    .crowd {
+      height: 400px;
+      width: 400px;
     }
     
     @media (min-width: 601px) {
@@ -83,7 +142,6 @@
               <paper-tab data-target="pricing" on-tap="scroll">Pricing</paper-tab>
               <paper-tab data-target="contact" on-tap="scroll">Contact</paper-tab>
             </paper-tabs>
-
           </app-toolbar>
           <app-toolbar class="hero-toolbar">
             <h2>Make Some Cheese With Your GIT!</h2>
@@ -95,81 +153,101 @@
           <gc-landing-page-scroll-down-button scroll-to="[[aboutSection]]">
           </gc-landing-page-scroll-down-button>
           <gc-landing-page-section id="about" title="simplest donation platform">
-            <p>Gitcheese is simple way to tip open source developers!</p>
-            <p>We believe that software should be free (as in free speech) but that doesn’t mean there is not a place for tips! And who hasn’t wanted to tip another developer some cheese for having an awesome solution.</p>
-          </gc-landing-page-section>
-          <gc-landing-page-section id="how" title="how" alt>
             <div class="layout horizontal">
-              <paper-material elevation="3">
-                <h2>Login With GitHub</h2>
-                <div>
-                  <p>
-                    All you need is a GitHub acccount - just login and enjoy Gitcheese!
-                  </p>
-                </div>
-              </paper-material>
-              <paper-material elevation="3">
-                <h2>Add Badge</h2>
-                <p>
-                  Add Gitcheese donate badge to your repo readme file. We even prepared a standard code snippet for that!
-                </p>
-              </paper-material>
-              <paper-material elevation="3">
-                <h2>Make $$</h2>
-                <p>
-                  Sit and wait for donations!
-                </p>
-              </paper-material>
+              <div>
+                <p>Gitcheese is simple way to tip open source developers!</p>
+                <p>We believe that software should be free (as in free speech) but that doesn’t mean there is not a place for tips! And who hasn’t wanted to tip another developer some cheese for having an awesome solution.</p>
+              </div>
+              <div>
+                <iron-image class="crowd" src="/../../images/crowd.png" preload sizing="contain"></iron-image>
+              </div>
             </div>
           </gc-landing-page-section>
-          <gc-landing-page-section id="why" title="why gitcheese">
-            <div class="layout horizontal">
-              <paper-material elevation="3">
-                <h2>Simple</h2>
-                <div>
-                  <p>
-                    Our mission is to engage open source donations so it has to be simple! Just login, put badge and wait :)
-                  </p>
-                </div>
-              </paper-material>
-              <paper-material elevation="3">
-                <h2>Secure</h2>
+          <gc-landing-page-section id="how" title="how" alt>
+            <div class="layout horizontal wrap">
+              <paper-material elevation="2">
+                <header>Simple</header>
                 <p>
-                  We don't store your sesitive data - we almost dont store any data! We gather bare minimum, send to Stripe and forget about it!
+                  2 steps - login and copy-paste badge. Done!
                 </p>
                 <p>
-                  You dont trust us?! Thats fine! Gitcheese is open source, so its 100% transparent for you!
+                  Our mission is to engage open source donations so it has to be simple!
                 </p>
               </paper-material>
-              <paper-material elevation="3">
-                <h2>Open Source</h2>
+              <paper-material elevation="2">
+                <iron-image class="mark-github" src="/../../images/mark-github.svg" sizing="contain"></iron-image>
+                <header>GitHub</header>
+                <p>
+                  All you need is a GitHub acccount - just login and enjoy Gitcheese!
+                </p>
+              </paper-material>
+              <paper-material elevation="2">
+                <iron-image class="gitcheese-badge" src="/../../images/badge.svg" sizing="contain"></iron-image>
+                <header>Badge</header>
+                <p>
+                  Gitcheese donate badge for your repo readme file.
+                </p>
+              </paper-material>
+              <paper-material elevation="2">
+                <iron-image class="stripe" src="/../../images/powered_by_stripe.svg" sizing="contain"></iron-image>
+                <header>Powered by Stripe</header>
+                <p>
+                  Thanks to Stripe everything is taken care of for you - just sit and wait for donations!
+                </p>
+              </paper-material>
+
+              <paper-material elevation="2">
+                <header>Secure</header>
+                <p>
+                  We don't store your sesitive data - we almost dont store any data!
+                </p>
+              </paper-material>
+              <paper-material elevation="2">
+                <iron-image class="opensource" src="/../../images/opensource.svg" sizing="contain"></iron-image>
+                <header>Open Source</header>
                 <p>
                   This platform is for you, so feel free to contribute to Gitcheese.
                 </p>
               </paper-material>
             </div>
           </gc-landing-page-section>
-          <gc-landing-page-section id="pricing" title="pricing" alt>
-            <h2>Free</h2>
-            <h3>What do we mean by Free?</h3>
-            <p>Exactly like it sounds: Free as in Speech! There is a small cost for processing the payments which we cannot avoid - but we are not currently taking any money from the donations. As an example: a $5 tip pledge will give $4.55 to a happy developer (91%).</p>
+          <gc-landing-page-section id="pricing" title="pricing">
+            <div class="layout horizontal">
+              <paper-material class="price-plan">
+                <header>FREE</header>
+                <ul>
+                  <li>Unlimited Repos</li>
+                  <li>Unlimited Donations</li>
+                  <li>Unlimited Everything!</li>
+                </ul>
+                <footer>
+                  <paper-button rised>Go For It!</paper-button>
+                </footer>
+              </paper-material>
+              <div>
+                <h3>What do we mean by Free?</h3>
+                <p>Exactly like it sounds: Free as in Speech! There is a small cost for processing the payments which we cannot avoid - but we are not currently taking any money from the donations. As an example: a $5 tip pledge will give $4.55 to a happy developer (91%).</p>
+              </div>
+            </div>
           </gc-landing-page-section>
-          <gc-landing-page-section id="countries" title="suported countries">
+          <gc-landing-page-section id="countries" title="suported countries" alt>
             <h2>23 Countries all around the world!</h2>
             <p>Gitcheese supports all the countries that Stripe supports</p>
             <div class="supported-countries-list">
               <template is="dom-repeat" items="[[supportedCountries]]" sort="_sortCountries">
                 <paper-icon-item>
-                  <iron-image item-icon class="flag" src="../../bower_components/flag-icon-css/flags/1x1/[[item.code]].svg" preload sizing="cover"></iron-image>
+                  <iron-image item-icon class="flag" src="/../../bower_components/flag-icon-css/flags/1x1/[[item.code]].svg" preload sizing="cover"></iron-image>
                   [[item.name]]
                 </paper-icon-item>
               </template>
             </div>
           </gc-landing-page-section>
-          <gc-landing-page-section id="contact" title="contact" alt>
+          <gc-landing-page-section id="contact" title="contact">
             <paper-input label="Your e-mail"></paper-input>
             <paper-textarea label="Message" rows="5"></paper-textarea>
-            <paper-button>Send</paper-button>
+            <div actions>
+              <paper-button class="accent" raised>Send</paper-button>
+            </div>
           </gc-landing-page-section>
         </div>
         <footer>

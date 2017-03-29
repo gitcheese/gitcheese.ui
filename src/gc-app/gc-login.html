@@ -14,9 +14,11 @@
     }
     
     :host {
-      @apply(--dark-theme);
       @apply(--layout-fit);
       @apply(--layout-vertical);
+      background-color: var(--default-primary-color);
+      color: var(--dark-theme-text-color);
+      --iron-icon-fill-color: var(--dark-theme-text-color);
       z-index: 999999999;
       transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       padding: 2rem;

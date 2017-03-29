@@ -6,20 +6,34 @@
     <style>
     :host {
       display: block;
+      @apply(--layout-horizontal);
+      @apply(--layout-center-justified);
       background-color: var(--primary-background-color);
-      @apply(--layout-vertical);
-      @apply(--layout-center-center);
-      padding-top: 2rem;
-      padding-bottom: 2rem;
+      padding: 2rem;
     }
     
-    :host([alt]),
-    :host([alt]) * {
-      @apply(--dark-theme);
+    :host([alt]) {
+      background-color: var(--default-primary-color);
+    }
+    
+    :host([alt]) section > h1 {
+      color: var(--dark-theme-text-color);
+    }
+    
+    :host([alt]) section > h1:after {
+      background: var(--accent-color);
+    }
+    
+    :host([alt]) section ::slotted(*) {
+      color: var(--dark-theme-text-color);
     }
     
     section {
-      max-width: 800px;
+      @apply(--layout-flex);
+      @apply(--layout-vertical);
+      @apply(--layout-center-center);
+      display: block;
+      max-width: 840px;
     }
     
     section > h1 {
@@ -37,15 +51,11 @@
       margin: 0 auto;
       margin-top: 1rem;
     }
-    
-    :host([alt]) section > h1:after {
-      background: var(--accent-color);
-    }
     </style>
 
     <section>
       <h1>[[title]]</h1>
-      <content></content>
+      <slot></slot>
     </section>
   </template>
   <script>

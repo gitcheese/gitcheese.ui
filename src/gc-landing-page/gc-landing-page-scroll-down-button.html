@@ -11,7 +11,8 @@
     
     .prev-section {
       height: 32px;
-      @apply(--dark-theme);
+      background-color: var(--default-primary-color);
+      color: var(--dark-theme-text-color);
     }
     
     .next-section {
@@ -20,15 +21,8 @@
       @apply(--layout-center-center);
     }
     
-    :host([alt]) .prev-section {
-      background-color: var(--primary-background-color);
-    }
-    
-    :host([alt]) .next-section {
-      @apply(--dark-theme);
-    }
-    
     paper-fab {
+      color: var(--primary-text-color);
       margin-top: -28px;
     }
     </style>
