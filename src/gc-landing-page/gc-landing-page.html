@@ -22,6 +22,7 @@
 <link rel="import" href="../gc-styles/gc-shared-styles.html">
 <link rel="import" href="../gc-landing-page/gc-landing-page-section.html">
 <link rel="import" href="../gc-landing-page/gc-landing-page-scroll-down-button.html">
+<link rel="import" href="../gc-landing-page/gc-landing-page-pricing-card.html">
 <dom-module id="gc-landing-page">
   <template>
     <style include="shared-styles"></style>
@@ -49,12 +50,25 @@
     }
     
     .supported-countries-list paper-icon-item {
-      flex-basis: 28%;
+      flex-basis: 40%;
+    }
+    
+    @media (min-width: 601px) {
+      .supported-countries-list paper-icon-item {
+        flex-basis: 25%;
+      }
     }
     
     #why > div > paper-material,
     #why > div > paper-card {
-      flex-basis: 25%;
+      flex-basis: 100%;
+    }
+    
+    @media (min-width: 601px) {
+      #why > div > paper-material,
+      #why > div > paper-card {
+        flex-basis: 25%;
+      }
     }
     
     paper-material {
@@ -87,37 +101,10 @@
       width: 160px;
     }
     
-    .price-plan {
-      text-align: initial;
-      max-width: 200px;
-    }
-    
-    .price-plan > header {
-      margin-bottom: 2rem;
-    }
-    
-    .price-plan > header::after {
-      content: "";
-      display: block;
-      background: var(--divider-color);
-      height: 1px;
-      width: 100%;
-      margin: 0 auto;
-      margin-top: 1rem;
-    }
-    
-    .price-plan footer {
-      text-align: center;
-    }
-    
-    .price-plan paper-button {
-      color: var(--dark-theme-text-color);
-      background-color: var(--primary-color);
-    }
-    
-    .crowd {
-      height: 400px;
-      width: 400px;
+    iron-image.crowd,
+    iron-image.crowd img {
+      width: 80%;
+      --iron-image-width: 100%;
     }
     </style>
     <iron-media-query query="(max-width: 600px)" query-matches="{{mobile}}"></iron-media-query>
@@ -153,7 +140,9 @@
           <app-toolbar class="hero-toolbar">
             <h2>Make Some Cheese With Your GIT!</h2>
             <p><i>Donations for open source projects</i></p>
-            <paper-button rised>Start Making It</paper-button>
+            <a href="/app" tabindex="-1">
+              <paper-button rised>Start Making It</paper-button>
+            </a>
           </app-toolbar>
         </app-header>
         <div class="layout vertical">
@@ -163,11 +152,16 @@
             <div class="layout horizontal">
               <div>
                 <p>Gitcheese is simple way to donate source projects!</p>
+                <template is="dom-if" if="[[mobile]]">
+                  <iron-image class="crowd" src="/../../images/crowd.png"></iron-image>
+                </template>
                 <p>We believe that software should be free (as in free speech) but that doesn’t mean there is not a place for tips! And who hasn’t wanted to tip another developer some cheese for having an awesome solution.</p>
               </div>
-              <div>
-                <iron-image class="crowd" src="/../../images/crowd.png" preload sizing="contain"></iron-image>
-              </div>
+              <template is="dom-if" if="[[!mobile]]">
+                <div>
+                  <iron-image class="crowd" src="/../../images/crowd.png"></iron-image>
+                </div>
+              </template>
             </div>
           </gc-landing-page-section>
           <gc-landing-page-section id="why" title="Why Gitcheese" alt>
@@ -220,18 +214,13 @@
           </gc-landing-page-section>
           <gc-landing-page-section id="pricing" title="How Much">
             <div class="layout horizontal">
-              <paper-material class="price-plan">
-                <header>FREE</header>
-                <ul>
-                  <li>Unlimited Repos</li>
-                  <li>Unlimited Donations</li>
-                  <li>Unlimited Everything!</li>
-                </ul>
-                <footer>
-                  <paper-button rised>Go For It!</paper-button>
-                </footer>
-              </paper-material>
+              <template is="dom-if" if="[[!mobile]]">
+                <gc-landing-page-pricing-card></gc-landing-page-pricing-card>
+              </template>
               <div>
+                <template is="dom-if" if="[[mobile]]">
+                  <gc-landing-page-pricing-card></gc-landing-page-pricing-card>
+                </template>
                 <h3>What do we mean by Free?</h3>
                 <p>Exactly like it sounds: Free as in Speech! There is a small cost for processing the payments which we cannot avoid - but we are not currently taking any money from the donations. As an example: a $5 donation will give $4.55 to a happy developer (91%).</p>
               </div>
