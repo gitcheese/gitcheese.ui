@@ -157,7 +157,7 @@
           </app-toolbar>
         </app-header>
         <div class="layout vertical">
-          <gc-landing-page-scroll-down-button scroll-to="[[aboutSection]]">
+          <gc-landing-page-scroll-down-button scroll-to="[[whatSection]]">
           </gc-landing-page-scroll-down-button>
           <gc-landing-page-section id="what" title="Whats That?!">
             <div class="layout horizontal">
@@ -272,9 +272,9 @@
       }
       get properties() {
         return {
-          aboutSection: {
+          whatSection: {
             type: Object,
-            value: () => this.$.about
+            value: () => this.$.what
           },
           supportedCountries: {
             type: Array,
@@ -354,7 +354,9 @@
       scroll(e) {
         if (this.$.drawer.opened)
           this.$.drawer.toggle();
-        this.$[e.currentTarget.dataset.target].scrollIntoView();
+        this.$[e.currentTarget.dataset.target].scrollIntoView({
+          behavior: 'smooth'
+        });
       }
       _sortCountries(a, b) {
           return a.name > b.name ? 1 : -1;
