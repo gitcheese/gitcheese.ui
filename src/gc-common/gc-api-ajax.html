@@ -1,10 +1,12 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../gc-common/gc-app-context-behavior.html">
+<link rel="import" href="../gc-common/gc-config.html">
 
 <dom-module id="gc-api-ajax">
   <template>
-    <iron-ajax id="ajax" url="https://pxh869rmo6.execute-api.us-east-1.amazonaws.com/v1[[url]]" body="[[body]]" headers="[[apiHeaders]]" loading="{{loading}}" last-response="{{lastResponse}}" method="[[method]]" bubbles="true " content-type="application/json" handle-as="json"></iron-ajax>
+    <gc-config api-uri="{{apiUri}}"></gc-config>
+    <iron-ajax id="ajax" url="[[apiUri]][[url]]" body="[[body]]" headers="[[apiHeaders]]" loading="{{loading}}" last-response="{{lastResponse}}" method="[[method]]" bubbles="true " content-type="application/json" handle-as="json"></iron-ajax>
   </template>
 </dom-module>
 <script>
