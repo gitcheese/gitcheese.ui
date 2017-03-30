@@ -30,7 +30,13 @@
     :host {
       display: block;
     }
-    
+
+    footer > app-toolbar {
+      color: var(--dark-theme-text-color);
+      background-color: var(--primary-color);
+      text-align: center;
+    }
+
     .hero-toolbar {
       height: calc(100vh - 128px);
       @apply(--layout-vertical);
@@ -38,69 +44,69 @@
       text-transform: uppercase;
       text-align: center;
     }
-    
+
     .hero-toolbar paper-button {
       color: var(--primary-text-color);
       background: var(--accent-color);
     }
-    
+
     .supported-countries-list {
       @apply(--layout-horizontal);
       @apply(--layout-wrap);
     }
-    
+
     .supported-countries-list paper-icon-item {
       flex-basis: 40%;
     }
-    
+
     @media (min-width: 601px) {
       .supported-countries-list paper-icon-item {
         flex-basis: 25%;
       }
     }
-    
+
     #why > div > paper-material,
     #why > div > paper-card {
       flex-basis: 100%;
     }
-    
+
     @media (min-width: 601px) {
       #why > div > paper-material,
       #why > div > paper-card {
         flex-basis: 25%;
       }
     }
-    
+
     paper-material {
       border-radius: 2px;
       text-align: center;
       margin: 1rem;
       min-width: 200px;
     }
-    
+
     paper-material > header {
       font-size: 1.5em;
       text-align: center;
     }
-    
+
     iron-image.flag {
       width: 21px;
       height: 15px;
       border-radius: 2px;
     }
-    
+
     gc-landing-page-section[alt] paper-input,
     gc-landing-page-section[alt] paper-textarea {
       --paper-input-container-color: var(--dark-theme-text-color);
       --paper-input-container-focus-color: var(--dark-theme-text-color);
       --paper-input-container-input-color: var(--dark-theme-text-color);
     }
-    
+
     paper-material > iron-image {
       height: 80px;
       width: 160px;
     }
-    
+
     iron-image.crowd,
     iron-image.crowd img {
       width: 80%;
@@ -111,11 +117,11 @@
     <app-drawer-layout force-narrow>
       <app-drawer id="drawer" swipe-to-open>
         <paper-menu>
-          <paper-item data-target="what" on-tap="scroll">What</paper-item>
-          <paper-item data-target="why" on-tap="scroll">Why</paper-item>
-          <paper-item data-target="where" on-tap="scroll">Where</paper-item>
-          <paper-item data-target="pricing" on-tap="scroll">How Much</paper-item>
-          <paper-item data-target="contact" on-tap="scroll">Contact</paper-item>
+          <paper-item target="[[whatSection]]" on-tap="scroll">What</paper-item>
+          <paper-item target="[[whySection]]" on-tap="scroll">Why</paper-item>
+          <paper-item target="[[pricingSection]]" on-tap="scroll">How Much</paper-item>
+          <paper-item target="[[whereSection]]" on-tap="scroll">Where</paper-item>
+          <paper-item target="[[contactSection]]" on-tap="scroll">Contact</paper-item>
         </paper-menu>
       </app-drawer>
       <app-header-layout>
@@ -128,12 +134,12 @@
               Gitcheese
             </div>
             <template is="dom-if" if="[[!mobile]]">
-              <paper-tabs menu selected="0">
-                <paper-tab data-target="what" on-tap="scroll">What</paper-tab>
-                <paper-tab data-target="why" on-tap="scroll">Why</paper-tab>
-                <paper-tab data-target="pricing" on-tap="scroll">How Much</paper-tab>
-                <paper-tab data-target="where" on-tap="scroll">Where</paper-tab>
-                <paper-tab data-target="contact" on-tap="scroll">Contact</paper-tab>
+              <paper-tabs id="menuTabs" menu selected="0">
+                <paper-tab target="[[whatSection]]" on-tap="scroll">What</paper-tab>
+                <paper-tab target="[[whySection]]" on-tap="scroll">Why</paper-tab>
+                <paper-tab target="[[pricingSection]]" on-tap="scroll">How Much</paper-tab>
+                <paper-tab target="[[whereSection]]" on-tap="scroll">Where</paper-tab>
+                <paper-tab target="[[contactSection]]" on-tap="scroll">Contact</paper-tab>
               </paper-tabs>
             </template>
           </app-toolbar>
@@ -215,7 +221,9 @@
           <gc-landing-page-section id="pricing" title="How Much">
             <div class="layout horizontal">
               <template is="dom-if" if="[[!mobile]]">
-                <gc-landing-page-pricing-card></gc-landing-page-pricing-card>
+                <div>
+                  <gc-landing-page-pricing-card></gc-landing-page-pricing-card>
+                </div>
               </template>
               <div>
                 <template is="dom-if" if="[[mobile]]">
@@ -247,7 +255,11 @@
           </gc-landing-page-section>
         </div>
         <footer>
-
+          <app-toolbar>
+            <div main-title>
+              © Copyright [[year]] Gitcheese
+            </div>
+          </app-toolbar>
         </footer>
       </app-header-layout>
     </app-drawer-layout>
@@ -264,6 +276,22 @@
           whatSection: {
             type: Object,
             value: () => this.$.what
+          },
+          whySection: {
+            type: Object,
+            value: () => this.$.why
+          },
+          whereSection: {
+            type: Object,
+            value: () => this.$.where
+          },
+          pricingSection: {
+            type: Object,
+            value: () => this.$.pricing
+          },
+          contactSection: {
+            type: Object,
+            value: () => this.$.contact
           },
           supportedCountries: {
             type: Array,
@@ -337,26 +365,55 @@
               name: 'United Kingdom',
               code: 'gb'
             }]
+          },
+          year: {
+            type: Number,
+            value: () => new Date().getFullYear()
           }
         };
       }
+      ready() {
+        // window.onscroll = this._handleScroll.bind(this);
+      }
       scroll(e) {
-        if (this.$.drawer.opened)
+        if (this.$.drawer.opened) {
           this.$.drawer.toggle();
-        this.$[e.currentTarget.dataset.target].scrollIntoView({
+        }
+        e.currentTarget.target.scrollIntoView({
           behavior: 'smooth'
         });
       }
       _sortCountries(a, b) {
-          return a.name > b.name ? 1 : -1;
-        }
-        // scroll position and tabs
-        // function testScroll(ev){
-        //     if(window.pageYOffset>400)alert('User has scrolled at least 400 px!');
-        // }
-        // window.onscroll=testScroll
+        return a.name > b.name ? 1 : -1;
+      }
+      _handleScroll() {
+          // let halfScreenOffset = window.pageYOffset + window.screen.availHeight / 2;
+          // let menuTabs = [].slice.call(this.$$('#menuTabs')
+          //   .querySelectorAll('paper-tab'));
+          // for (var i = 1; i < menuTabs.length; i++) {
+          //   if (i + 1 < menuTabs.length && halfScreenOffset > menuTabs[i].target.offsetTop && halfScreenOffset < menuTabs[i + 1].target.offsetTop)
+          //     console.log(menuTabs[i].target.id)
+          // }
+          // console.log(menuTabs);
+          // if (halfScreenOffset > this.whySection.offsetTop && halfScreenOffset < this.pricingSection.offsetTop)
+          //   console.log('why')
+          // else if (halfScreenOffset > this.pricingSection.offsetTop && halfScreenOffset < this.whereSection.offsetTop)
+          //   console.log('pricing');
+          // else if (halfScreenOffset > this.whereSection.offsetTop && halfScreenOffset < this.contactSection.offsetTop)
+          //   console.log('where');
+          // else if (halfScreenOffset > this.contactSection.offsetTop && halfScreenOffset || ((window.innerHeight + window.scrollY) >= document.body.scrollHeight)) {
+          //   console.log("contact");
+          // } else {
+          //   console.log("what");
+          // }
+      }
+      // scroll position and tabs
+      // function testScroll(ev){
+      //     if(window.pageYOffset>400)alert('User has scrolled at least 400 px!');
+      // }
+      // window.onscroll=testScroll
     }
-    new Polymer(GcLandingPage);
+    Polymer(GcLandingPage);
   })();
   </script>
 </dom-module>

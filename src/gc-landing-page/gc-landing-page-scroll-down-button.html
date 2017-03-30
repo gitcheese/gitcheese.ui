@@ -8,19 +8,19 @@
     :host {
       display: block;
     }
-    
+
     .prev-section {
       height: 32px;
       background-color: var(--default-primary-color);
       color: var(--dark-theme-text-color);
     }
-    
+
     .next-section {
       background-color: var(--primary-background-color);
       @apply(--layout-vertical);
       @apply(--layout-center-center);
     }
-    
+
     paper-fab {
       color: var(--primary-text-color);
       margin-top: -28px;
@@ -51,7 +51,7 @@
         });
       }
     }
-    new Polymer(GcLandingPageScrollDownButton);
+    Polymer(GcLandingPageScrollDownButton);
   })();
   </script>
 </dom-module>

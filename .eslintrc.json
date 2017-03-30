@@ -9,8 +9,6 @@
     "promise"
   ],
   "rules": {
-    "no-var": "off",
-    "new-cap": ["error", { "capIsNewExceptions": ["Polymer"] }],
     "semi": [2, "always"],
     "space-before-function-paren": ["error", {
       "anonymous": "ignore",
