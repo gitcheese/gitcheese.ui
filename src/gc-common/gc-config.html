@@ -4,17 +4,23 @@
   (() => {
     let config = {
       api: {
-        'localhost:8080': 'https://pxh869rmo6.execute-api.us-east-1.amazonaws.com/v1'
+        'localhost:8080': 'https://api.dev.gitcheese.com/v1',
+        'dev.gitcheese.com': 'https://api.dev.gitcheese.com/v1',
+        'gitcheese.com': 'https://api.gitcheese.com/v1'
       },
       stripe: {
         uri: 'https://api.stripe.com/v1',
         key: {
-          'localhost:8080': 'pk_test_icwCSxTloCbsT3QvNHL4uumW'
+          'localhost:8080': 'pk_test_icwCSxTloCbsT3QvNHL4uumW',
+          'dev.gitcheese.com': 'pk_test_icwCSxTloCbsT3QvNHL4uumW',
+          'gitcheese.com': 'pk_live_qcQQvxqODpmTtwNdlzQb1yfl'
         }
       },
       s3Bucket: {
         uri: {
-          'localhost:8080': 'https://s3.amazonaws.com/gitcheese-ui-dev'
+          'localhost:8080': 'https://s3.amazonaws.com/gitcheese-ui-dev',
+          'dev.gitcheese.com': 'https://s3.amazonaws.com/gitcheese-ui-dev',
+          'gitcheese.com': 'https://s3.amazonaws.com/gitcheese-ui-master'
         }
       }
     };
