@@ -33,7 +33,7 @@
           apiUri: {
             type: String,
             notify: true,
-            value: () => config.api[window.location.host]
+            value: () => config.api[window.location.host.replace('www')]
           },
           stripeUri: {
             type: String,
@@ -43,17 +43,17 @@
           stripeKey: {
             type: String,
             notify: true,
-            value: () => config.stripe.key[window.location.host]
+            value: () => config.stripe.key[window.location.host.replace('www')]
           },
           s3BucketUri: {
             type: String,
             notify: true,
-            value: () => config.s3Bucket.uri[window.location.host]
+            value: () => config.s3Bucket.uri[window.location.host.replace('www')]
           }
         };
       }
     }
-    new Polymer(GcConfig);
+    Polymer(GcConfig);
   })();
   </script>
 </dom-module>
