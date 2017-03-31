@@ -61,14 +61,15 @@
         return this.repos && this.repos.length === 0;
       }
       _handleGetResponse() {
-        if (this.repos.length === 0)
+        if (this.repos.length === 0) {
           this.updateRepos();
+        }
       }
       _handlePutResponse() {
-        this.push('repos', ...this._newRepos)
+        this.push('repos', ...this._newRepos);
       }
     }
-    new Polymer(GcRepos);
+    Polymer(GcRepos);
   })();
   </script>
 </dom-module>
