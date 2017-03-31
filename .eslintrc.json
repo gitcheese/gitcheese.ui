@@ -17,6 +17,7 @@
     }]
   },
   "globals": {
-    "Polymer": true
+    "Polymer": true,
+    "GitcheeseBehaviors": true
   }
 }
