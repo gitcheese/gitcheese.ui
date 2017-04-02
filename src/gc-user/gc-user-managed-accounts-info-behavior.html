@@ -48,6 +48,9 @@
     },
     _handleInfoUpdatedResponse: function() {
       this.fire('info-updated');
+      if (this.$.toast) {
+        this.$.toast.show();
+      }
     }
   };
 }());

@@ -5,6 +5,7 @@
 <link rel="import" href="../../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../gc-styles/gc-shared-styles.html">
 <link rel="import" href="../gc-common/gc-app-context-behavior.html">
 <link rel="import" href="../gc-common/gc-config.html">
@@ -23,6 +24,8 @@
     <gc-config stripe-uri="{{stripeUri}}" stripe-key="{{stripeKey}}"></gc-config>
     <iron-ajax id="postToken" url="[[stripeUri]]/tokens" method="post" body="[[tokenRequestBody]]" content-type="application/x-www-form-urlencoded" on-response="_handleStripeTokenResponse" on-error="_handleStripeTokenError" last-response="{{token}}" last-error="{{tokenError}}"></iron-ajax>
     <gc-api-ajax id="put" url="/user/managed-accounts/external-account" method="put" auth-user="[[authUser]]" on-response="_handleInfoUpdatedResponse"></gc-api-ajax>
+
+    <paper-toast id="toast" text="Your bank account info has been submited."></paper-toast>
 
     <div class="layout horizontal" on-tap="toggle">
       <p class="flex">

@@ -7,6 +7,7 @@
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../gc-styles/gc-shared-styles.html">
 <link rel="import" href="../gc-common/gc-app-context-behavior.html">
 <link rel="import" href="../gc-common/gc-api-ajax.html">
@@ -21,6 +22,8 @@
     }
     </style>
     <gc-api-ajax id="put" url="/user/managed-accounts/legal-entity/basic" method="put" auth-user="[[authUser]]" body="[[newInfo]]" on-response="_handleInfoUpdatedResponse"></gc-api-ajax>
+
+    <paper-toast id="toast" text="Your entity info has been submited."></paper-toast>
 
     <div class="layout horizontal" on-tap="toggle">
       <p class="flex">

@@ -3,6 +3,7 @@
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../gc-styles/gc-shared-styles.html">
 <link rel="import" href="../gc-common/gc-app-context-behavior.html">
 <link rel="import" href="../gc-common/gc-api-ajax.html">
@@ -17,6 +18,8 @@
     }
     </style>
     <gc-api-ajax id="put" url="/user/managed-accounts/terms-of-service" method="put" auth-user="[[authUser]]" on-response="_handleInfoUpdatedResponse"></gc-api-ajax>
+
+    <paper-toast id="toast" text="Your TOS acceptance has been submited."></paper-toast>
 
     <div class="layout horizontal" on-tap="toggle">
       <p class="flex">
