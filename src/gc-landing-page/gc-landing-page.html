@@ -23,6 +23,8 @@
 <link rel="import" href="../gc-landing-page/gc-landing-page-section.html">
 <link rel="import" href="../gc-landing-page/gc-landing-page-scroll-down-button.html">
 <link rel="import" href="../gc-landing-page/gc-landing-page-pricing-card.html">
+<link rel="import" href="../gc-common/gc-icons.html">
+
 <dom-module id="gc-landing-page">
   <template>
     <style include="shared-styles"></style>
@@ -111,6 +113,11 @@
     iron-image.crowd img {
       width: 80%;
       --iron-image-width: 100%;
+    }
+
+    paper-icon-button.giant{
+      height:100px;
+      width:100px;
     }
     </style>
     <iron-media-query query="(max-width: 600px)" query-matches="{{mobile}}"></iron-media-query>
@@ -247,10 +254,14 @@
             </div>
           </gc-landing-page-section>
           <gc-landing-page-section id="contact" title="contact">
-            <paper-input label="Your e-mail"></paper-input>
-            <paper-textarea label="Message" rows="5"></paper-textarea>
-            <div actions>
-              <paper-button class="accent" raised>Send</paper-button>
+            <p>If you have any questions, please do not hesitate and reach us on Twitter or create issue/pr on one of our repos!</p>
+            <div class="layout horizontal center-center">
+              <a href="https://twitter.com/gitcheese" tabindex="-1" target="_blank">
+                <paper-icon-button class="giant" icon="gc-icons:twitter"></paper-icon-button>
+              </a>
+              <a href="https://github.com/gitcheese" tabindex="-1" target="_blank">
+                <paper-icon-button class="giant" icon="gc-icons:github"></paper-icon-button>
+              </a>
             </div>
           </gc-landing-page-section>
         </div>
