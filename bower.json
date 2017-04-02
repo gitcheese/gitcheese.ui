@@ -34,7 +34,8 @@
     "paper-progress": "polymerelements/paper-progress#^1.0.11",
     "paper-fab": "polymerelements/paper-fab#^1.2.1",
     "paper-card": "polymerelements/paper-card#^1.1.4",
-    "flag-icon-css": "^2.8.0"
+    "flag-icon-css": "^2.8.0",
+    "paper-toast": "polymerelements/paper-toast#^1.3.0"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"

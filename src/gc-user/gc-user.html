@@ -4,6 +4,7 @@
 <link rel="import" href="../../bower_components/gold-email-input/gold-email-input.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../gc-common/gc-app-context-behavior.html">
 <link rel="import" href="../gc-styles/gc-shared-styles.html">
 <link rel="import" href="../gc-common/gc-api-ajax.html">
@@ -14,8 +15,10 @@
   <template>
     <style include="shared-styles"></style>
     <gc-api-ajax id="getUser" url="/user" auth-user="[[authUser]]" last-response="{{user}}"></gc-api-ajax>
-    <gc-api-ajax id="putUser" url="/user" method="put" auth-user="[[authUser]]" body="{{user}}"></gc-api-ajax>
+    <gc-api-ajax id="putUser" url="/user" method="put" auth-user="[[authUser]]" body="{{user}}" on-response="_handlePutUserResponse"></gc-api-ajax>
     <gc-api-ajax id="getManagedAccount" url="/user/managed-accounts" auth-user="[[authUser]]" last-response="{{managedAccount}}"></gc-api-ajax>
+
+    <paper-toast id="putUserDoneToast" text="Your profile has been saved."></paper-toast>
 
     <paper-material elevation="1" class="edge-breaking">
       <form is="iron-form" id="profileForm">
@@ -64,8 +67,11 @@
       _refreshManagedAccount() {
         this.$.getManagedAccount.generateRequest();
       }
+      _handlePutUserResponse() {
+        this.$.putUserDoneToast.show();
+      }
     }
-    new Polymer(GcUser);
+    Polymer(GcUser);
   })();
   </script>
 </dom-module>
