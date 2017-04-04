@@ -5,7 +5,13 @@
     "src/gc-app/gc-app.html",
     "src/gc-donate-app/gc-donate-app.html",
     "src/gc-repo/gc-repo-shell.html",
-    "src/gc-user/gc-user-shell.html"
+    "src/gc-user/gc-user-shell.html",
+    "src/gc-user/gc-user-managed-accounts-external-account-info-au.html",
+    "src/gc-user/gc-user-managed-accounts-external-account-info-ca.html",
+    "src/gc-user/gc-user-managed-accounts-external-account-info-eu.html",
+    "src/gc-user/gc-user-managed-accounts-external-account-info-gb.html",
+    "src/gc-user/gc-user-managed-accounts-external-account-info-jp.html",
+    "src/gc-user/gc-user-managed-accounts-external-account-info-us.html"
   ],
   "sources": [
     "src/**/*",
