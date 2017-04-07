@@ -22,45 +22,45 @@
       @apply(--layout-horizontal);
       @apply(--layout-center-justified);
     }
-    
+
     footer {
       background-color: var(--default-primary-color);
       color: var(--dark-theme-text-color);
     }
-    
+
     neon-animated-pages {
       max-width: 800px;
       @apply(--layout-flex);
       @apply(--layout-self-start);
     }
-    
+
     paper-material {
       @apply(--layout-vertical);
       @apply(--layout-center-center);
     }
-    
+
     iron-image.feed-the-cat {
       margin-top: 1rem;
       margin-bottom: 1rem;
       height: 150px;
       width: 150px;
     }
-    
+
     .donate-buttons {
       @apply(--layout-horizontal);
       @apply(--layout-wrap);
     }
-    
+
     iron-image.logo {
       --iron-image-height: 50px;
     }
-    
+
     paper-button {
       background-color: var(--default-primary-color);
       color: var(--dark-theme-text-color);
       margin-bottom: 1rem;
     }
-    
+
     paper-progress {
       background-color: var(--primary-background-color);
       transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -68,7 +68,7 @@
       margin-bottom: -4px;
       z-index: 103;
     }
-    
+
     paper-progress[hide] {
       opacity: 0;
       pointer-events: none;
@@ -107,7 +107,7 @@
             </paper-material>
           </neon-animatable>
           <neon-animatable>
-            <paper-material hidden$="[[!success]]" elevation="1">
+            <paper-material elevation="1">
               <iron-image class="feed-the-cat" src="../../images/feed-the-cat.svg" preload sizing="cover"></iron-image>
               <p>Your donation is on the way!</p>
               <i>Repo '[[repo.fullname]]' should get your $$ soon. We would like to thank you on behalf of repo owner and ourselves.</i>
@@ -177,7 +177,7 @@
         this.currentPage = 1;
       }
     }
-    new Polymer(GcDonateApp);
+    Polymer(GcDonateApp);
   })();
   </script>
 </dom-module>

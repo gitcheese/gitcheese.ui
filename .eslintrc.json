@@ -18,6 +18,7 @@
   },
   "globals": {
     "Polymer": true,
-    "GitcheeseBehaviors": true
+    "GitcheeseBehaviors": true,
+    "StripeCheckout": true
   }
 }
