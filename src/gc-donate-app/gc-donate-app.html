@@ -23,8 +23,13 @@
       @apply(--layout-center-justified);
     }
 
-    footer {
-      background-color: var(--default-primary-color);
+    footer > app-toolbar {
+      color: var(--dark-theme-text-color);
+      background-color: var(--primary-color);
+      text-align: center;
+    }
+
+    footer > app-toolbar a {
       color: var(--dark-theme-text-color);
     }
 
@@ -117,7 +122,9 @@
       </div>
       <footer>
         <app-toolbar>
-
+          <div class="flex">
+            © Copyright [[year]] <a href="/">Gitcheese</a>
+          </div>
         </app-toolbar>
       </footer>
     </app-header-layout>
