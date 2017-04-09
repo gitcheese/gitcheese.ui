@@ -17,12 +17,12 @@
       @apply(--layout-horizontal);
       @apply(--layout-center-justified);
     }
-    
+
     .content {
       max-width: 800px;
       @apply(--layout-flex);
     }
-    
+
     paper-progress {
       background-color: var(--primary-background-color);
       transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -30,14 +30,18 @@
       margin-bottom: -4px;
       z-index: 103;
     }
-    
+
     paper-progress[hide] {
       opacity: 0;
       pointer-events: none;
     }
-    
+
     iron-image {
       --iron-image-height: 50px;
+    }
+
+    .secondary-title {
+      @apply(--layout-flex);
     }
     </style>
     <iron-media-query query="(min-width: 601px)" query-matches="{{mobileSmall}}"></iron-media-query>
@@ -50,7 +54,10 @@
           <template is="dom-if" if="[[backButton]]">
             <paper-icon-button icon="arrow-back" on-tap="_handleBackTap"></paper-icon-button>
           </template>
-          <div main-title>{{title}}</div>
+          <div secondary-title>
+            {{title}}
+            <slot select="[title-addon]"></slot>
+          </div>
         </app-toolbar>
       </template>
       <template is="dom-if" if="[[mobileSmall]]">
@@ -63,7 +70,10 @@
           <template is="dom-if" if="[[backButton]]">
             <paper-icon-button icon="arrow-back" on-tap="_handleBackTap"></paper-icon-button>
           </template>
-          <div main-title>{{title}}</div>
+          <div secondary-title>
+            {{title}}
+            <slot select="[title-addon]"></slot>
+          </div>
         </app-toolbar>
       </template>
 
