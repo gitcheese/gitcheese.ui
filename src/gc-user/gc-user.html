@@ -5,12 +5,12 @@
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
-<link rel="import" href="../gc-common/gc-app-context-behavior.html">
 <link rel="import" href="../gc-styles/gc-shared-styles.html">
 <link rel="import" href="../gc-common/gc-api-ajax.html">
 <link rel="import" href="../gc-user/gc-user-managed-accounts-external-account-info.html">
 <link rel="import" href="../gc-user/gc-user-managed-accounts-legal-entity-info.html">
 <link rel="import" href="../gc-user/gc-user-managed-accounts-terms-of-service-info.html">
+
 <dom-module id="gc-user">
   <template>
     <style include="shared-styles"></style>
@@ -50,9 +50,6 @@
     class GcUser {
       get is() {
         return 'gc-user';
-      }
-      get behaviors() {
-        return [GitcheeseBehaviors.AppContextBehavior];
       }
       loadData() {
         this.$.getUser.generateRequest();

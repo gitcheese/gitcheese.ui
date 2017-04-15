@@ -1,41 +1,33 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../gc-common/gc-lazy-components-behavior.html">
+
 <script>
 (function() {
   window.GitcheeseBehaviors = window.GitcheeseBehaviors || {};
-  GitcheeseBehaviors.ShellBehavior = {
+  GitcheeseBehaviors.ShellBehaviorImpl = {
     properties: {
       active: {
         type: Boolean,
         notify: true,
         reflectToAttribute: true,
         observer: '_handleActiveChanged'
-      },
-      lazyComponents: {
-        type: Array,
-        value: () => []
-      },
-      lazyComponentsLoaded: {
-        type: Boolean,
-        value: false
       }
     },
     _handleActiveChanged: function(active) {
-      if (active && !this.lazyComponentsLoaded)
-        this._loadLazyComponents();
-      if (active && this.activated)
+      if (active) {
+        this.ensureLazyComponents();
+      }
+      if (active && this.activated) {
         this.activated();
-      if (!active && this.deactivated)
+      }
+      if (!active && this.deactivated) {
         this.deactivated();
-    },
-    _loadLazyComponents: function() {
-      this.lazyComponentsLoaded = true;
-      this.lazyComponents.forEach((c) => {
-        Polymer.RenderStatus.afterNextRender(this, () => {
-          let url = this.resolveUrl(c);
-          this.importHref(url, null, null, true);
-        });
-      });
+      }
     }
   };
+  GitcheeseBehaviors.ShellBehavior = [
+    GitcheeseBehaviors.LazyComponentsBehavior,
+    GitcheeseBehaviors.ShellBehaviorImpl
+  ];
 }());
 </script>

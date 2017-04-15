@@ -1,12 +1,13 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="../gc-common/gc-app-context-behavior.html">
+<link rel="import" href="../gc-common/gc-auth.html">
 <link rel="import" href="../gc-common/gc-config.html">
 
 <dom-module id="gc-api-ajax">
   <template>
     <gc-config api-uri="{{apiUri}}"></gc-config>
-    <iron-ajax id="ajax" url="[[apiUri]][[url]]" body="[[body]]" headers="[[apiHeaders]]" loading="{{loading}}" last-response="{{lastResponse}}" method="[[method]]" bubbles="true " content-type="application/json" handle-as="json"></iron-ajax>
+    <gc-auth id="auth" info="{{authInfo}}"></gc-auth>
+    <iron-ajax id="ajax" url="[[apiUri]][[url]]" body="[[body]]" loading="{{loading}}" last-response="{{lastResponse}}" method="[[method]]" bubbles="true " content-type="application/json" handle-as="json"></iron-ajax>
   </template>
 </dom-module>
 <script>
@@ -15,21 +16,11 @@
     get is() {
       return 'gc-api-ajax';
     }
-    get behaviors() {
-      return [GitcheeseBehaviors.AppContextBehavior];
-    }
     get properties() {
       return {
-        url: {
-          type: String
-        },
         method: {
           type: String,
           value: 'GET'
-        },
-        body: {
-          type: Object,
-          value: null
         },
         loading: {
           type: Boolean,
@@ -38,20 +29,15 @@
         lastResponse: {
           type: Object,
           notify: true
-        },
-        apiHeaders: {
-          type: Object,
-          computed: '_computeApiHeaders(authUser)'
         }
       };
     }
-    _computeApiHeaders(authUser) {
-      if (!authUser) return {};
-      return {
-        authorization: authUser.authToken
-      };
-    }
     generateRequest() {
+      if (this.authInfo) {
+        this.$.ajax.headers = Object.assign({
+          'authorization': `${this.authInfo.token}`
+        }, this.headers);
+      }
       return this.$.ajax.generateRequest();
     }
   }

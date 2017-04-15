@@ -1,0 +1,52 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
+
+<dom-module id="gc-auth">
+    <template>
+      <iron-localstorage id="localStorage" name="gc-auth" value="{{info}}" auto-save-disabled="true"></iron-localstorage>
+    </template>
+    <script>
+    (() => {
+      'use strict';
+      let monoInfo;
+
+      class GcAuth {
+        get is() {
+          return 'gc-auth';
+        }
+        get properties() {
+          return {
+            info: {
+              type: Object,
+              notify: true,
+              value: () => this.$.localStorage.value || monoInfo,
+              observer: '_handleInfoChanged'
+            },
+            authenticated: {
+              type: Boolean,
+              notify: true,
+              computed: '_computeAuthenticated(info)'
+            }
+          };
+        }
+        init(token) {
+          this.info = {
+            token: token
+          };
+          this.$.localStorage.save();
+        }
+        clear() {
+          this.info = null;
+          this.$.localStorage.save();
+        }
+        _handleInfoChanged(info) {
+          monoInfo = info;
+        }
+        _computeAuthenticated(info) {
+          return !!info;
+        }
+      }
+      Polymer(GcAuth);
+    })();
+    </script>
+</dom-module>

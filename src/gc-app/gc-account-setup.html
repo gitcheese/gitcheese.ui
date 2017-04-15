@@ -2,8 +2,8 @@
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../gc-styles/gc-shared-styles.html">
-<link rel="import" href="../gc-common/gc-app-context-behavior.html">
 <link rel="import" href="../gc-common/gc-api-ajax.html">
+
 <dom-module id="gc-account-setup">
   <template>
     <style include="shared-styles"></style>
@@ -12,7 +12,7 @@
       opacity: 0;
       pointer-events: none;
     }
-    
+
     :host {
       @apply(--layout-fit);
       @apply(--layout-vertical);
@@ -21,7 +21,7 @@
       z-index: 888888888;
       padding: 2rem;
     }
-    
+
     paper-dropdown-menu {
       --paper-input-container-input-color: #fff;
     }
@@ -50,9 +50,6 @@
     class GcAccountSetup {
       get is() {
         return 'gc-account-setup';
-      }
-      get behaviors() {
-        return [GitcheeseBehaviors.AppContextBehavior];
       }
       get properties() {
         return {

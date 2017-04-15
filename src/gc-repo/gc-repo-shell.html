@@ -3,9 +3,9 @@
 <link rel="import" href="../gc-layouts/gc-app-fragment-layout.html">
 <link rel="import" href="../gc-styles/gc-shared-styles.html">
 <link rel="import" href="../gc-common/gc-icons.html">
-<link rel="import" href="../gc-common/gc-app-context-behavior.html">
 <link rel="import" href="../gc-common/gc-shell-behavior.html">
 <link rel="import" href="../gc-repo/gc-repo.html">
+
 <dom-module id="gc-repo-shell">
   <template>
     <style include="shared-styles"></style>
@@ -29,13 +29,13 @@
         return 'gc-repo-shell';
       }
       get behaviors() {
-        return [GitcheeseBehaviors.AppContextBehavior, GitcheeseBehaviors.ShellBehavior];
+        return [...GitcheeseBehaviors.ShellBehavior];
       }
       activated() {
         this.$.repo.loadData();
       }
     }
-    new Polymer(GcRepoShell);
+    Polymer(GcRepoShell);
   })();
   </script>
 </dom-module>

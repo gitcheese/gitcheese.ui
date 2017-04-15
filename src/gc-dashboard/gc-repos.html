@@ -4,15 +4,18 @@
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
-<link rel="import" href="../gc-common/gc-app-context-behavior.html">
 <link rel="import" href="../gc-styles/gc-shared-styles.html">
 <link rel="import" href="../gc-common/gc-api-ajax.html">
+
 <dom-module id="gc-repos">
   <template>
     <style include="shared-styles"></style>
-    <gc-api-ajax id="get" url="/user/repos" auth-user="[[authUser]]" on-response="_handleGetResponse" last-response="{{repos}}"></gc-api-ajax>
-    <gc-api-ajax id="put" method="put" url="/user/repos" auth-user="[[authUser]]" on-response="_handlePutResponse" last-response="{{_newRepos}}"></gc-api-ajax>
+
+    <gc-api-ajax id="get" url="/user/repos" on-response="_handleGetResponse" last-response="{{repos}}"></gc-api-ajax>
+    <gc-api-ajax id="put" method="put" url="/user/repos" on-response="_handlePutResponse" last-response="{{_newRepos}}"></gc-api-ajax>
+
     <paper-toast id="putDoneToast" text="Your repos has been updated."></paper-toast>
+
     <paper-material elevation="1">
       <div class="layout horizontal">
         <p class="flex">Your Repositories</p>
@@ -36,11 +39,6 @@
     class GcRepos {
       get is() {
         return 'gc-repos';
-      }
-      get behaviors() {
-        return [
-          GitcheeseBehaviors.AppContextBehavior
-        ];
       }
       get properties() {
         return {
