@@ -12,6 +12,15 @@
       opacity: 0;
       pointer-events: none;
     }
+    :host([setup-required]) {
+      opacity: 1;
+      -webkit-transition: opacity 0.5s ease-in-out;
+    }
+    :host([setup-required][submited]){
+      opacity: 0;
+      pointer-events: none;
+      -webkit-transition: opacity 0.5s ease-in-out;
+    }
 
     :host {
       @apply(--layout-fit);
@@ -26,8 +35,8 @@
       --paper-input-container-input-color: #fff;
     }
     </style>
-    <gc-api-ajax id="get" url="/user/managed-accounts" auth-user="[[authUser]]" last-response="{{managedAccount}}" on-response="_handleGetResponse"></gc-api-ajax>
-    <gc-api-ajax id="post" method="POST" url="/user/managed-accounts" auth-user="[[authUser]]" on-response="_handlePostResponse"></gc-api-ajax>
+    <gc-api-ajax id="get" url="/user/managed-accounts" last-response="{{managedAccount}}" on-response="_handleGetResponse"></gc-api-ajax>
+    <gc-api-ajax id="post" method="POST" url="/user/managed-accounts"></gc-api-ajax>
 
     <h2>Hello!</h2>
     <p>To set up your account we just need your country:</p>
@@ -43,6 +52,7 @@
     <div actions>
       <paper-button on-tap="_submit">submit</paper-button>
     </div>
+
   </template>
   <script>
   (() => {
@@ -53,7 +63,13 @@
       }
       get properties() {
         return {
+          authenticated: Boolean,
           setupRequired: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true
+          },
+          submited: {
             type: Boolean,
             value: false,
             reflectToAttribute: true
@@ -135,10 +151,10 @@
         };
       }
       get observers() {
-        return ['_handleAuthUserChanged(authUser)'];
+        return ['_handleAuthenticatedChanged(authenticated)'];
       }
-      _handleAuthUserChanged() {
-        if (!this.authUser) return;
+      _handleAuthenticatedChanged(authenticated) {
+        if (!authenticated) return;
         this.$.get.generateRequest();
       }
       _handleGetResponse() {
@@ -149,9 +165,7 @@
           country: this.$.countryListbox.selectedItem.country.code
         };
         this.$.post.generateRequest();
-      }
-      _handlePostResponse() {
-        this.$.get.generateRequest();
+        this.submited = true;
       }
     }
     Polymer(GcAccountSetup);

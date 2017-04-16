@@ -15,36 +15,58 @@
   <template>
     <style include="shared-styles"></style>
     <style>
-
+      .brand-toolbar{
+        padding-left: 1.6rem;
+      }
+      .brand-toolbar iron-image {
+        width: 56px;
+      }
+      [menu] {
+        height: calc(100vh - 64px);
+        @apply(--layout-vertical);
+      }
+      [main-menu] {
+        @apply(--layout-flex);
+      }
     </style>
+    <iron-signals on-iron-signal-update-drawer-layout="_updateDrawerLayout"></iron-signals>
     <iron-signals on-iron-signal-toggle-drawer="_toggleDrawer"></iron-signals>
-    <app-drawer-layout fullbleed force-narrow>
+    <app-drawer-layout id="drawerLayout" fullbleed responsive-width="841px" on-narrow-changed="_updateDrawerLayout">
       <app-drawer id="drawer">
-        <app-toolbar class="layout horizontal">
+        <app-toolbar class="brand-toolbar">
           <iron-image src="../../images/logo.svg"></iron-image>
           <span class="flex">Gitcheese</span>
-          <a href="/app/logout" tabindex="-1">
-            <paper-icon-button icon="exit-to-app"></paper-icon-button>
-          </a>
         </app-toolbar>
-        <paper-menu>
-          <a href="/app" on-tap="_toggleDrawer">
-            <paper-item>
-              <paper-icon-item>
-                <iron-icon icon="home" item-icon></iron-icon>
-                Dashboard
-              </paper-icon-item>
-            </paper-item>
-          </a>
-          <a href="/app/user" on-tap="_toggleDrawer">
-            <paper-item>
-              <paper-icon-item>
-                <iron-icon icon="account-circle" item-icon></iron-icon>
-                User Profile
-              </paper-icon-item>
-            </paper-item>
-          </a>
-        </paper-menu>
+        <div menu>
+          <paper-menu main-menu>
+            <a href="/app" on-tap="_toggleDrawer">
+              <paper-item>
+                <paper-icon-item>
+                  <iron-icon icon="home" item-icon></iron-icon>
+                  Repositories
+                </paper-icon-item>
+              </paper-item>
+            </a>
+            <a href="/app/user" on-tap="_toggleDrawer">
+              <paper-item>
+                <paper-icon-item>
+                  <iron-icon icon="account-circle" item-icon></iron-icon>
+                  User Profile
+                </paper-icon-item>
+              </paper-item>
+            </a>
+          </paper-menu>
+          <paper-menu>
+            <a href="/app/logout" on-tap="_toggleDrawer">
+              <paper-item>
+                <paper-icon-item>
+                  <iron-icon icon="exit-to-app" item-icon></iron-icon>
+                  Logout
+                </paper-icon-item>
+              </paper-item>
+            </a>
+          </paper-menu>
+        </div>
       </app-drawer>
       <app-header-layout has-scrolling-region>
         <content></content>
@@ -58,8 +80,18 @@
       get is() {
         return 'gc-app-shell-layout';
       }
+      _updateDrawerLayout() {
+        this.fire('iron-signal', {
+          name: 'drawer-layout-narrow-changed',
+          data: {
+            narrow: this.$.drawerLayout.narrow
+          }
+        });
+      }
       _toggleDrawer() {
-        this.$.drawer.toggle();
+        if (this.$.drawerLayout.narrow){
+          this.$.drawer.toggle();
+        }
       }
     }
     new Polymer(GcAppShellLayout);

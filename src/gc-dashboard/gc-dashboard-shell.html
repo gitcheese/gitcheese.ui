@@ -11,7 +11,7 @@
       <app-route route="{{route}}" pattern="/repos/:id" data="{{repoData}}" tail="{{repoTail}}"></app-route>
     </gc-active-route>
     <iron-pages selected="[[activePattern]]" attr-for-selected="for-pattern" selected-attribute="active">
-      <gc-app-fragment-layout for-pattern="/" title="Dashboard">
+      <gc-app-fragment-layout for-pattern="/" title="Repositories" burger-button>
         <gc-repos id="repos"></gc-repos>
       </gc-app-fragment-layout>
       <gc-repo-shell for-pattern="/repos/:id" repo-id="[[repoData.id]]" route="[[repoTail]]"></gc-repo-shell>

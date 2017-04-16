@@ -16,9 +16,9 @@
       word-break: break-word;
     }
     </style>
-    <gc-api-ajax id="get" url="/user/repos/[[repoId]]" auth-user="[[authUser]]" last-response="{{repo}}"></gc-api-ajax>
-    <gc-api-ajax id="getDonations" url="/user/repos/[[repoId]]/donations" auth-user="[[authUser]]" last-response="{{donations}}"></gc-api-ajax>
-    <gc-api-ajax id="getUser" url="/user" auth-user="[[authUser]]" last-response="{{user}}"></gc-api-ajax>
+    <gc-api-ajax id="get" url="/user/repos/[[repoId]]" last-response="{{repo}}"></gc-api-ajax>
+    <gc-api-ajax id="getDonations" url="/user/repos/[[repoId]]/donations" last-response="{{donations}}"></gc-api-ajax>
+    <gc-api-ajax id="getUser" url="/user" last-response="{{user}}"></gc-api-ajax>
     <gc-config s3-bucket-uri="{{s3BucketUri}}"></gc-config>
 
     <paper-material elevation="1">

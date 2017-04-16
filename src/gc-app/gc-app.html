@@ -7,20 +7,19 @@
 <link rel="import" href="../gc-common/gc-auth.html">
 <link rel="import" href="../gc-common/gc-lazy-components-behavior.html">
 <link rel="import" href="../gc-app/gc-login.html">
-<link rel="import" href="../gc-app/gc-account-setup.html">
 
 <dom-module id="gc-app">
   <template>
     <style include="shared-styles"></style>
 
-    <gc-account-setup></gc-account-setup>
+    <gc-auth id="auth" authenticated="{{authenticated}}"></gc-auth>
+    <gc-account-setup authenticated=[[authenticated]]></gc-account-setup>
     <gc-login
       route="[[route]]"
       authenticated="[[authenticated]]"
       on-logged-in="_initAuth"
       on-logged-out="_clearAuth">
     </gc-login>
-    <gc-auth id="auth" authenticated="{{authenticated}}"></gc-auth>
 
     <gc-active-route pattern="{{activePattern}}" fallback-pattern="/">
       <app-route route="[[route]]" pattern="/user"></app-route>
@@ -48,7 +47,8 @@
       get lazyComponents() {
         return [
           '../gc-dashboard/gc-dashboard-shell.html',
-          '../gc-dashboard/gc-dashboard-shell.html'
+          '../gc-user/gc-user-shell.html',
+          '../gc-app/gc-account-setup.html'
         ];
       }
       ready() {

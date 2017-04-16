@@ -20,7 +20,7 @@
       cursor: pointer;
     }
     </style>
-    <gc-api-ajax id="put" url="/user/managed-accounts/legal-entity/basic" method="put" auth-user="[[authUser]]" body="[[newInfo]]" on-response="_handleInfoUpdatedResponse"></gc-api-ajax>
+    <gc-api-ajax id="put" url="/user/managed-accounts/legal-entity/basic" method="put" body="[[newInfo]]" on-response="_handleInfoUpdatedResponse"></gc-api-ajax>
 
     <paper-toast id="toast" text="Your entity info has been submited."></paper-toast>
 
