@@ -21,34 +21,38 @@
     <gc-api-ajax id="getUser" url="/user" last-response="{{user}}"></gc-api-ajax>
     <gc-config s3-bucket-uri="{{s3BucketUri}}"></gc-config>
 
-    <paper-material elevation="1">
-      <p class="layout horizontal">
-        <span class="flex">Donations</span>
-        <span>[[donatedAmount]]</span>
-      </p>
-      <paper-listbox>
-        <template is="dom-if" if="[[noDonations]]">
-          <paper-item><i>No one donated yet - keep pushing!</i></paper-item>
-        </template>
-        <template is="dom-repeat" items="[[donations]]" sort="_sortDonations">
-          <paper-item>
-            <paper-item-body>
-              [[_formatTimeStamp(item.created)]]
-            </paper-item-body>
-            <span>[[_formatAmount(item.amount)]]</span>
-          </paper-item>
-        </template>
-      </paper-listbox>
-    </paper-material>
-    <paper-material elevation="1">
-      <div class="layout horizontal">
-        <p class="flex">Badge</p>
-        <iron-image src="../../images/badge.svg"></iron-image>
-      </div>
-      <p>
-        <code>[![gitcheese.com]([[s3BucketUri]]/images/badge.svg)](https://www.gitcheese.com/donate/users/[[user.id]]/repos/[[repo.id]])</code>
-      </p>
-    </paper-material>
+    <section>
+      <paper-material elevation="1">
+        <p class="layout horizontal">
+          <span class="flex">Donations</span>
+          <span>[[donatedAmount]]</span>
+        </p>
+        <paper-listbox>
+          <template is="dom-if" if="[[noDonations]]">
+            <paper-item><i>No one donated yet - keep pushing!</i></paper-item>
+          </template>
+          <template is="dom-repeat" items="[[donations]]" sort="_sortDonations">
+            <paper-item>
+              <paper-item-body>
+                [[_formatTimeStamp(item.created)]]
+              </paper-item-body>
+              <span>[[_formatAmount(item.amount)]]</span>
+            </paper-item>
+          </template>
+        </paper-listbox>
+      </paper-material>
+    </section>
+    <section>
+      <paper-material elevation="1">
+        <div class="layout horizontal">
+          <p class="flex">Badge</p>
+          <iron-image src="../../images/badge.svg"></iron-image>
+        </div>
+        <p>
+          <code>[![gitcheese.com]([[s3BucketUri]]/images/badge.svg)](https://www.gitcheese.com/donate/users/[[user.id]]/repos/[[repo.id]])</code>
+        </p>
+      </paper-material>
+    </section>
   </template>
   <script>
   (() => {
