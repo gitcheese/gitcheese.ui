@@ -7,13 +7,14 @@
 <link rel="import" href="../gc-common/gc-auth.html">
 <link rel="import" href="../gc-common/gc-lazy-components-behavior.html">
 <link rel="import" href="../gc-app/gc-login.html">
+<link rel="import" href="../gc-app/gc-account-setup.html">
 
 <dom-module id="gc-app">
   <template>
     <style include="shared-styles"></style>
 
     <gc-auth id="auth" authenticated="{{authenticated}}"></gc-auth>
-    <gc-account-setup authenticated=[[authenticated]]></gc-account-setup>
+    <gc-account-setup></gc-account-setup>
     <gc-login
       route="[[route]]"
       authenticated="[[authenticated]]"

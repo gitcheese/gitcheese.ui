@@ -8,8 +8,6 @@
     <script>
     (() => {
       'use strict';
-      let monoInfo;
-
       class GcAuth {
         get is() {
           return 'gc-auth';
@@ -18,9 +16,12 @@
           return {
             info: {
               type: Object,
+              notify: true
+            },
+            token: {
+              type: String,
               notify: true,
-              value: () => this.$.localStorage.value || monoInfo,
-              observer: '_handleInfoChanged'
+              computed: '_computeToken(info)'
             },
             authenticated: {
               type: Boolean,
@@ -39,8 +40,11 @@
           this.info = null;
           this.$.localStorage.save();
         }
-        _handleInfoChanged(info) {
-          monoInfo = info;
+        _computeToken(info) {
+          if (!info) {
+            return;
+          }
+          return info.token;
         }
         _computeAuthenticated(info) {
           return !!info;

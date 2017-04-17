@@ -4,6 +4,7 @@
   "fragments": [
     "src/gc-app/gc-app.html",
     "src/gc-donate-app/gc-donate-app.html",
+    "src/gc-dashboard/gc-dashboard-shell.html",
     "src/gc-repo/gc-repo-shell.html",
     "src/gc-user/gc-user-shell.html",
     "src/gc-user/gc-user-managed-accounts-external-account-info-au.html",

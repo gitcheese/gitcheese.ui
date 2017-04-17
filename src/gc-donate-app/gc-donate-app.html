@@ -81,8 +81,8 @@
     </style>
     <app-route route="{{route}}" pattern="/users/:userId/repos/:repoId" data="{{routeData}}"></app-route>
 
-    <gc-api-ajax id="get" url="/users/[[routeData.userId]]/repos/[[routeData.repoId]]" last-response="{{repo}}" loading="{{loading}}"></gc-api-ajax>
-    <gc-api-ajax id="post" url="/users/[[routeData.userId]]/repos/[[routeData.repoId]]/donations" method="post" body="[[donation]]" loading="{{loading}}" on-response="_handleDonationResponse"></gc-api-ajax>
+    <gc-api-ajax id="get" unauthorized url="/users/[[routeData.userId]]/repos/[[routeData.repoId]]" last-response="{{repo}}" loading="{{loading}}"></gc-api-ajax>
+    <gc-api-ajax id="post" unauthorized url="/users/[[routeData.userId]]/repos/[[routeData.repoId]]/donations" method="post" body="[[donation]]" loading="{{loading}}" on-response="_handleDonationResponse"></gc-api-ajax>
     <gc-config stripe-key="{{stripeKey}}" s3-bucket-uri="{{s3BucketUri}}"></gc-config>
 
     <app-header-layout fullbleed>

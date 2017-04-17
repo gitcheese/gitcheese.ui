@@ -6,7 +6,7 @@
 <dom-module id="gc-api-ajax">
   <template>
     <gc-config api-uri="{{apiUri}}"></gc-config>
-    <gc-auth id="auth" info="{{authInfo}}"></gc-auth>
+    <gc-auth id="auth" token="{{token}}"></gc-auth>
     <iron-ajax id="ajax" url="[[apiUri]][[url]]" body="[[body]]" loading="{{loading}}" last-response="{{lastResponse}}" method="[[method]]" bubbles="true " content-type="application/json" handle-as="json"></iron-ajax>
   </template>
 </dom-module>
@@ -29,15 +29,30 @@
         lastResponse: {
           type: Object,
           notify: true
-        }
+        },
+        unauthorized: Boolean,
+        _trigger: Boolean
       };
     }
+    get observers() {
+      return [
+        '_generateRequestWhenReady(token, apiUri, trigger)',
+        '_generateRequestWhenReady(unauthorized, apiUri, trigger)'
+      ];
+    }
     generateRequest() {
-      if (this.authInfo) {
-        this.$.ajax.headers = Object.assign({
-          'authorization': `${this.authInfo.token}`
-        }, this.headers);
-      }
+      this.trigger = !this.trigger;
+    }
+    _generateRequestWhenReady(token) {
+      this.trigger = undefined;
+      this.$.ajax.headers = Object.assign({
+        'authorization': token
+      }, this.headers);
+      return this.$.ajax.generateRequest();
+    }
+    _generateUnauthorizedRequestWhenReady() {
+      this.trigger = undefined;
+      this.$.ajax.headers = this.headers;
       return this.$.ajax.generateRequest();
     }
   }

@@ -63,7 +63,6 @@
       }
       get properties() {
         return {
-          authenticated: Boolean,
           setupRequired: {
             type: Boolean,
             value: false,
@@ -150,11 +149,7 @@
           }
         };
       }
-      get observers() {
-        return ['_handleAuthenticatedChanged(authenticated)'];
-      }
-      _handleAuthenticatedChanged(authenticated) {
-        if (!authenticated) return;
+      ready() {
         this.$.get.generateRequest();
       }
       _handleGetResponse() {
