@@ -64,8 +64,8 @@
         </template>
         <div main-title>
           {{title}}
-          <slot select="[title-addon]"></slot>
         </div>
+        <slot select="[title-addon]"></slot>
         <template is="dom-if" if="[[_narrowLayout]]">
           <iron-image src="../../images/logo.svg"></iron-image>
         </template>
