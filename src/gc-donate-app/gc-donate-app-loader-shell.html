@@ -14,14 +14,14 @@
       }
       get behaviors() {
         return [
-          GitcheeseBehaviors.ShellBehavior
-        ]
+          ...GitcheeseBehaviors.ShellBehavior
+        ];
       }
-      ready() {
-        this.lazyComponents.push('../gc-donate-app/gc-donate-app.html');
+      get lazyComponents() {
+        return ['../gc-donate-app/gc-donate-app.html'];
       }
     }
-    new Polymer(GcDonateAppShell);
+    Polymer(GcDonateAppShell);
   })();
   </script>
 </dom-module>

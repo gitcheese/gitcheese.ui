@@ -5,44 +5,46 @@
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
-<link rel="import" href="../gc-common/gc-app-context-behavior.html">
 <link rel="import" href="../gc-styles/gc-shared-styles.html">
 <link rel="import" href="../gc-common/gc-api-ajax.html">
 <link rel="import" href="../gc-user/gc-user-managed-accounts-external-account-info.html">
 <link rel="import" href="../gc-user/gc-user-managed-accounts-legal-entity-info.html">
 <link rel="import" href="../gc-user/gc-user-managed-accounts-terms-of-service-info.html">
+
 <dom-module id="gc-user">
   <template>
     <style include="shared-styles"></style>
-    <gc-api-ajax id="getUser" url="/user" auth-user="[[authUser]]" last-response="{{user}}"></gc-api-ajax>
-    <gc-api-ajax id="putUser" url="/user" method="put" auth-user="[[authUser]]" body="{{user}}" on-response="_handlePutUserResponse"></gc-api-ajax>
-    <gc-api-ajax id="getManagedAccount" url="/user/managed-accounts" auth-user="[[authUser]]" last-response="{{managedAccount}}"></gc-api-ajax>
+    <gc-api-ajax id="getUser" url="/user" last-response="{{user}}"></gc-api-ajax>
+    <gc-api-ajax id="putUser" url="/user" method="put" body="{{user}}" on-response="_handlePutUserResponse"></gc-api-ajax>
+    <gc-api-ajax id="getManagedAccount" url="/user/managed-accounts" last-response="{{managedAccount}}"></gc-api-ajax>
 
     <paper-toast id="putUserDoneToast" text="Your profile has been saved."></paper-toast>
 
-    <paper-material elevation="1" class="edge-breaking">
-      <form is="iron-form" id="profileForm">
-        <p>Profile</p>
-        <gold-email-input label="email" value="{{user.email}}" auto-validate required error-message="valid e-mail is required."></gold-email-input>
-        <div actions>
-          <paper-button on-tap="_saveProfile">save</paper-button>
+    <section>
+      <paper-material elevation="1" class="edge-breaking">
+        <form is="iron-form" id="profileForm">
+          <p>Profile</p>
+          <gold-email-input label="email" value="{{user.email}}" auto-validate required error-message="valid e-mail is required."></gold-email-input>
+          <div actions>
+            <paper-button on-tap="_saveProfile">save</paper-button>
+          </div>
+        </form>
+      </paper-material>
+    </section>
+    <section>
+      <paper-material elevation="1">
+        <div class="layout horizontal">
+          <p class="flex">Stripe Identity</p>
+          <p><i>[[managedAccount.country]]</i></p>
         </div>
-      </form>
-    </paper-material>
-
-    <paper-material elevation="1">
-
-      <div class="layout horizontal">
-        <p class="flex">Stripe Identity</p>
-        <p><i>[[managedAccount.country]]</i></p>
-      </div>
-      <gc-user-managed-accounts-legal-entity-info managed-account="[[managedAccount]]" auth-user="[[authUser]]" on-info-updated="_refreshManagedAccount">
-      </gc-user-managed-accounts-legal-entity-info>
-      <gc-user-managed-accounts-external-account-info managed-account="[[managedAccount]]" auth-user="[[authUser]]" on-info-updated="_refreshManagedAccount">
-      </gc-user-managed-accounts-external-account-info>
-      <gc-user-managed-accounts-terms-of-service-info managed-account="[[managedAccount]]" auth-user="[[authUser]]" on-info-updated="_refreshManagedAccount">
-      </gc-user-managed-accounts-terms-of-service-info>
-    </paper-material>
+        <gc-user-managed-accounts-legal-entity-info managed-account="[[managedAccount]]" on-info-updated="_refreshManagedAccount">
+        </gc-user-managed-accounts-legal-entity-info>
+        <gc-user-managed-accounts-external-account-info managed-account="[[managedAccount]]" on-info-updated="_refreshManagedAccount">
+        </gc-user-managed-accounts-external-account-info>
+        <gc-user-managed-accounts-terms-of-service-info managed-account="[[managedAccount]]" on-info-updated="_refreshManagedAccount">
+        </gc-user-managed-accounts-terms-of-service-info>
+      </paper-material>
+    </section>
   </template>
   <script>
   (() => {
@@ -50,9 +52,6 @@
     class GcUser {
       get is() {
         return 'gc-user';
-      }
-      get behaviors() {
-        return [GitcheeseBehaviors.AppContextBehavior];
       }
       loadData() {
         this.$.getUser.generateRequest();

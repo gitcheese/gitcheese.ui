@@ -1,14 +1,13 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../gc-layouts/gc-app-fragment-layout.html">
-<link rel="import" href="../gc-common/gc-app-context-behavior.html">
 <link rel="import" href="../gc-common/gc-shell-behavior.html">
 <link rel="import" href="../gc-styles/gc-shared-styles.html">
 <link rel="import" href="../gc-user/gc-user.html">
 <dom-module id="gc-user-shell">
   <template>
     <style include="shared-styles"></style>
-    <gc-app-fragment-layout title="User" back-button>
-      <gc-user id="user" auth-user="[[authUser]]"></gc-user>
+    <gc-app-fragment-layout title="User Profile" back-button>
+      <gc-user id="user"></gc-user>
     </gc-app-fragment-layout>
   </template>
   <script>
@@ -19,13 +18,13 @@
         return 'gc-user-shell';
       }
       get behaviors() {
-        return [GitcheeseBehaviors.AppContextBehavior, GitcheeseBehaviors.ShellBehavior];
+        return [...GitcheeseBehaviors.ShellBehavior];
       }
       activated() {
         this.$.user.loadData();
       }
     }
-    new Polymer(GcUserShell);
+    Polymer(GcUserShell);
   })();
   </script>
 </dom-module>

@@ -5,7 +5,6 @@
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../gc-styles/gc-shared-styles.html">
-<link rel="import" href="../gc-common/gc-app-context-behavior.html">
 <link rel="import" href="../gc-common/gc-api-ajax.html">
 <link rel="import" href="../gc-user/gc-user-managed-accounts-info-behavior.html">
 
@@ -17,7 +16,7 @@
       cursor: pointer;
     }
     </style>
-    <gc-api-ajax id="put" url="/user/managed-accounts/terms-of-service" method="put" auth-user="[[authUser]]" on-response="_handleInfoUpdatedResponse"></gc-api-ajax>
+    <gc-api-ajax id="put" url="/user/managed-accounts/terms-of-service" method="put" on-response="_handleInfoUpdatedResponse"></gc-api-ajax>
 
     <paper-toast id="toast" text="Your TOS acceptance has been submited."></paper-toast>
 
@@ -49,7 +48,6 @@
       }
       get behaviors() {
         return [
-          GitcheeseBehaviors.AppContextBehavior,
           GitcheeseBehaviors.UserManagedAccountsInfoBehavior
         ];
       }

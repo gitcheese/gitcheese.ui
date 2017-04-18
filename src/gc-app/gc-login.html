@@ -1,15 +1,13 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
 <link rel="import" href="../../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../gc-styles/gc-shared-styles.html">
-<link rel="import" href="../gc-common/gc-app-context-behavior.html">
 <link rel="import" href="../gc-common/gc-config.html">
 <dom-module id="gc-login">
   <template>
     <style include="shared-styles"></style>
     <style>
-    :host([is-authenticated]) {
+    :host([authenticated]) {
       opacity: 0;
       pointer-events: none;
     }
@@ -40,7 +38,6 @@
     }
     </style>
     <gc-config api-uri="{{apiUri}}"></gc-config>
-    <iron-localstorage id="localStorage" name="gc-auth-user" value="{{authUser}}"></iron-localstorage>
 
     <app-route id="login" route="{{route}}" pattern="/login/success" query-params="{{_queryParams}}" active="{{_successRouteActive}}"></app-route>
     <app-route route="{{route}}" pattern="/login/error" query-params="{{_queryParams}}" active="{{_errorRouteActive}}"></app-route>
@@ -64,11 +61,12 @@
       get is() {
         return 'gc-login';
       }
-      get behaviors() {
-        return [ GitcheeseBehaviors.AppContextBehavior ];
-      }
       get properties() {
         return {
+          authenticated: {
+            type: Boolean,
+            reflectToAttribute: true
+          },
           _queryParams: {
             type: Object
           },
@@ -86,10 +84,7 @@
       }
       _handleLogin(active, token) {
         if (!active) return;
-        this.authUser = {
-          authToken: token
-        };
-        this.$.localStorage.save();
+        this.fire('logged-in', {token: token});
         window.history.pushState(null, 'root', '/app');
       }
       _handleLoginError(active, message) {
@@ -98,8 +93,7 @@
       }
       _handleLogout(active) {
         if (!active) return;
-        this.authUser = null;
-        this.$.localStorage.save();
+        this.fire('logged-out');
       }
       _login() {
         window.location = `${this.apiUri}/tokens/github`;

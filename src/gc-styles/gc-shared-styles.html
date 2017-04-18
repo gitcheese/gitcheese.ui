@@ -77,7 +77,6 @@
       background-color: var(--primary-background-color);
       color: var(--primary-text-color);
       padding: 1rem;
-      margin: 1rem;
     }
 
     a {
@@ -93,6 +92,16 @@
     [actions] {
       @apply(--layout-horizontal);
       @apply(--layout-end-justified);
+    }
+
+    @media (min-width: 842px) {
+
+      section {
+        margin-bottom: 1rem;
+      }
+      paper-toast {
+        margin-left: 268px;
+      }
     }
 
     @media (max-width: 640px) {

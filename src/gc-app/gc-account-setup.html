@@ -2,8 +2,8 @@
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../gc-styles/gc-shared-styles.html">
-<link rel="import" href="../gc-common/gc-app-context-behavior.html">
 <link rel="import" href="../gc-common/gc-api-ajax.html">
+
 <dom-module id="gc-account-setup">
   <template>
     <style include="shared-styles"></style>
@@ -12,7 +12,16 @@
       opacity: 0;
       pointer-events: none;
     }
-    
+    :host([setup-required]) {
+      opacity: 1;
+      -webkit-transition: opacity 0.5s ease-in-out;
+    }
+    :host([setup-required][submited]){
+      opacity: 0;
+      pointer-events: none;
+      -webkit-transition: opacity 0.5s ease-in-out;
+    }
+
     :host {
       @apply(--layout-fit);
       @apply(--layout-vertical);
@@ -21,13 +30,13 @@
       z-index: 888888888;
       padding: 2rem;
     }
-    
+
     paper-dropdown-menu {
       --paper-input-container-input-color: #fff;
     }
     </style>
-    <gc-api-ajax id="get" url="/user/managed-accounts" auth-user="[[authUser]]" last-response="{{managedAccount}}" on-response="_handleGetResponse"></gc-api-ajax>
-    <gc-api-ajax id="post" method="POST" url="/user/managed-accounts" auth-user="[[authUser]]" on-response="_handlePostResponse"></gc-api-ajax>
+    <gc-api-ajax id="get" url="/user/managed-accounts" last-response="{{managedAccount}}" on-response="_handleGetResponse"></gc-api-ajax>
+    <gc-api-ajax id="post" method="POST" url="/user/managed-accounts"></gc-api-ajax>
 
     <h2>Hello!</h2>
     <p>To set up your account we just need your country:</p>
@@ -43,6 +52,7 @@
     <div actions>
       <paper-button on-tap="_submit">submit</paper-button>
     </div>
+
   </template>
   <script>
   (() => {
@@ -51,12 +61,14 @@
       get is() {
         return 'gc-account-setup';
       }
-      get behaviors() {
-        return [GitcheeseBehaviors.AppContextBehavior];
-      }
       get properties() {
         return {
           setupRequired: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true
+          },
+          submited: {
             type: Boolean,
             value: false,
             reflectToAttribute: true
@@ -137,11 +149,7 @@
           }
         };
       }
-      get observers() {
-        return ['_handleAuthUserChanged(authUser)'];
-      }
-      _handleAuthUserChanged() {
-        if (!this.authUser) return;
+      ready() {
         this.$.get.generateRequest();
       }
       _handleGetResponse() {
@@ -152,9 +160,7 @@
           country: this.$.countryListbox.selectedItem.country.code
         };
         this.$.post.generateRequest();
-      }
-      _handlePostResponse() {
-        this.$.get.generateRequest();
+        this.submited = true;
       }
     }
     Polymer(GcAccountSetup);

@@ -3,9 +3,9 @@
 <link rel="import" href="../gc-layouts/gc-app-fragment-layout.html">
 <link rel="import" href="../gc-styles/gc-shared-styles.html">
 <link rel="import" href="../gc-common/gc-icons.html">
-<link rel="import" href="../gc-common/gc-app-context-behavior.html">
 <link rel="import" href="../gc-common/gc-shell-behavior.html">
 <link rel="import" href="../gc-repo/gc-repo.html">
+
 <dom-module id="gc-repo-shell">
   <template>
     <style include="shared-styles"></style>
@@ -16,9 +16,9 @@
     </style>
     <gc-app-fragment-layout title="[[repo.name]]" back-button>
       <a title-addon href="https://github.com/[[repo.fullname]]" target="_blank">
-        <paper-icon-button  icon="gc-icons:github"></paper-icon-button>
+        <paper-icon-button  icon="gc:github"></paper-icon-button>
       </a>
-      <gc-repo id="repo" repo-id="[[repoId]]" auth-user="[[authUser]]" repo="{{repo}}"></gc-repo>
+      <gc-repo id="repo" repo-id="[[repoId]]" repo="{{repo}}"></gc-repo>
     </gc-app-fragment-layout>
   </template>
   <script>
@@ -29,13 +29,13 @@
         return 'gc-repo-shell';
       }
       get behaviors() {
-        return [GitcheeseBehaviors.AppContextBehavior, GitcheeseBehaviors.ShellBehavior];
+        return [...GitcheeseBehaviors.ShellBehavior];
       }
       activated() {
         this.$.repo.loadData();
       }
     }
-    new Polymer(GcRepoShell);
+    Polymer(GcRepoShell);
   })();
   </script>
 </dom-module>

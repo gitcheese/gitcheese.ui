@@ -4,26 +4,31 @@
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../gc-styles/gc-shared-styles.html">
 <link rel="import" href="../gc-layouts/gc-app-shell-layout.html">
-<link rel="import" href="../gc-common/gc-app-context-behavior.html">
+<link rel="import" href="../gc-common/gc-auth.html">
+<link rel="import" href="../gc-common/gc-lazy-components-behavior.html">
 <link rel="import" href="../gc-app/gc-login.html">
 <link rel="import" href="../gc-app/gc-account-setup.html">
-<link rel="import" href="../gc-dashboard/gc-dashboard-shell.html">
 
 <dom-module id="gc-app">
   <template>
     <style include="shared-styles"></style>
-    <gc-login route="[[route]]" auth-user="{{authUser}}"></gc-login>
-    <gc-account-setup auth-user="[[authUser]]"></gc-account-setup>
+
+    <gc-auth id="auth" authenticated="{{authenticated}}"></gc-auth>
+    <gc-account-setup></gc-account-setup>
+    <gc-login
+      route="[[route]]"
+      authenticated="[[authenticated]]"
+      on-logged-in="_initAuth"
+      on-logged-out="_clearAuth">
+    </gc-login>
+
     <gc-active-route pattern="{{activePattern}}" fallback-pattern="/">
-      <app-route route="{{route}}" pattern="/"></app-route>
-      <app-route route="{{route}}" pattern="/repos/:id" data="{{repoRouteData}}"></app-route>
-      <app-route route="{{route}}" pattern="/user"></app-route>
+      <app-route route="[[route]]" pattern="/user"></app-route>
     </gc-active-route>
     <gc-app-shell-layout>
-      <iron-pages selected="[[_activePage]]" attr-for-selected="for-pattern" selected-attribute="active">
-        <gc-dashboard-shell id="dashboard" auth-user="[[authUser]]" for-pattern="/"></gc-dashboard-shell>
-        <gc-repo-shell auth-user="[[authUser]]" repo-id="[[repoRouteData.id]]" for-pattern="/repos/:id" route="[[appSubroute]]"></gc-repo-shell>
-        <gc-user-shell auth-user="[[authUser]]" for-pattern="/user"></gc-user-shell>
+      <iron-pages selected="[[activePattern]]" attr-for-selected="for-pattern" selected-attribute="active">
+        <gc-dashboard-shell for-pattern="/" route="[[route]]"></gc-dashboard-shell>
+        <gc-user-shell for-pattern="/user" route="[[route]]"></gc-user-shell>
       </iron-pages>
     </gc-app-shell-layout>
   </template>
@@ -36,32 +41,27 @@
         return 'gc-app';
       }
       get behaviors() {
-        return [GitcheeseBehaviors.AppContextBehavior];
+        return [
+          GitcheeseBehaviors.LazyComponentsBehavior
+        ];
       }
-      get properties() {
-        return {
-          activePattern: {
-            type: String
-          },
-          _activePage: {
-            type: String,
-            computed: '_computeActivePage(authUser, activePattern)'
-          }
-        }
+      get lazyComponents() {
+        return [
+          '../gc-dashboard/gc-dashboard-shell.html',
+          '../gc-user/gc-user-shell.html'
+        ];
       }
       ready() {
-        Polymer.RenderStatus.afterNextRender(this, () => {
-          this.importHref(this.resolveUrl('../gc-repo/gc-repo-shell.html'), null, null, true);
-          this.importHref(this.resolveUrl('../gc-user/gc-user-shell.html'), null, null, true);
-        });
+        this.ensureLazyComponents();
       }
-      _computeActivePage(authUser, activePattern) {
-        if (!this.isAuthenticated) return;
-        if (!this.$.dashboard.authUser) this.$.dashboard.authUser = this.authUser;
-        return activePattern;
+      _initAuth(e, data) {
+        this.$.auth.init(data.token, data.scopes);
+      }
+      _clearAuth() {
+        this.$.auth.clear();
       }
     }
-    new Polymer(GcApp);
+    Polymer(GcApp);
   })();
   </script>
 </dom-module>

@@ -33,17 +33,17 @@
         if (route.active) this._setPattern(route.pattern);
       });
       if (this.fallbackPattern && !this.pattern) {
-        this._setPattern(this.fallbackPattern)
+        this._setPattern(this.fallbackPattern);
       }
     }
     _handleActiveChanged(route) {
       let activeRoute = this.routes.find((r) => r.active);
       if (activeRoute) {
-        this._setPattern(activeRoute.pattern);
-      } else
-        this._setPattern(this.fallbackPattern);
+        return this._setPattern(activeRoute.pattern);
+      }
+      return this._setPattern(this.fallbackPattern);
     }
   }
-  new Polymer(GcActiveRoute);
+  Polymer(GcActiveRoute);
 })();
 </script>

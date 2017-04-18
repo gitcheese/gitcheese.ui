@@ -7,7 +7,6 @@
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../gc-styles/gc-shared-styles.html">
-<link rel="import" href="../gc-common/gc-app-context-behavior.html">
 <link rel="import" href="../gc-common/gc-config.html">
 <link rel="import" href="../gc-common/gc-api-ajax.html">
 <link rel="import" href="../gc-user/gc-user-managed-accounts-info-behavior.html">
@@ -23,7 +22,7 @@
 
     <gc-config stripe-uri="{{stripeUri}}" stripe-key="{{stripeKey}}"></gc-config>
     <iron-ajax id="postToken" url="[[stripeUri]]/tokens" method="post" body="[[tokenRequestBody]]" content-type="application/x-www-form-urlencoded" on-response="_handleStripeTokenResponse" on-error="_handleStripeTokenError" last-response="{{token}}" last-error="{{tokenError}}"></iron-ajax>
-    <gc-api-ajax id="put" url="/user/managed-accounts/external-account" method="put" auth-user="[[authUser]]" on-response="_handleInfoUpdatedResponse"></gc-api-ajax>
+    <gc-api-ajax id="put" url="/user/managed-accounts/external-account" method="put" on-response="_handleInfoUpdatedResponse"></gc-api-ajax>
 
     <paper-toast id="toast" text="Your bank account info has been submited."></paper-toast>
 
@@ -62,7 +61,6 @@
       }
       get behaviors() {
         return [
-          GitcheeseBehaviors.AppContextBehavior,
           GitcheeseBehaviors.UserManagedAccountsInfoBehavior
         ];
       }

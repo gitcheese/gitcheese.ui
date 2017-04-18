@@ -19,8 +19,19 @@
     }
 
     .content {
-      max-width: 800px;
+      max-width: 841px;
       @apply(--layout-flex);
+    }
+
+    @media (min-width: 842px) {
+      .content {
+        padding: 1rem;
+      }
+    }
+    @media (max-width: 841px) {
+      .content {
+        padding: 0;
+      }
     }
 
     paper-progress {
@@ -29,6 +40,10 @@
       width: 100%;
       margin-bottom: -4px;
       z-index: 103;
+    }
+
+    [main-title] ::slotted(a){
+      pointer-events: all;
     }
 
     paper-progress[hide] {
@@ -40,48 +55,30 @@
       --iron-image-height: 50px;
     }
 
-    .secondary-title {
-      @apply(--layout-flex);
-    }
     </style>
-    <iron-media-query query="(min-width: 601px)" query-matches="{{mobileSmall}}"></iron-media-query>
-    <app-header condenses reveals effects="waterfall">
-      <template is="dom-if" if="[[!mobileSmall]]">
-        <app-toolbar>
-          <template is="dom-if" if="[[!backButton]]">
-            <paper-icon-button icon="menu" on-tap="_toggleDrawer"></paper-icon-button>
-          </template>
-          <template is="dom-if" if="[[backButton]]">
-            <paper-icon-button icon="arrow-back" on-tap="_handleBackTap"></paper-icon-button>
-          </template>
-          <div secondary-title>
-            {{title}}
-            <slot select="[title-addon]"></slot>
-          </div>
-        </app-toolbar>
-      </template>
-      <template is="dom-if" if="[[mobileSmall]]">
-        <app-toolbar>
-          <paper-icon-button icon="menu" on-tap="_toggleDrawer"></paper-icon-button>
-          <div main-title>Gitcheese</div>
-          <iron-image src="../../images/logo.svg"></iron-image>
-        </app-toolbar>
-        <app-toolbar>
-          <template is="dom-if" if="[[backButton]]">
-            <paper-icon-button icon="arrow-back" on-tap="_handleBackTap"></paper-icon-button>
-          </template>
-          <div secondary-title>
-            {{title}}
-            <slot select="[title-addon]"></slot>
-          </div>
-        </app-toolbar>
-      </template>
+    <iron-signals on-iron-signal-drawer-layout-narrow-changed="_handleNarrowLayoutChanged"></iron-signals>
 
+    <app-header condenses reveals effects="waterfall">
+      <app-toolbar>
+        <template is="dom-if" if="[[_showBurgerButton]]">
+          <paper-icon-button icon="menu" on-tap="_toggleDrawer"></paper-icon-button>
+        </template>
+        <template is="dom-if" if="[[backButton]]">
+          <paper-icon-button icon="arrow-back" on-tap="_handleBackTap"></paper-icon-button>
+        </template>
+        <div main-title>
+          {{title}}
+          <slot select="[title-addon]"></slot>
+        </div>
+        <template is="dom-if" if="[[_narrowLayout]]">
+          <iron-image src="../../images/logo.svg"></iron-image>
+        </template>
+      </app-toolbar>
     </app-header>
     <paper-progress hide$="{{!loading}}" indeterminate></paper-progress>
     <div class="content-wrapper">
       <div class="content">
-        <content></content>
+        <slot></slot>
       </div>
     </div>
   </template>
@@ -94,6 +91,10 @@
       }
       get properties() {
         return {
+          burgerButton: {
+            type: Boolean,
+            value: false
+          },
           backButton: {
             type: Boolean,
             value: false
@@ -107,6 +108,10 @@
           _requestsCounter: {
             type: Number,
             value: 0
+          },
+          _showBurgerButton: {
+            type: Boolean,
+            computed: '_computeShowBurgerButton(burgerButton, _narrowLayout)'
           }
         };
       }
@@ -117,6 +122,11 @@
           'iron-ajax-error': '_handleRequestEnded'
         };
       }
+      attached() {
+        this.fire('iron-signal', {
+          name: 'update-drawer-layout'
+        });
+      }
       _handleBackTap() {
         window.history.back();
       }
@@ -124,6 +134,12 @@
         this.fire('iron-signal', {
           name: 'toggle-drawer'
         });
+      }
+      _handleNarrowLayoutChanged(e, data) {
+        this._narrowLayout = data.narrow;
+      }
+      _computeShowBurgerButton(burgerButton, _narrowLayout) {
+        return burgerButton && _narrowLayout;
       }
       _handleRequestStarted() {
         this._requestsCounter++;

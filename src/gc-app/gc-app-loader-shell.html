@@ -2,7 +2,6 @@
 <link rel="import" href="../gc-common/gc-shell-behavior.html">
 <dom-module id="gc-app-loader-shell">
   <template>
-    <style></style>
     <gc-app route="[[route]]"></gc-app>
   </template>
   <script>
@@ -14,14 +13,14 @@
       }
       get behaviors() {
         return [
-          GitcheeseBehaviors.ShellBehavior
-        ]
+          ...GitcheeseBehaviors.ShellBehavior
+        ];
       }
-      ready() {
-        this.lazyComponents.push('../gc-app/gc-app.html');
+      get lazyComponents() {
+        return ['../gc-app/gc-app.html'];
       }
     }
-    new Polymer(GcAppLoaderShell);
+    Polymer(GcAppLoaderShell);
   })();
   </script>
 </dom-module>
