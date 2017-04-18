@@ -10,6 +10,7 @@
 <link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../gc-common/gc-api-ajax.html">
 <link rel="import" href="../gc-styles/gc-shared-styles.html">
 <dom-module id="gc-app-shell-layout">
   <template>
@@ -21,24 +22,39 @@
       .brand-toolbar iron-image {
         width: 56px;
       }
-      [menu] {
+      .user-toolbar {
+        @apply(--layout-vertical);
+        @apply(--layout-center-center);
+        text-align: center;
+      }
+      .user-toolbar > iron-image {
+        height: 100px;
+        width: 100px;
+        /*--iron-image-height: 100px;
+        --iron-image-width: 100px;*/
+        border-radius: 50px;
+      }
+      .drawer-content {
         height: calc(100vh - 64px);
         @apply(--layout-vertical);
       }
-      [main-menu] {
+      .drawer-content > paper-menu {
         @apply(--layout-flex);
       }
     </style>
     <iron-signals on-iron-signal-update-drawer-layout="_updateDrawerLayout"></iron-signals>
     <iron-signals on-iron-signal-toggle-drawer="_toggleDrawer"></iron-signals>
+
+    <gc-api-ajax id="get" url="/user" last-response="{{user}}"></gc-api-ajax>
+
     <app-drawer-layout id="drawerLayout" fullbleed responsive-width="841px" on-narrow-changed="_updateDrawerLayout">
       <app-drawer id="drawer">
         <app-toolbar class="brand-toolbar">
           <iron-image src="../../images/logo.svg"></iron-image>
           <span class="flex">Gitcheese</span>
         </app-toolbar>
-        <div menu>
-          <paper-menu main-menu>
+        <div class="drawer-content">
+          <paper-menu>
             <a href="/app" on-tap="_toggleDrawer">
               <paper-item>
                 <paper-icon-item>
@@ -56,16 +72,16 @@
               </paper-item>
             </a>
           </paper-menu>
-          <paper-menu>
-            <a href="/app/logout" on-tap="_toggleDrawer">
-              <paper-item>
-                <paper-icon-item>
-                  <iron-icon icon="exit-to-app" item-icon></iron-icon>
-                  Logout
-                </paper-icon-item>
-              </paper-item>
+          <div class="user-toolbar">
+            <p>[[user.githubLogin]]</p>
+            <iron-image src="https://github.com/[[user.githubLogin]].png?size=100"></iron-image>
+            <a href="/app/logout" tabindex="-1" on-tap="_toggleDrawer">
+              <paper-button>
+                <iron-icon icon="exit-to-app" item-icon></iron-icon>
+                Logout
+              </paper-button>
             </a>
-          </paper-menu>
+          </div>
         </div>
       </app-drawer>
       <app-header-layout has-scrolling-region>
@@ -80,6 +96,9 @@
       get is() {
         return 'gc-app-shell-layout';
       }
+      ready() {
+        this.$.get.generateRequest();
+      }
       _updateDrawerLayout() {
         this.fire('iron-signal', {
           name: 'drawer-layout-narrow-changed',
@@ -89,12 +108,12 @@
         });
       }
       _toggleDrawer() {
-        if (this.$.drawerLayout.narrow){
+        if (this.$.drawerLayout.narrow) {
           this.$.drawer.toggle();
         }
       }
     }
-    new Polymer(GcAppShellLayout);
+    Polymer(GcAppShellLayout);
   })();
   </script>
 </dom-module>
