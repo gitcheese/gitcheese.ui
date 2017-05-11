@@ -42,6 +42,7 @@
       @apply(--layout-center-center);
     }
     </style>
+
     <gc-config api-uri="{{apiUri}}"></gc-config>
 
     <app-route id="login" route="{{route}}" pattern="/login/success" query-params="{{_queryParams}}" active="{{_successRouteActive}}"></app-route>
@@ -50,9 +51,7 @@
 
     <section>
       <h1 hero-title>Gitcheese</h1>
-      <!-- <div logo-container> -->
-        <iron-image logo src="../../images/logo.svg"></iron-image>
-      <!-- </div> -->
+      <iron-image logo src="../../images/logo.svg"></iron-image>
       <paper-button on-tap="_login">
         <iron-icon icon="account-circle"></iron-icon>Login With GitHub
       </paper-button>

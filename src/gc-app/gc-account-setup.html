@@ -1,6 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../facebook-pixel/facebook-pixel-event.html">
 <link rel="import" href="../gc-styles/gc-shared-styles.html">
 <link rel="import" href="../gc-common/gc-api-ajax.html">
 
@@ -35,6 +36,8 @@
       --paper-input-container-input-color: #fff;
     }
     </style>
+    <facebook-pixel-event id="pixel" name="CompleteRegistration"></facebook-pixel-event>
+
     <gc-api-ajax id="get" url="/user/managed-accounts" last-response="{{managedAccount}}" on-response="_handleGetResponse"></gc-api-ajax>
     <gc-api-ajax id="post" method="POST" url="/user/managed-accounts"></gc-api-ajax>
 
@@ -161,6 +164,7 @@
         };
         this.$.post.generateRequest();
         this.submited = true;
+        this.$.pixel.fire();
       }
     }
     Polymer(GcAccountSetup);
