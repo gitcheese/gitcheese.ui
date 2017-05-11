@@ -2,6 +2,7 @@
 <link rel="import" href="../../bower_components/app-route/app-location.html">
 <link rel="import" href="../../bower_components/app-route/app-route.html">
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../facebook-pixel/facebook-pixel.html">
 <link rel="import" href="../gc-styles/gc-shared-styles.html">
 <link rel="import" href="../gc-common/gc-active-route.html">
 <link rel="import" href="../gc-landing-page/gc-landing-page.html">
@@ -11,6 +12,7 @@
 <dom-module id="gc-shell">
   <template>
     <style include="shared-styles"></style>
+    <facebook-pixel pixel-id="535325640007099"></facebook-pixel>
 
     <app-location route="{{route}}"></app-location>
     <gc-active-route pattern="{{activePattern}}" fallback-pattern="/">

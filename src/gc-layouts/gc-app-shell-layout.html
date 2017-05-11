@@ -6,6 +6,7 @@
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/iron-signals/iron-signals.html">
 <link rel="import" href="../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../../bower_components/iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
@@ -51,7 +52,7 @@
           <iron-image src="../../images/logo.svg"></iron-image>
           <span class="flex">Gitcheese</span>
         </app-toolbar>
-        <div class="drawer-content">
+        <div id="drawerContent" class="drawer-content">
           <paper-menu>
             <a href="/app" on-tap="_toggleDrawer">
               <paper-item>
@@ -92,6 +93,9 @@
       get is() {
         return 'gc-app-shell-layout';
       }
+      get behaviors() {
+        return [Polymer.IronResizableBehavior];
+      }
       get properties() {
         return {
           githubAvatarUrl: {
@@ -99,6 +103,9 @@
             computed: '_computeGithubAvatarUrl(user)'
           }
         };
+      }
+      get listeners() {
+        return {'iron-resize': '_resize'};
       }
       ready() {
         this.$.get.generateRequest();
@@ -118,6 +125,9 @@
         if (this.$.drawerLayout.narrow) {
           this.$.drawer.toggle();
         }
+      }
+      _resize() {
+        this.$.drawerContent.style.height = `${window.innerHeight - 64}px`;
       }
     }
     Polymer(GcAppShellLayout);

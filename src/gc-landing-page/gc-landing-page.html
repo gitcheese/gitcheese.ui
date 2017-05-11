@@ -24,6 +24,7 @@
 <link rel="import" href="../gc-landing-page/gc-landing-page-scroll-down-button.html">
 <link rel="import" href="../gc-landing-page/gc-landing-page-pricing-card.html">
 <link rel="import" href="../gc-common/gc-icons.html">
+<link rel="import" href="../facebook-pixel/facebook-pixel-event.html">
 
 <dom-module id="gc-landing-page">
   <template>
@@ -119,6 +120,8 @@
     }
     </style>
     <iron-media-query query="(max-width: 600px)" query-matches="{{mobile}}"></iron-media-query>
+    <facebook-pixel-event id="pixel" name="Lead"></facebook-pixel-event>
+
     <app-drawer-layout force-narrow>
       <app-drawer id="drawer" swipe-to-open>
         <paper-menu>
@@ -152,7 +155,7 @@
             <h2>Make Some Cheese With Your GIT!</h2>
             <p><i>Donations for open source projects</i></p>
             <a href="/app" tabindex="-1">
-              <paper-button rised>Start Making It</paper-button>
+              <paper-button rised on-tap="_appLinkTap">Start Making It</paper-button>
             </a>
           </app-toolbar>
         </app-header>
@@ -381,9 +384,6 @@
           }
         };
       }
-      ready() {
-        // window.onscroll = this._handleScroll.bind(this);
-      }
       scroll(e) {
         if (this.$.drawer.opened) {
           this.$.drawer.toggle();
@@ -395,32 +395,9 @@
       _sortCountries(a, b) {
         return a.name > b.name ? 1 : -1;
       }
-      _handleScroll() {
-          // let halfScreenOffset = window.pageYOffset + window.screen.availHeight / 2;
-          // let menuTabs = [].slice.call(this.$$('#menuTabs')
-          //   .querySelectorAll('paper-tab'));
-          // for (var i = 1; i < menuTabs.length; i++) {
-          //   if (i + 1 < menuTabs.length && halfScreenOffset > menuTabs[i].target.offsetTop && halfScreenOffset < menuTabs[i + 1].target.offsetTop)
-          //     console.log(menuTabs[i].target.id)
-          // }
-          // console.log(menuTabs);
-          // if (halfScreenOffset > this.whySection.offsetTop && halfScreenOffset < this.pricingSection.offsetTop)
-          //   console.log('why')
-          // else if (halfScreenOffset > this.pricingSection.offsetTop && halfScreenOffset < this.whereSection.offsetTop)
-          //   console.log('pricing');
-          // else if (halfScreenOffset > this.whereSection.offsetTop && halfScreenOffset < this.contactSection.offsetTop)
-          //   console.log('where');
-          // else if (halfScreenOffset > this.contactSection.offsetTop && halfScreenOffset || ((window.innerHeight + window.scrollY) >= document.body.scrollHeight)) {
-          //   console.log("contact");
-          // } else {
-          //   console.log("what");
-          // }
+      _appLinkTap() {
+        this.$.pixel.fire();
       }
-      // scroll position and tabs
-      // function testScroll(ev){
-      //     if(window.pageYOffset>400)alert('User has scrolled at least 400 px!');
-      // }
-      // window.onscroll=testScroll
     }
     Polymer(GcLandingPage);
   })();

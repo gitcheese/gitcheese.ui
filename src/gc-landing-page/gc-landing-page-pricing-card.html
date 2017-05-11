@@ -2,6 +2,8 @@
 <link rel="import" href="../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../gc-styles/gc-shared-styles.html">
+<link rel="import" href="../facebook-pixel/facebook-pixel-event.html">
+
 <dom-module id="gc-landing-page-pricing-card">
   <template>
     <style include="shared-styles"></style>
@@ -11,17 +13,17 @@
       width: 250px;
       margin: 1rem;
     }
-    
+
     paper-material {
       border-radius: 2px;
     }
-    
+
     header {
       font-size: 1.5em;
       text-align: center;
       margin-bottom: 2rem;
     }
-    
+
     header::after {
       content: "";
       display: block;
@@ -31,16 +33,18 @@
       margin: 0 auto;
       margin-top: 1rem;
     }
-    
+
     footer {
       text-align: center;
     }
-    
+
     paper-button {
       color: var(--dark-theme-text-color);
       background-color: var(--primary-color);
     }
     </style>
+    <facebook-pixel-event id="pixel" name="Lead"></facebook-pixel-event>
+
     <paper-material>
       <header>FREE</header>
       <ul>
@@ -50,7 +54,7 @@
       </ul>
       <footer>
         <a href="/app" tabindex="-1">
-          <paper-button rised>Go For It!</paper-button>
+          <paper-button rised on-tap="_appLinkTap">Go For It!</paper-button>
         </a>
       </footer>
     </paper-material>
@@ -62,8 +66,11 @@
       get is() {
         return 'gc-landing-page-pricing-card';
       }
+      _appLinkTap() {
+        this.$.pixel.fire();
+      }
     }
-    new Polymer(GcLandingPagePricingCard);
+    Polymer(GcLandingPagePricingCard);
   })();
   </script>
 </dom-module>
