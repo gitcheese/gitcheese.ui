@@ -43,11 +43,14 @@ function build() {
           .pipe($.if(/\.js$/, $.uglify()))
           .pipe($.if(/\.html$/, $.htmlAutoprefixer()))
           .pipe($.if(/\.html$/, cssSlam()))
-          .pipe($.if(/\.html$/, $.htmlMinifier({ removeComments: true })))
+          .pipe($.if(/\.html$/, $.htmlMinifier({
+            removeComments: true,
+            collapseWhitespace: true
+          })))
           .pipe(dependenciesHtmlSplitter.rejoin());
 
         let bundled = mergeStream(sourcesStream, dependenciesStream)
-          .pipe(project.bundler)
+          .pipe(project.bundler())
           .pipe(gulp.dest('build/'));
         return waitFor(bundled);
       })
