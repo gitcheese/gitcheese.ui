@@ -1,4 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/app-active-route/app-active-route.html">
 <link rel="import" href="../gc-layouts/gc-app-fragment-layout.html">
 <link rel="import" href="../gc-common/gc-shell-behavior.html">
 <link rel="import" href="../gc-dashboard/gc-repos.html">
@@ -7,9 +8,9 @@
   <template>
     <style include="shared-styles"></style>
 
-    <gc-active-route pattern="{{activePattern}}" fallback-pattern="/">
+    <app-active-route pattern="{{activePattern}}" fallback-pattern="/">
       <app-route route="{{route}}" pattern="/repos/:id" data="{{repoData}}" tail="{{repoTail}}"></app-route>
-    </gc-active-route>
+    </app-active-route>
     <iron-pages selected="[[activePattern]]" attr-for-selected="for-pattern" selected-attribute="active">
       <gc-app-fragment-layout for-pattern="/" title="Repositories" burger-button>
         <gc-repos id="repos"></gc-repos>
