@@ -35,7 +35,7 @@
         <template is="dom-if" if="[[noRepos]]">
           <paper-item><i>So lonely here :( You can always refresh to fetch repos from GitHub</i></paper-item>
         </template>
-        <template is="dom-repeat" items="[[repos]]">
+        <template is="dom-repeat" items="[[repos]]" sort="_sort">
           <a href="/app/repos/[[item.id]]">
             <paper-item>[[item.fullname]]</paper-item>
           </a>
@@ -82,6 +82,9 @@
       _handlePutResponse() {
         this.push('repos', ...this._newRepos);
         this.$.putDoneToast.show();
+      }
+      _sort(a, b) {
+        return a.fullname.localeCompare(b.fullname);
       }
     }
     Polymer(GcRepos);

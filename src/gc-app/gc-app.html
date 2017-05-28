@@ -1,6 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/app-route/app-location.html">
 <link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/app-active-route/app-active-route.html">
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../gc-styles/gc-shared-styles.html">
 <link rel="import" href="../gc-layouts/gc-app-shell-layout.html">
@@ -22,9 +23,9 @@
       on-logged-out="_clearAuth">
     </gc-login>
 
-    <gc-active-route pattern="{{activePattern}}" fallback-pattern="/">
+    <app-active-route pattern="{{activePattern}}" fallback-pattern="/">
       <app-route route="[[route]]" pattern="/user"></app-route>
-    </gc-active-route>
+    </app-active-route>
     <gc-app-shell-layout>
       <iron-pages selected="[[activePattern]]" attr-for-selected="for-pattern" selected-attribute="active">
         <gc-dashboard-shell for-pattern="/" route="[[route]]"></gc-dashboard-shell>
