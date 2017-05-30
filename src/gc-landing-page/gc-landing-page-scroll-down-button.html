@@ -1,9 +1,10 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
-<link rel="import" href="../gc-styles/gc-shared-styles.html">
+<link rel="import" href="../gc-styles/gc-styles.html">
+
 <dom-module id="gc-landing-page-scroll-down-button">
   <template>
-    <style include="shared-styles"></style>
+    <style include="gc-styles"></style>
     <style>
     :host {
       display: block;
@@ -17,8 +18,8 @@
 
     .next-section {
       background-color: var(--primary-background-color);
-      @apply(--layout-vertical);
-      @apply(--layout-center-center);
+      @apply --layout-vertical;
+      @apply --layout-center-center;
     }
 
     paper-fab {
@@ -32,13 +33,9 @@
     </div>
   </template>
   <script>
-  (() => {
-    'use strict';
-    class GcLandingPageScrollDownButton {
-      get is() {
-        return 'gc-landing-page-scroll-down-button';
-      }
-      get properties() {
+    class GcLandingPageScrollDownButton extends Polymer.Element {
+      static get is() { return 'gc-landing-page-scroll-down-button'; }
+      static get properties() {
         return {
           scrollTo: {
             type: Object
@@ -51,7 +48,7 @@
         });
       }
     }
-    Polymer(GcLandingPageScrollDownButton);
-  })();
+
+    window.customElements.define(GcLandingPageScrollDownButton.is, GcLandingPageScrollDownButton);
   </script>
 </dom-module>

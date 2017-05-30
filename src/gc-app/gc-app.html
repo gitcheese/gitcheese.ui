@@ -1,19 +1,17 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../bower_components/app-route/app-location.html">
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/app-route/app-route.html">
 <link rel="import" href="../../bower_components/app-active-route/app-active-route.html">
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
-<link rel="import" href="../gc-styles/gc-shared-styles.html">
-<link rel="import" href="../gc-layouts/gc-app-shell-layout.html">
+<link rel="import" href="../gc-styles/gc-styles.html">
+<link rel="import" href="../gc-common/gc-lazy-components-loader.html">
+<link rel="import" href="../gc-layouts/gc-app-layout.html">
 <link rel="import" href="../gc-common/gc-auth.html">
-<link rel="import" href="../gc-common/gc-lazy-components-behavior.html">
 <link rel="import" href="../gc-app/gc-login.html">
 <link rel="import" href="../gc-app/gc-account-setup.html">
 
 <dom-module id="gc-app">
   <template>
-    <style include="shared-styles"></style>
-
+    <style include="gc-styles"></style>
     <gc-auth id="auth" authenticated="{{authenticated}}"></gc-auth>
     <gc-account-setup></gc-account-setup>
     <gc-login
@@ -26,33 +24,26 @@
     <app-active-route pattern="{{activePattern}}" fallback-pattern="/">
       <app-route route="[[route]]" pattern="/user"></app-route>
     </app-active-route>
-    <gc-app-shell-layout>
+    <gc-app-layout>
       <iron-pages selected="[[activePattern]]" attr-for-selected="for-pattern" selected-attribute="active">
-        <gc-dashboard-shell for-pattern="/" route="[[route]]"></gc-dashboard-shell>
-        <gc-user-shell for-pattern="/user" route="[[route]]"></gc-user-shell>
+        <gc-dashboard-fragment for-pattern="/" route="[[route]]"></gc-dashboard-fragment>
+        <gc-user-fragment for-pattern="/user" route="[[route]]"></gc-user-fragment>
       </iron-pages>
-    </gc-app-shell-layout>
+    </gc-app-layout>
   </template>
-
   <script>
-  (() => {
-    'use strict';
-    class GcApp {
-      get is() {
-        return 'gc-app';
-      }
-      get behaviors() {
-        return [
-          GitcheeseBehaviors.LazyComponentsBehavior
-        ];
-      }
+    class GcApp extends GcLazyComponentsLoader {
+      static get is() { return 'gc-app'; }
+
       get lazyComponents() {
         return [
-          '../gc-dashboard/gc-dashboard-shell.html',
-          '../gc-user/gc-user-shell.html'
+          '../gc-dashboard/gc-dashboard-fragment.html',
+          '../gc-user/gc-user-fragment.html'
         ];
       }
+
       ready() {
+        super.ready();
         this.ensureLazyComponents();
       }
       _initAuth(e, data) {
@@ -62,7 +53,7 @@
         this.$.auth.clear();
       }
     }
-    Polymer(GcApp);
-  })();
+
+    window.customElements.define(GcApp.is, GcApp);
   </script>
 </dom-module>

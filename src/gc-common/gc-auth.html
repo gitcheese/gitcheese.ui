@@ -1,56 +1,52 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
 
 <dom-module id="gc-auth">
-    <template>
-      <iron-localstorage id="localStorage" name="gc-auth" value="{{info}}" auto-save-disabled="true"></iron-localstorage>
-    </template>
-    <script>
-    (() => {
-      'use strict';
-      class GcAuth {
-        get is() {
-          return 'gc-auth';
-        }
-        get properties() {
-          return {
-            info: {
-              type: Object,
-              notify: true
-            },
-            token: {
-              type: String,
-              notify: true,
-              computed: '_computeToken(info)'
-            },
-            authenticated: {
-              type: Boolean,
-              notify: true,
-              computed: '_computeAuthenticated(info)'
-            }
-          };
-        }
-        init(token) {
-          this.info = {
-            token: token
-          };
-          this.$.localStorage.save();
-        }
-        clear() {
-          this.info = null;
-          this.$.localStorage.save();
-        }
-        _computeToken(info) {
-          if (!info) {
-            return;
+  <template>
+    <iron-localstorage id="localStorage" name="gc-auth" value="{{info}}" auto-save-disabled="true"></iron-localstorage>
+  </template>
+  <script>
+    class GcAuth extends Polymer.Element {
+      static get is() { return 'gc-auth'; }
+      static get properties() {
+        return {
+          info: {
+            type: Object,
+            notify: true
+          },
+          token: {
+            type: String,
+            notify: true,
+            computed: '_computeToken(info)'
+          },
+          authenticated: {
+            type: Boolean,
+            notify: true,
+            computed: '_computeAuthenticated(info)'
           }
-          return info.token;
-        }
-        _computeAuthenticated(info) {
-          return !!info;
-        }
+        };
       }
-      Polymer(GcAuth);
-    })();
-    </script>
+      init(token) {
+        this.info = {
+          token: token
+        };
+        this.$.localStorage.save();
+      }
+      clear() {
+        this.info = null;
+        this.$.localStorage.save();
+      }
+      _computeToken(info) {
+        if (!info) {
+          return;
+        }
+        return info.token;
+      }
+      _computeAuthenticated(info) {
+        return !!info;
+      }
+    }
+
+    window.customElements.define(GcAuth.is, GcAuth);
+  </script>
 </dom-module>

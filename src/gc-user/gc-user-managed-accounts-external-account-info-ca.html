@@ -1,18 +1,20 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
-<link rel="import" href="../gc-styles/gc-shared-styles.html">
-<link rel="import" href="../gc-user/gc-user-managed-accounts-external-account-info-behavior.html">
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../gc-styles/gc-styles.html">
+<link rel="import" href="../gc-user/gc-user-managed-accounts-external-account-info-country.html">
 
 <dom-module id="gc-user-managed-accounts-external-account-info-ca">
   <template>
-    <style include="shared-styles"></style>
+    <style include="gc-styles"></style>
     <div class="layout horizontal">
       <paper-dropdown-menu class="flex"
         label="Currency"
         required
         auto-validate
         error-message="Currency is required.">
-        <paper-listbox class="dropdown-content" selected="{{_data.currency}}" attr-for-selected="value">
+        <paper-listbox slot="dropdown-content" selected="{{_data.currency}}" attr-for-selected="value">
           <template is="dom-repeat" items="[[_availableCurrencies]]">
             <paper-item value="[[item]]">[[item]]</paper-item>
           </template>
@@ -25,19 +27,10 @@
     </div>
   </template>
   <script>
-  (() => {
-    'use strict';
-    class GcUserManagedAccountsExternalAccountInfoCa {
-      get is() {
-        return 'gc-user-managed-accounts-external-account-info-ca';
-      }
-      get behaviors() {
-        return [
-          GitcheeseBehaviors.UserManagedAccountsExternalAccountInfoBehavior
-        ];
-      }
+    class GcUserManagedAccountsExternalAccountInfoCa extends GcUserManagedAccountsExternalAccountInfoCountry {
+      static get is() { return 'gc-user-managed-accounts-external-account-info-ca'; }
     }
-    new Polymer(GcUserManagedAccountsExternalAccountInfoCa);
-  })();
+
+    window.customElements.define(GcUserManagedAccountsExternalAccountInfoCa.is, GcUserManagedAccountsExternalAccountInfoCa);
   </script>
 </dom-module>

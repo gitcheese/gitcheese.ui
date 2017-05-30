@@ -1,46 +1,47 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../gc-styles/gc-shared-styles.html">
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../gc-styles/gc-styles.html">
+
 <dom-module id="gc-landing-page-section">
   <template>
-    <style include="shared-styles"></style>
+    <style include="gc-styles"></style>
     <style>
     :host {
       display: block;
-      @apply(--layout-horizontal);
-      @apply(--layout-center-justified);
+      @apply --layout-horizontal;
+      @apply --layout-center-justified;
       background-color: var(--primary-background-color);
       padding: 2rem;
     }
-    
+
     :host([alt]) {
       background-color: var(--default-primary-color);
     }
-    
+
     :host([alt]) section > h1 {
       color: var(--dark-theme-text-color);
     }
-    
+
     :host([alt]) section > h1:after {
       background: var(--accent-color);
     }
-    
+
     :host([alt]) section ::slotted(*) {
       color: var(--dark-theme-text-color);
     }
-    
+
     section {
-      @apply(--layout-flex);
-      @apply(--layout-vertical);
-      @apply(--layout-center-center);
+      @apply --layout-flex;
+      @apply --layout-vertical;
+      @apply --layout-center-center;
       display: block;
       max-width: 840px;
     }
-    
+
     section > h1 {
       text-transform: uppercase;
       text-align: center;
     }
-    
+
     section > h1:after {
       content: '';
       display: block;
@@ -59,13 +60,9 @@
     </section>
   </template>
   <script>
-  (() => {
-    'use strict';
-    class GcLandingPageSection {
-      get is() {
-        return 'gc-landing-page-section';
-      }
-      get properties() {
+    class GcLandingPageSection extends Polymer.Element {
+      static get is() { return 'gc-landing-page-section'; }
+      static get properties() {
         return {
           alt: {
             type: Boolean,
@@ -77,7 +74,7 @@
         };
       }
     }
-    new Polymer(GcLandingPageSection);
-  })();
+
+    window.customElements.define(GcLandingPageSection.is, GcLandingPageSection);
   </script>
 </dom-module>

@@ -1,0 +1,63 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="gc-user-managed-accounts-info">
+  <script>
+    class UserManagedAccountsInfo extends Polymer.Element {
+      static get is() { return 'gc-user-managed-accounts-info'; }
+      static get properties() {
+        return {
+          status: {
+            type: String,
+            value: 'ok'
+          },
+          managedAccount: {
+            type: Object,
+            notify: true,
+            observer: '_managedAccountChanged'
+          },
+          fieldsMissing: {
+            type: Boolean,
+            value: false
+          },
+          fields: {
+            type: Array,
+            value: () => []
+          },
+          _expanded: {
+            type: Boolean,
+            value: false
+          },
+          _chevronIcon: {
+            type: String,
+            computed: '_computeChevronIcon(_expanded)'
+          },
+          _statusIcon: {
+            type: String,
+            computed: '_computeStatusIcon(fieldsMissing)'
+          }
+        };
+      }
+      toggle() {
+        this._expanded = !this._expanded;
+      }
+      _managedAccountChanged(account) {
+        this.fieldsMissing = account.verification.fields_needed &&
+          account.verification.fields_needed.filter(x => this.fields.includes(x)).length > 0;
+      }
+      _computeChevronIcon(expanded) {
+        return expanded ? 'expand-less' : 'expand-more';
+      }
+      _computeStatusIcon(fieldsMissing) {
+        return fieldsMissing ? 'report-problem' : 'check-circle';
+      }
+      _handleInfoUpdatedResponse() {
+        this.dispatchEvent(new CustomEvent('info-updated'));
+        if (this.$.toast) {
+          this.$.toast.show();
+        }
+      }
+    }
+
+    window.customElements.define(UserManagedAccountsInfo.is, UserManagedAccountsInfo);
+  </script>
+</dom-module>

@@ -1,16 +1,16 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
-<link rel="import" href="../gc-styles/gc-shared-styles.html">
+<link rel="import" href="../gc-styles/gc-styles.html">
 <link rel="import" href="../gc-common/gc-api-ajax.html">
 
 <dom-module id="gc-repos">
   <template>
-    <style include="shared-styles"></style>
+    <style include="gc-styles"></style>
     <style>
       paper-fab{
         position: fixed;
@@ -24,7 +24,6 @@
         }
       }
     </style>
-
     <gc-api-ajax id="get" url="/user/repos" on-response="_handleGetResponse" last-response="{{repos}}"></gc-api-ajax>
     <gc-api-ajax id="put" method="put" url="/user/repos" on-response="_handlePutResponse" last-response="{{_newRepos}}"></gc-api-ajax>
 
@@ -45,16 +44,11 @@
 
     <paper-fab icon="refresh" on-tap="updateRepos"></paper-fab>
 
-
   </template>
   <script>
-  (() => {
-    'use strict';
-    class GcRepos {
-      get is() {
-        return 'gc-repos';
-      }
-      get properties() {
+    class GcRepos extends Polymer.Element {
+      static get is() { return 'gc-repos'; }
+      static get properties() {
         return {
           repos: {
             type: Array
@@ -87,7 +81,7 @@
         return a.fullname.localeCompare(b.fullname);
       }
     }
-    Polymer(GcRepos);
-  })();
+
+    window.customElements.define(GcRepos.is, GcRepos);
   </script>
 </dom-module>

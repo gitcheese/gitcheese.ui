@@ -1,0 +1,38 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../gc-styles/gc-styles.html">
+<link rel="import" href="../gc-common/gc-fragment.html">
+<link rel="import" href="../gc-layouts/gc-app-fragment-layout.html">
+<link rel="import" href="../gc-common/gc-icons.html">
+<link rel="import" href="../gc-repo/gc-repo.html">
+
+<dom-module id="gc-repo-fragment">
+  <template>
+    <style include="gc-styles"></style>
+    <style>
+      paper-icon-button {
+        color: #FFF;
+      }
+    </style>
+    <gc-app-fragment-layout title="[[repo.name]]" back-button>
+      <a slot="toolbar-title-addon" href="https://github.com/[[repo.fullname]]" target="_blank">
+        <paper-icon-button  icon="gc:github"></paper-icon-button>
+      </a>
+      <gc-repo slot="layout-content" id="repo" repo-id="[[repoId]]" repo="{{repo}}"></gc-repo>
+    </gc-app-fragment-layout>
+  </template>
+  <script>
+    class GcRepoFragment extends GcFragment {
+      static get is() { return 'gc-repo-fragment'; }
+      static get observers() {
+        return ['_loadDataObserver(active, repoId)'];
+      }
+      _loadDataObserver(active, repoId) {
+        if (!active || !repoId) return;
+        this.$.repo.loadData();
+      }
+    }
+
+    window.customElements.define(GcRepoFragment.is, GcRepoFragment);
+  </script>
+</dom-module>

@@ -1,0 +1,24 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../gc-styles/gc-styles.html">
+<link rel="import" href="../gc-layouts/gc-app-fragment-layout.html">
+<link rel="import" href="../gc-common/gc-fragment.html">
+<link rel="import" href="../gc-user/gc-user.html">
+
+<dom-module id="gc-user-fragment">
+  <template>
+    <style include="gc-styles"></style>
+    <gc-app-fragment-layout title="User Profile" back-button>
+      <gc-user slot="layout-content" id="user"></gc-user>
+    </gc-app-fragment-layout>
+  </template>
+  <script>
+    class GcUserFragment extends GcFragment {
+      static get is() { return 'gc-user-fragment'; }
+      activated() {
+        this.$.user.loadData();
+      }
+    }
+
+    window.customElements.define(GcUserFragment.is, GcUserFragment);
+  </script>
+</dom-module>

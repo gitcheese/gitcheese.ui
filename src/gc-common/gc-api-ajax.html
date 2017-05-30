@@ -1,4 +1,4 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../gc-common/gc-auth.html">
 <link rel="import" href="../gc-common/gc-config.html">
@@ -9,53 +9,59 @@
     <gc-auth id="auth" token="{{token}}"></gc-auth>
     <iron-ajax id="ajax" url="[[apiUri]][[url]]" body="[[body]]" loading="{{loading}}" last-response="{{lastResponse}}" method="[[method]]" bubbles="true " content-type="application/json" handle-as="json"></iron-ajax>
   </template>
+  <script>
+    class GcApiAJax extends Polymer.Element {
+      static get is() { return 'gc-api-ajax'; }
+      static get properties() {
+        return {
+          url: String,
+          method: {
+            type: String,
+            value: 'GET'
+          },
+          loading: {
+            type: Boolean,
+            notify: true
+          },
+          lastResponse: {
+            type: Object,
+            notify: true
+          },
+          unauthorized: Boolean,
+          _trigger: Boolean
+        };
+      }
+      static get observers() {
+        return [
+          '_generateRequestWhenReady(token, apiUri, trigger)',
+          '_generateUnauthorizedRequestWhenReady(unauthorized, apiUri, trigger)'
+        ];
+      }
+      generateRequest() {
+        this.trigger = !this.trigger;
+      }
+      _generateRequestWhenReady(token, apiUri, trigger) {
+        if (!token || !apiUri || !trigger) {
+          return;
+        }
+
+        this.trigger = undefined;
+        this.$.ajax.headers = Object.assign({
+          'authorization': token
+        }, this.headers);
+        return this.$.ajax.generateRequest();
+      }
+      _generateUnauthorizedRequestWhenReady(unauthorized, apiUri, trigger) {
+        if (!unauthorized || !apiUri || !trigger) {
+          return;
+        }
+
+        this.trigger = undefined;
+        this.$.ajax.headers = this.headers;
+        return this.$.ajax.generateRequest();
+      }
+    }
+
+    window.customElements.define(GcApiAJax.is, GcApiAJax);
+  </script>
 </dom-module>
-<script>
-(() => {
-  class GcApijax {
-    get is() {
-      return 'gc-api-ajax';
-    }
-    get properties() {
-      return {
-        method: {
-          type: String,
-          value: 'GET'
-        },
-        loading: {
-          type: Boolean,
-          notify: true
-        },
-        lastResponse: {
-          type: Object,
-          notify: true
-        },
-        unauthorized: Boolean,
-        _trigger: Boolean
-      };
-    }
-    get observers() {
-      return [
-        '_generateRequestWhenReady(token, apiUri, trigger)',
-        '_generateRequestWhenReady(unauthorized, apiUri, trigger)'
-      ];
-    }
-    generateRequest() {
-      this.trigger = !this.trigger;
-    }
-    _generateRequestWhenReady(token) {
-      this.trigger = undefined;
-      this.$.ajax.headers = Object.assign({
-        'authorization': token
-      }, this.headers);
-      return this.$.ajax.generateRequest();
-    }
-    _generateUnauthorizedRequestWhenReady() {
-      this.trigger = undefined;
-      this.$.ajax.headers = this.headers;
-      return this.$.ajax.generateRequest();
-    }
-  }
-  Polymer(GcApijax);
-})();
-</script>

@@ -1,0 +1,18 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../gc-common/gc-fragment.html">
+
+<dom-module id="gc-donate-app-fragment">
+  <template>
+    <gc-donate-app route="[[route]]"></gc-donate-app>
+  </template>
+  <script>
+    class GcDonateAppFragment extends GcFragment {
+      static get is() { return 'gc-donate-app-fragment'; }
+      get lazyComponents() {
+        return ['../gc-donate-app/gc-donate-app.html'];
+      }
+    }
+
+    window.customElements.define(GcDonateAppFragment.is, GcDonateAppFragment);
+  </script>
+</dom-module>

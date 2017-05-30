@@ -1,19 +1,15 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
 
 <dom-module id="facebook-pixel">
   <script>
-  (() => {
-    'use strict';
-    class FacebookPixel {
-      get is() {
-        return 'facebook-pixel';
-      }
-      get properties() {
+    class FacebookPixel extends Polymer.Element {
+      static get is() { return 'facebook-pixel'; }
+      static get properties() {
         return {
           pixelId: String
         };
       }
-      get observers() {
+      static get observers() {
         return ['_initialize(pixelId)'];
       }
       _initialize(pixelId) {
@@ -26,7 +22,7 @@
         fbq('track', 'PageView');
       }
     }
-    Polymer(FacebookPixel);
-  })();
+
+    window.customElements.define(FacebookPixel.is, FacebookPixel);
   </script>
 </dom-module>

@@ -1,16 +1,17 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
 <link rel="import" href="../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../gc-styles/gc-styles.html">
 <link rel="import" href="../gc-common/gc-config.html">
-<link rel="import" href="../gc-styles/gc-shared-styles.html">
 <link rel="import" href="../gc-common/gc-api-ajax.html">
+
 
 <dom-module id="gc-repo">
   <template>
-    <style include="shared-styles"></style>
+    <style include="gc-styles"></style>
     <style>
     code {
       word-break: break-word;
@@ -22,7 +23,7 @@
     <gc-config s3-bucket-uri="{{s3BucketUri}}"></gc-config>
 
     <section>
-      <paper-material elevation="1">
+      <div class="paper-material" elevation="1">
         <p class="layout horizontal">
           <span class="flex">Donations</span>
           <span>[[donatedAmount]]</span>
@@ -40,10 +41,10 @@
             </paper-item>
           </template>
         </paper-listbox>
-      </paper-material>
+      </div>
     </section>
     <section>
-      <paper-material elevation="1">
+      <div class="paper-material" elevation="1">
         <div class="layout horizontal">
           <p class="flex">Badge</p>
           <iron-image src="../../images/badge.svg"></iron-image>
@@ -51,17 +52,13 @@
         <p>
           <code>[![gitcheese.com]([[s3BucketUri]]/images/badge.svg)](https://www.gitcheese.com/donate/users/[[user.id]]/repos/[[repo.id]])</code>
         </p>
-      </paper-material>
+      </div>
     </section>
   </template>
   <script>
-  (() => {
-    'use strict';
-    class GcRepo {
-      get is() {
-        return 'gc-repo';
-      }
-      get properties() {
+    class GcRepo extends Polymer.Element {
+      static get is() { return 'gc-repo'; }
+      static get properties() {
         return {
           repo: {
             type: Object,
@@ -84,7 +81,7 @@
               return new Intl.NumberFormat('en-US', {
                 style: 'currency',
                 currency: 'USD',
-                minimumFractionDigits: 2,
+                minimumFractionDigits: 2
               });
             }
           },
@@ -114,7 +111,7 @@
         return this.donations && this.donations.length === 0;
       }
     }
-    new Polymer(GcRepo);
-  })();
+
+    window.customElements.define(GcRepo.is, GcRepo);
   </script>
 </dom-module>

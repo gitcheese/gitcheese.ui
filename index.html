@@ -39,34 +39,6 @@
   <meta name="msapplication-tap-highlight" content="no">
 
   <script>
-  window.Polymer = {
-    dom: 'shadow',
-    lazyRegister: true,
-  };
-  (function() {
-    'use strict';
-    var onload = function() {
-      if (!window.HTMLImports) {
-        document.dispatchEvent(
-          new CustomEvent('WebComponentsReady', {
-            bubbles: true
-          })
-        );
-      }
-    };
-    var webComponentsSupported = (
-      'registerElement' in document && 'import' in document.createElement('link') && 'content' in document.createElement('template')
-    );
-    if (!webComponentsSupported) {
-      var script = document.createElement('script');
-      script.async = true;
-      script.src = '/bower_components/webcomponentsjs/webcomponents-lite.min.js';
-      script.onload = onload;
-      document.head.appendChild(script);
-    } else {
-      onload();
-    }
-  })();
   // Load pre-caching Service Worker
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
@@ -75,6 +47,7 @@
   }
   </script>
 
+  <script src="/bower_components/webcomponentsjs/webcomponents-loader.js"></script>
   <link rel="import" href="/src/gc-shell/gc-shell.html">
 
   <style>

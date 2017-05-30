@@ -1,0 +1,31 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="gc-lazy-components-loader">
+  <script>
+    class GcLazyComponentsLoader extends Polymer.Element {
+      static get is() { return 'gc-lazy-components-loader'; }
+      static get properties() {
+        return {
+          lazyComponentsLoaded: {
+            type: Boolean,
+            value: false
+          }
+        };
+      }
+      ensureLazyComponents() {
+        if (this.lazyComponentsLoaded || !this.lazyComponents) {
+          return;
+        }
+        this.lazyComponentsLoaded = true;
+        this.lazyComponents.forEach((c) => {
+          Polymer.RenderStatus.afterNextRender(this, () => {
+            let url = this.resolveUrl(c);
+            Polymer.importHref(url, null, null, true);
+          });
+        });
+      }
+    }
+
+    window.customElements.define(GcLazyComponentsLoader.is, GcLazyComponentsLoader);
+  </script>
+</dom-module>

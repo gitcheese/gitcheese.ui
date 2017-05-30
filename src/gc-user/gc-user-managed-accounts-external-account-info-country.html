@@ -1,0 +1,73 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="gc-user-managed-accounts-external-account-info-country">
+  <script>
+    var currenciesMap = {
+      'AU': ['AUD'],
+      'CA': ['CAD', 'USD'],
+      'JP': ['JPY'],
+      'SG': ['SGD'],
+      'US': ['USD'],
+      'HK': ['HKD'],
+      'NZ': ['NZD'],
+      'FI': ['EUR', 'GBP', 'USD', 'DKK', 'NOK', 'SEK'],
+      'FR': ['EUR', 'GBP', 'USD', 'DKK', 'NOK', 'SEK'],
+      'IE': ['EUR', 'GBP', 'USD', 'DKK', 'NOK', 'SEK'],
+      'NO': ['EUR', 'GBP', 'USD', 'DKK', 'NOK', 'SEK'],
+      'DK': ['EUR', 'GBP', 'USD', 'DKK', 'NOK', 'SEK'],
+      'SE': ['EUR', 'GBP', 'USD', 'DKK', 'NOK', 'SEK'],
+      'GB': ['EUR', 'GBP', 'USD', 'DKK', 'NOK', 'SEK'],
+      'ES': ['EUR', 'GBP', 'USD', 'DKK', 'NOK', 'SEK'],
+      'AT': ['EUR', 'GBP', 'USD', 'DKK', 'NOK', 'SEK'],
+      'BE': ['EUR', 'GBP', 'USD', 'DKK', 'NOK', 'SEK'],
+      'DE': ['EUR', 'GBP', 'USD', 'DKK', 'NOK', 'SEK'],
+      'IT': ['EUR', 'GBP', 'USD', 'DKK', 'NOK', 'SEK'],
+      'LU': ['EUR', 'GBP', 'USD', 'DKK', 'NOK', 'SEK'],
+      'NL': ['EUR', 'GBP', 'USD', 'DKK', 'NOK', 'SEK'],
+      'PT': ['EUR', 'GBP', 'USD', 'DKK', 'NOK', 'SEK'],
+      'CH': ['CHF', 'EUR', 'GBP', 'USD', 'DKK', 'NOK', 'SEK']
+    };
+    class GcUserManagedAccountsExternalAccountInfoCountry extends Polymer.Element {
+      static get is() { return 'gc-user-managed-accounts-external-account-info-country'; }
+      static get properties() {
+        return {
+          tokenRequest: {
+            type: Object,
+            computed: '_computeTokenRequest(_data.*)',
+            notify: true
+          },
+          country: {
+            type: String
+          },
+          _availableCurrencies: {
+            type: Array,
+            computed: '_computeAvailableCurrencies(country)',
+            observer: '_availableCurrenciesChanged'
+          },
+          _data: {
+            type: Object,
+            value: {}
+          }
+        };
+      }
+      _computeTokenRequest() {
+        if (!this._data) return;
+        let result = {
+          'bank_account[country]': this.country
+        };
+        Object.keys(this._data).forEach((key) => {
+          result[`bank_account[${key}]`] = this._data[key];
+        });
+        return result;
+      }
+      _computeAvailableCurrencies(country) {
+        return currenciesMap[country];
+      }
+      _availableCurrenciesChanged(currencies) {
+        this.set('_data.currency', currencies[0]);
+      }
+    }
+
+    window.customElements.define(GcUserManagedAccountsExternalAccountInfoCountry.is, GcUserManagedAccountsExternalAccountInfoCountry);
+  </script>
+</dom-module>
