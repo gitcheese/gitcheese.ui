@@ -19,7 +19,9 @@
         </paper-listbox>
       </paper-dropdown-menu>
     </div>
-    <style></style>
+    <div class="layout horizontal">
+      <paper-input class="flex" value="{{_data.account_holder_name}}" label="Account Holder Name" required auto-validate error-message="Account Holder Name is required."></paper-input>
+    </div>
     <div class="layout horizontal">
       <paper-input class="flex" value="{{_data.account_number}}" label="Account Number" required auto-validate error-message="Account Number is required."></paper-input>
       <paper-input class="flex" value="{{_data.routing_number}}" label="Routing Number" required auto-validate error-message="Routing Number is required."></paper-input>
