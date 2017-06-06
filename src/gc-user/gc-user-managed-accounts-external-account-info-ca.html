@@ -7,6 +7,19 @@
   <template>
     <style include="shared-styles"></style>
     <div class="layout horizontal">
+      <paper-dropdown-menu class="flex"
+        label="Currency"
+        required
+        auto-validate
+        error-message="Currency is required.">
+        <paper-listbox class="dropdown-content" selected="{{_data.currency}}" attr-for-selected="value">
+          <template is="dom-repeat" items="[[_availableCurrencies]]">
+            <paper-item value="[[item]]">[[item]]</paper-item>
+          </template>
+        </paper-listbox>
+      </paper-dropdown-menu>
+    </div>
+    <div class="layout horizontal">
       <paper-input class="flex" value="{{_data.account_number}}" label="Account Number" required auto-validate error-message="Account Number is required."></paper-input>
       <paper-input class="flex" value="{{_data.routing_number}}" label="Transit & Institution Number" required auto-validate error-message="Transit & Institution Number is required."></paper-input>
     </div>
