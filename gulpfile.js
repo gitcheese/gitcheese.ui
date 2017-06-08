@@ -30,7 +30,7 @@ function build() {
           .pipe($.plumber())
           .pipe(sourcesHtmlSplitter.split())
           .pipe($.if(/\.js$/, $.babel({presets: ['es2015']})))
-          .pipe($.if(/\.js$/, $.uglify()))
+          // .pipe($.if(/\.js$/, $.uglify()))
           .pipe($.if(/\.html$/, $.htmlAutoprefixer()))
           .pipe($.if(/\.html$/, cssSlam()))
           .pipe($.if(/\.html$/, $.htmlMinifier({ removeComments: true })))
@@ -40,7 +40,7 @@ function build() {
         let dependenciesStream = project.dependencies()
           .pipe($.plumber())
           .pipe(dependenciesHtmlSplitter.split())
-          .pipe($.if(/\.js$/, $.uglify()))
+          // .pipe($.if(/\.js$/, $.uglify()))
           .pipe($.if(/\.html$/, $.htmlAutoprefixer()))
           .pipe($.if(/\.html$/, cssSlam()))
           .pipe($.if(/\.html$/, $.htmlMinifier({
