@@ -37,5 +37,9 @@
     "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.1",
     "web-animations-js": "web-animations/web-animations-js#^2.2.5"
   },
-  "private": true
+  "private": true,
+  "resolutions": {
+    "polymer": "2.0.1",
+    "webcomponentsjs": "1.0.1"
+  }
 }
