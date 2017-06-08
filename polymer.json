@@ -4,9 +4,9 @@
   "fragments": [
     "src/gc-app/gc-app.html",
     "src/gc-donate-app/gc-donate-app.html",
-    "src/gc-dashboard/gc-dashboard-shell.html",
-    "src/gc-repo/gc-repo-shell.html",
-    "src/gc-user/gc-user-shell.html",
+    "src/gc-dashboard/gc-dashboard-fragment.html",
+    "src/gc-repo/gc-repo-fragment.html",
+    "src/gc-user/gc-user-fragment.html",
     "src/gc-user/gc-user-managed-accounts-external-account-info-au.html",
     "src/gc-user/gc-user-managed-accounts-external-account-info-ca.html",
     "src/gc-user/gc-user-managed-accounts-external-account-info-eu.html",
@@ -21,7 +21,7 @@
   ],
   "extraDependencies": [
     "manifest.json",
-    "bower_components/webcomponentsjs/webcomponents-lite.min.js",
+    "bower_components/webcomponentsjs/webcomponents-loader.js",
     "bower_components/flag-icon-css/**/*"
   ]
 }

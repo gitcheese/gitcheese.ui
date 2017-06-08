@@ -1,0 +1,18 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../gc-common/gc-fragment.html">
+
+<dom-module id="gc-app-fragment">
+  <template>
+    <gc-app route="[[route]]"></gc-app>
+  </template>
+  <script>
+    class GcAppFragment extends GcFragment {
+      static get is() { return 'gc-app-fragment'; }
+      get lazyComponents() {
+        return ['../gc-app/gc-app.html'];
+      }
+    }
+
+    window.customElements.define(GcAppFragment.is, GcAppFragment);
+  </script>
+</dom-module>

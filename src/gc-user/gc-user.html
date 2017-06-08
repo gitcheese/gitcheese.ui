@@ -1,19 +1,17 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../bower_components/iron-form/iron-form.html">
-<link rel="import" href="../../bower_components/paper-material/paper-material.html">
-<link rel="import" href="../../bower_components/gold-email-input/gold-email-input.html">
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
-<link rel="import" href="../gc-styles/gc-shared-styles.html">
+<link rel="import" href="../gc-styles/gc-styles.html">
 <link rel="import" href="../gc-common/gc-api-ajax.html">
 <link rel="import" href="../gc-user/gc-user-managed-accounts-external-account-info.html">
 <link rel="import" href="../gc-user/gc-user-managed-accounts-legal-entity-info.html">
 <link rel="import" href="../gc-user/gc-user-managed-accounts-terms-of-service-info.html">
 
+
 <dom-module id="gc-user">
   <template>
-    <style include="shared-styles"></style>
+    <style include="gc-styles"></style>
     <gc-api-ajax id="getUser" url="/user" last-response="{{user}}"></gc-api-ajax>
     <gc-api-ajax id="putUser" url="/user" method="put" body="{{user}}" on-response="_handlePutUserResponse"></gc-api-ajax>
     <gc-api-ajax id="getManagedAccount" url="/user/managed-accounts" last-response="{{managedAccount}}"></gc-api-ajax>
@@ -21,18 +19,16 @@
     <paper-toast id="putUserDoneToast" text="Your profile has been saved."></paper-toast>
 
     <section>
-      <paper-material elevation="1" class="edge-breaking">
-        <form is="iron-form" id="profileForm">
-          <p>Profile</p>
-          <gold-email-input label="email" value="{{user.email}}" auto-validate required error-message="valid e-mail is required."></gold-email-input>
-          <div actions>
-            <paper-button on-tap="_saveProfile">save</paper-button>
-          </div>
-        </form>
-      </paper-material>
+      <div class="paper-material" elevation="1" class="edge-breaking">
+        <p>Profile</p>
+        <paper-input id="email" label="email" value="{{user.email}}" type="email" auto-validate required error-message="valid e-mail is required."></paper-input>
+        <div class="action-buttons">
+          <paper-button on-tap="_saveProfile">save</paper-button>
+        </div>
+      </div>
     </section>
     <section>
-      <paper-material elevation="1">
+      <div class="paper-material" elevation="1">
         <div class="layout horizontal">
           <p class="flex">Stripe Identity</p>
           <p><i>[[managedAccount.country]]</i></p>
@@ -43,24 +39,18 @@
         </gc-user-managed-accounts-external-account-info>
         <gc-user-managed-accounts-terms-of-service-info managed-account="[[managedAccount]]" on-info-updated="_refreshManagedAccount">
         </gc-user-managed-accounts-terms-of-service-info>
-      </paper-material>
+      </div>
     </section>
   </template>
   <script>
-  (() => {
-    'use strict';
-    class GcUser {
-      get is() {
-        return 'gc-user';
-      }
+    class GcUser extends Polymer.Element {
+      static get is() { return 'gc-user'; }
       loadData() {
         this.$.getUser.generateRequest();
         this.$.getManagedAccount.generateRequest();
       }
       _saveProfile() {
-        if (!this.$.profileForm.validate()) {
-          return;
-        }
+        if (this.$.email.invalid) return;
         this.$.putUser.generateRequest();
       }
       _refreshManagedAccount() {
@@ -70,7 +60,7 @@
         this.$.putUserDoneToast.show();
       }
     }
-    Polymer(GcUser);
-  })();
+
+    window.customElements.define(GcUser.is, GcUser);
   </script>
 </dom-module>

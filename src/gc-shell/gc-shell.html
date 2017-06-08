@@ -1,18 +1,17 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/app-route/app-location.html">
 <link rel="import" href="../../bower_components/app-route/app-route.html">
 <link rel="import" href="../../bower_components/app-active-route/app-active-route.html">
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../facebook-pixel/facebook-pixel.html">
-<link rel="import" href="../gc-styles/gc-shared-styles.html">
 <link rel="import" href="../gc-landing-page/gc-landing-page.html">
-<link rel="import" href="../gc-app/gc-app-loader-shell.html">
-<link rel="import" href="../gc-donate-app/gc-donate-app-loader-shell.html">
+<link rel="import" href="../gc-app/gc-app-fragment.html">
+<link rel="import" href="../gc-donate-app/gc-donate-app-fragment.html">
 
 <dom-module id="gc-shell">
   <template>
-    <style include="shared-styles"></style>
-    <facebook-pixel pixel-id="535325640007099"></facebook-pixel>
+    <!-- <facebook-pixel pixel-id="535325640007099"></facebook-pixel> -->
+    <facebook-pixel pixel-id=""></facebook-pixel>
 
     <app-location route="{{route}}"></app-location>
     <app-active-route pattern="{{activePattern}}" fallback-pattern="/">
@@ -23,20 +22,15 @@
 
     <iron-pages selected="[[activePattern]]" attr-for-selected="for-pattern" selected-attribute="active">
       <gc-landing-page for-pattern="/"></gc-landing-page>
-      <gc-app-loader-shell for-pattern="/app" route="[[appSubroute]]"></gc-app-loader-shell>
-      <gc-donate-app-loader-shell for-pattern="/donate" route="[[donateSubroute]]"></gc-donate-app-loader-shell>
+      <gc-app-fragment for-pattern="/app" route="[[appSubroute]]"></gc-app-fragment>
+      <gc-donate-app-fragment for-pattern="/donate" route="[[donateSubroute]]"></gc-donate-app-fragment>
     </iron-pages>
-  </template>
 
+  </template>
   <script>
-  (() => {
-    'use strict';
-    class GcShell {
-      get is() {
-        return 'gc-shell';
-      }
+    class GcShell extends Polymer.Element {
+      static get is() { return 'gc-shell'; }
     }
-    Polymer(GcShell);
-  })();
+    window.customElements.define(GcShell.is, GcShell);
   </script>
 </dom-module>

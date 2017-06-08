@@ -1,19 +1,18 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/iron-collapse/iron-collapse.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="../../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
-<link rel="import" href="../gc-styles/gc-shared-styles.html">
+<link rel="import" href="../gc-styles/gc-styles.html">
 <link rel="import" href="../gc-common/gc-config.html">
 <link rel="import" href="../gc-common/gc-api-ajax.html">
-<link rel="import" href="../gc-user/gc-user-managed-accounts-info-behavior.html">
+<link rel="import" href="../gc-user/gc-user-managed-accounts-info.html">
 
 <dom-module id="gc-user-managed-accounts-external-account-info">
   <template>
-    <style include="shared-styles"></style>
+    <style include="gc-styles"></style>
     <style>
     :host {
       cursor: pointer;
@@ -38,33 +37,22 @@
         <i>You already submited bank account informations</i>
       </template>
       <template is="dom-if" if="[[fieldsMissing]]">
-        <form id="form" is="iron-form">
-          <gc-user-managed-accounts-external-account-info-au token-request="{{tokenRequestBody}}" country="[[managedAccount.country]]"></gc-user-managed-accounts-external-account-info-au>
-          <gc-user-managed-accounts-external-account-info-ca token-request="{{tokenRequestBody}}" country="[[managedAccount.country]]"></gc-user-managed-accounts-external-account-info-ca>
-          <gc-user-managed-accounts-external-account-info-eu token-request="{{tokenRequestBody}}" country="[[managedAccount.country]]"></gc-user-managed-accounts-external-account-info-eu>
-          <gc-user-managed-accounts-external-account-info-gb token-request="{{tokenRequestBody}}" country="[[managedAccount.country]]"></gc-user-managed-accounts-external-account-info-gb>
-          <gc-user-managed-accounts-external-account-info-jp token-request="{{tokenRequestBody}}" country="[[managedAccount.country]]"></gc-user-managed-accounts-external-account-info-jp>
-          <gc-user-managed-accounts-external-account-info-us token-request="{{tokenRequestBody}}" country="[[managedAccount.country]]"></gc-user-managed-accounts-external-account-info-us>
-          <div actions>
-            <paper-button on-tap="_submit">submit</paper-button>
-          </div>
-        </form>
+        <gc-user-managed-accounts-external-account-info-au token-request="{{tokenRequestBody}}" country="[[managedAccount.country]]"></gc-user-managed-accounts-external-account-info-au>
+        <gc-user-managed-accounts-external-account-info-ca token-request="{{tokenRequestBody}}" country="[[managedAccount.country]]"></gc-user-managed-accounts-external-account-info-ca>
+        <gc-user-managed-accounts-external-account-info-eu token-request="{{tokenRequestBody}}" country="[[managedAccount.country]]"></gc-user-managed-accounts-external-account-info-eu>
+        <gc-user-managed-accounts-external-account-info-gb token-request="{{tokenRequestBody}}" country="[[managedAccount.country]]"></gc-user-managed-accounts-external-account-info-gb>
+        <gc-user-managed-accounts-external-account-info-jp token-request="{{tokenRequestBody}}" country="[[managedAccount.country]]"></gc-user-managed-accounts-external-account-info-jp>
+        <gc-user-managed-accounts-external-account-info-us token-request="{{tokenRequestBody}}" country="[[managedAccount.country]]"></gc-user-managed-accounts-external-account-info-us>
+        <div class="action-buttons">
+          <paper-button on-tap="_submit">submit</paper-button>
+        </div>
       </template>
     </iron-collapse>
   </template>
   <script>
-  (() => {
-    'use strict';
-    class GcUserManagedAccountsExternalAccountInfo {
-      get is() {
-        return 'gc-user-managed-accounts-external-account-info';
-      }
-      get behaviors() {
-        return [
-          GitcheeseBehaviors.UserManagedAccountsInfoBehavior
-        ];
-      }
-      get properties() {
+    class GcUserManagedAccountsExternalAccountInfo extends UserManagedAccountsInfo {
+      static get is() { return 'gc-user-managed-accounts-external-account-info'; }
+      static get properties() {
         return {
           _formMapping: {
             type: Object,
@@ -97,23 +85,31 @@
           _formLoaded: Boolean
         };
       }
-      get observers() {
+      static get observers() {
         return ['_loadCountryForm(managedAccount.country)'];
       }
       ready() {
+        super.ready();
         this.fields.push('external_account');
       }
       _loadCountryForm(country) {
         if (!this._formLoaded) {
           Polymer.RenderStatus.afterNextRender(this, () => {
             let url = this.resolveUrl(this._formMapping[country]);
-            this.importHref(url, null, null, true);
+            Polymer.importHref(url, null, null, true);
             this._formLoaded = true;
           });
         }
       }
       _submit() {
-        if (!this.$$('#form').validate()) return;
+        let valid = true;
+        this.shadowRoot.querySelectorAll('*')
+          .forEach((e) => {
+            if (!e.shadowRoot) return;
+            e.shadowRoot.querySelectorAll('paper-input')
+              .forEach((f) => { valid = valid && f.validate(); });
+          });
+        if (!valid) return;
         this.$.postToken.headers.Authorization = `Bearer ${this.stripeKey}`;
         this.$.postToken.generateRequest();
       }
@@ -127,7 +123,7 @@
         console.log(this.tokenError.response.error.message)
       }
     }
-    new Polymer(GcUserManagedAccountsExternalAccountInfo);
-  })();
+
+    window.customElements.define(GcUserManagedAccountsExternalAccountInfo.is, GcUserManagedAccountsExternalAccountInfo);
   </script>
 </dom-module>

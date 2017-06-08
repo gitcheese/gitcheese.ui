@@ -1,11 +1,12 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/iron-image/iron-image.html">
-<link rel="import" href="../gc-styles/gc-shared-styles.html">
+<link rel="import" href="../gc-styles/gc-styles.html">
 <link rel="import" href="../gc-common/gc-config.html">
+
 <dom-module id="gc-login">
   <template>
-    <style include="shared-styles"></style>
+    <style include="gc-styles"></style>
     <style>
     :host([authenticated]) {
       opacity: 0;
@@ -13,8 +14,8 @@
     }
 
     :host {
-      @apply(--layout-fit);
-      @apply(--layout-vertical);
+      @apply --layout-fit;
+      @apply --layout-vertical;
       background-color: var(--default-primary-color);
       color: var(--dark-theme-text-color);
       --iron-icon-fill-color: var(--dark-theme-text-color);
@@ -24,9 +25,9 @@
     }
 
     section {
-      @apply(--layout-flex);
-      @apply(--layout-vertical);
-      @apply(--layout-center-center);
+      @apply --layout-flex;
+      @apply --layout-vertical;
+      @apply --layout-center-center;
     }
 
     [logo] {
@@ -38,15 +39,19 @@
       --iron-image-width: 220px;
       background-color: var(--primary-background-color);
       border-radius: 50%;
-      @apply(--layout-horizontal);
-      @apply(--layout-center-center);
+      @apply --layout-horizontal;
+      @apply --layout-center-center;
+    }
+    [hero-title] {
+      text-transform: uppercase;
+      font-size: xx-large;
     }
     </style>
 
     <gc-config api-uri="{{apiUri}}"></gc-config>
 
-    <app-route id="login" route="{{route}}" pattern="/login/success" query-params="{{_queryParams}}" active="{{_successRouteActive}}"></app-route>
-    <app-route route="{{route}}" pattern="/login/error" query-params="{{_queryParams}}" active="{{_errorRouteActive}}"></app-route>
+    <app-route id="login" route="{{route}}" pattern="/login/success" query-params="{{_successQueryParams}}" active="{{_successRouteActive}}"></app-route>
+    <app-route route="{{route}}" pattern="/login/error" query-params="{{_errorQueryParams}}" active="{{_errorRouteActive}}"></app-route>
     <app-route route="{{route}}" pattern="/logout" active="{{_logoutRouteActive}}"></app-route>
 
     <section>
@@ -61,36 +66,33 @@
     </section>
   </template>
   <script>
-  (() => {
-    'use strict';
-    class GcLogin {
-      get is() {
-        return 'gc-login';
-      }
-      get properties() {
+    class GcLogin extends Polymer.Element {
+      static get is() { return 'gc-login'; }
+      static get properties() {
         return {
           authenticated: {
             type: Boolean,
             reflectToAttribute: true
           },
-          _queryParams: {
-            type: Object
-          },
+          _successQueryParams: Object,
+          _errorQueryParams: Object,
           _errorMessage: {
             type: String
           }
         };
       }
-      get observers() {
+      static get observers() {
         return [
-          '_handleLogin(_successRouteActive, _queryParams.token)',
-          '_handleLoginError(_errorRouteActive, _queryParams.message)',
+          '_handleLogin(_successRouteActive, _successQueryParams.token)',
+          '_handleLoginError(_errorRouteActive, _errorQueryParams.message)',
           '_handleLogout(_logoutRouteActive)'
         ];
       }
       _handleLogin(active, token) {
         if (!active) return;
-        this.fire('logged-in', {token: token});
+        this.dispatchEvent(new CustomEvent('logged-in', {
+          detail: {token: token}
+        }));
         window.history.pushState(null, 'root', '/app');
       }
       _handleLoginError(active, message) {
@@ -99,13 +101,13 @@
       }
       _handleLogout(active) {
         if (!active) return;
-        this.fire('logged-out');
+        this.dispatchEvent(new CustomEvent('logged-out'));
       }
       _login() {
         window.location = `${this.apiUri}/tokens/github`;
       }
     }
-    Polymer(GcLogin);
-  })();
+
+    window.customElements.define(GcLogin.is, GcLogin);
   </script>
 </dom-module>

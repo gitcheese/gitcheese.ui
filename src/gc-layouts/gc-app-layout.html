@@ -1,30 +1,25 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
 <link rel="import" href="../../bower_components/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="../../bower_components/iron-signals/iron-signals.html">
 <link rel="import" href="../../bower_components/iron-image/iron-image.html">
-<link rel="import" href="../../bower_components/iron-resizable-behavior/iron-resizable-behavior.html">
-<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
-<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../gc-styles/gc-styles.html">
 <link rel="import" href="../gc-common/gc-api-ajax.html">
-<link rel="import" href="../gc-styles/gc-shared-styles.html">
-<dom-module id="gc-app-shell-layout">
+
+<dom-module id="gc-app-layout">
   <template>
-    <style include="shared-styles"></style>
+    <style include="gc-styles"></style>
     <style>
-      .brand-toolbar{
-        padding-left: 1.6rem;
-      }
       .brand-toolbar iron-image {
         width: 56px;
       }
       .user-toolbar {
-        @apply(--layout-vertical);
-        @apply(--layout-center-center);
+        @apply --layout-vertical;
+        @apply --layout-center-center;
         text-align: center;
       }
       .user-toolbar > iron-image {
@@ -35,42 +30,35 @@
       }
       .drawer-content {
         height: calc(100vh - 64px);
-        @apply(--layout-vertical);
+        @apply --layout-vertical;
       }
-      .drawer-content > paper-menu {
-        @apply(--layout-flex);
+      .drawer-content > .main-menu {
+        @apply --layout-flex;
       }
     </style>
-    <iron-signals on-iron-signal-update-drawer-layout="_updateDrawerLayout"></iron-signals>
-    <iron-signals on-iron-signal-toggle-drawer="_toggleDrawer"></iron-signals>
-
     <gc-api-ajax id="get" url="/user" last-response="{{user}}"></gc-api-ajax>
 
-    <app-drawer-layout id="drawerLayout" responsive-width="841px" on-narrow-changed="_updateDrawerLayout">
-      <app-drawer swipe-open id="drawer">
+    <app-drawer-layout id="drawerLayout" responsive-width="841px">
+      <app-drawer slot="drawer" swipe-open id="drawer">
         <app-toolbar class="brand-toolbar">
           <iron-image src="../../images/logo.svg"></iron-image>
           <span class="flex">Gitcheese</span>
         </app-toolbar>
         <div id="drawerContent" class="drawer-content">
-          <paper-menu>
+          <div class="main-menu">
             <a href="/app" on-tap="_toggleDrawer">
-              <paper-item>
-                <paper-icon-item>
-                  <iron-icon icon="gc:repo" item-icon></iron-icon>
-                  Repositories
-                </paper-icon-item>
-              </paper-item>
+              <paper-icon-item>
+                <iron-icon icon="gc:repo" slot="item-icon"></iron-icon>
+                Repositories
+              </paper-icon-item>
             </a>
             <a href="/app/user" on-tap="_toggleDrawer">
-              <paper-item>
-                <paper-icon-item>
-                  <iron-icon icon="account-circle" item-icon></iron-icon>
-                  User Profile
-                </paper-icon-item>
-              </paper-item>
+              <paper-icon-item>
+                <iron-icon icon="account-circle" slot="item-icon"></iron-icon>
+                User Profile
+              </paper-icon-item>
             </a>
-          </paper-menu>
+          </div>
           <div class="user-toolbar">
             <p>[[user.githubLogin]]</p>
             <iron-image src="[[githubAvatarUrl]]"></iron-image>
@@ -87,16 +75,12 @@
     </app-drawer-layout>
   </template>
   <script>
-  (() => {
-    'use strict';
-    class GcAppShellLayout {
-      get is() {
-        return 'gc-app-shell-layout';
-      }
-      get behaviors() {
-        return [Polymer.IronResizableBehavior];
-      }
-      get properties() {
+    class GcAppLayout extends Polymer.Element {
+      static get is() { return 'gc-app-layout'; }
+      // static get behaviors() {
+      //   return [Polymer.IronResizableBehavior];
+      // }
+      static get properties() {
         return {
           githubAvatarUrl: {
             type: String,
@@ -104,33 +88,25 @@
           }
         };
       }
-      get listeners() {
-        return {'iron-resize': '_resize'};
-      }
       ready() {
+        super.ready();
+        this.addEventListener('iron-resize', () => this._resize());
+        this.addEventListener('drawer-toggle-tap', () => this._toggleDrawer());
         this.$.get.generateRequest();
       }
       _computeGithubAvatarUrl(user) {
         return `https://github.com/${user.githubLogin}.png?size=100`;
       }
-      _updateDrawerLayout() {
-        this.fire('iron-signal', {
-          name: 'drawer-layout-narrow-changed',
-          data: {
-            narrow: this.$.drawerLayout.narrow
-          }
-        });
-      }
-      _toggleDrawer() {
-        if (this.$.drawerLayout.narrow) {
-          this.$.drawer.toggle();
-        }
-      }
       _resize() {
         this.$.drawerContent.style.height = `${window.innerHeight - 64}px`;
       }
+      _toggleDrawer() {
+        if (this.$.drawerLayout.narrow) {
+          this.$.drawerLayout.drawer.toggle();
+        }
+      }
     }
-    Polymer(GcAppShellLayout);
-  })();
+
+    window.customElements.define(GcAppLayout.is, GcAppLayout);
   </script>
 </dom-module>

@@ -1,26 +1,24 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/app-route/app-route.html">
 <link rel="import" href="../../bower_components/app-layout/app-header-layout/app-header-layout.html">
 <link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-progress/paper-progress.html">
-<link rel="import" href="../../bower_components/neon-animation/neon-animated-pages.html">
-<link rel="import" href="../../bower_components/neon-animation/animations/fade-out-animation.html">
-<link rel="import" href="../../bower_components/neon-animation/animations/slide-from-right-animation.html">
-<link rel="import" href="../gc-styles/gc-shared-styles.html">
+<link rel="import" href="../gc-styles/gc-styles.html">
 <link rel="import" href="../gc-donate-app/stripe-checkout-importer.html">
 <link rel="import" href="../gc-common/gc-config.html">
 <link rel="import" href="../gc-common/gc-api-ajax.html">
 
 <dom-module id="gc-donate-app">
   <template>
-    <style include="shared-styles"></style>
+    <style include="gc-styles"></style>
     <style>
     .content {
-      @apply(--layout-flex);
-      @apply(--layout-horizontal);
-      @apply(--layout-center-justified);
+      @apply --layout-flex;
+      @apply --layout-horizontal;
+      @apply --layout-center-justified;
     }
 
     footer > app-toolbar {
@@ -33,15 +31,15 @@
       color: var(--dark-theme-text-color);
     }
 
-    neon-animated-pages {
+    iron-pages {
       max-width: 800px;
-      @apply(--layout-flex);
-      @apply(--layout-self-start);
+      @apply --layout-flex;
+      @apply --layout-self-start;
     }
 
-    paper-material {
-      @apply(--layout-vertical);
-      @apply(--layout-center-center);
+    .paper-material {
+      @apply --layout-vertical;
+      @apply --layout-center-center;
     }
 
     iron-image.feed-the-cat {
@@ -52,8 +50,8 @@
     }
 
     .donate-buttons {
-      @apply(--layout-horizontal);
-      @apply(--layout-wrap);
+      @apply --layout-horizontal;
+      @apply --layout-wrap;
     }
 
     iron-image.logo {
@@ -89,17 +87,16 @@
       <app-header condenses reveals effects="waterfall">
         <app-toolbar>
           <div main-title>Gitcheese</div>
-          <iron-image class="logo" src="../../images/logo.svg"></iron-image>
+          <iron-image class="logo" src="[[importPath]]../../images/logo.svg"></iron-image>
         </app-toolbar>
       </app-header>
 
       <paper-progress hide$="{{!loading}}" indeterminate></paper-progress>
 
       <div class="content">
-        <neon-animated-pages selected="[[currentPage]]" fallback-selection="0" entry-animation="slide-from-right-animation" exit-animation="fade-out-animation">
-          <neon-animatable>
-            <paper-material elevation="1">
-              <iron-image class="feed-the-cat" src="../../images/feed-the-cat.svg" preload sizing="cover"></iron-image>
+        <iron-pages selected="[[currentPage]]" fallback-selection="0" entry-animation="slide-from-right-animation" exit-animation="fade-out-animation">
+            <div class="paper-material" elevation="1">
+              <iron-image class="feed-the-cat" src="[[importPath]]../../images/feed-the-cat.svg" preload sizing="cover"></iron-image>
               <p>Repo '[[repo.fullname]]' awaits your contribution!</p>
               <div class="donate-buttons">
                 <paper-button data-amount="200" raised on-tap="_donateTapped">$2</paper-button>
@@ -109,16 +106,13 @@
                 <paper-button data-amount="5000" raised on-tap="_donateTapped">$50</paper-button>
               </div>
               <i>Every penny makes a huge difference.</i>
-            </paper-material>
-          </neon-animatable>
-          <neon-animatable>
-            <paper-material elevation="1">
+            </div>
+            <div class="paper-material" elevation="1">
               <iron-image class="feed-the-cat" src="../../images/feed-the-cat.svg" preload sizing="cover"></iron-image>
               <p>Your donation is on the way!</p>
               <i>Repo '[[repo.fullname]]' should get your $$ soon. We would like to thank you on behalf of repo owner and ourselves.</i>
-            </paper-material>
-          </neon-animatable>
-        </neon-animated-pages>
+            </div>
+        </iron-pages>
       </div>
       <footer>
         <app-toolbar>
@@ -128,16 +122,11 @@
         </app-toolbar>
       </footer>
     </app-header-layout>
-
   </template>
   <script>
-  (() => {
-    'use strict';
-    class GcDonateApp {
-      get is() {
-        return 'gc-donate-app';
-      }
-      get properties() {
+    class GcDonateApp extends Polymer.Element {
+      static get is() { return 'gc-donate-app'; }
+      static get properties() {
         return {
           routeData: {
             type: Object,
@@ -154,6 +143,7 @@
         };
       }
       ready() {
+        super.ready();
         this.stripe = StripeCheckout.configure({
           key: this.stripeKey,
           locale: 'auto',
@@ -184,7 +174,7 @@
         this.currentPage = 1;
       }
     }
-    Polymer(GcDonateApp);
-  })();
+
+    window.customElements.define(GcDonateApp.is, GcDonateApp);
   </script>
 </dom-module>

@@ -1,0 +1,33 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../gc-common/gc-lazy-components-loader.html">
+
+<dom-module id="gc-fragment">
+  <script>
+    class GcFragment extends GcLazyComponentsLoader {
+      static get is() { return 'gc-fragment'; }
+      static get properties() {
+        return {
+          active: {
+            type: Boolean,
+            notify: true,
+            reflectToAttribute: true,
+            observer: '_handleActiveChanged'
+          }
+        };
+      }
+      _handleActiveChanged(active) {
+        if (active) {
+          this.ensureLazyComponents();
+        }
+        if (active && this.activated) {
+          this.activated();
+        }
+        if (!active && this.deactivated) {
+          this.deactivated();
+        }
+      }
+    }
+
+    window.customElements.define(GcFragment.is, GcFragment);
+  </script>
+</dom-module>

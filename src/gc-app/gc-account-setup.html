@@ -1,13 +1,14 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../gc-styles/gc-styles.html">
 <link rel="import" href="../facebook-pixel/facebook-pixel-event.html">
-<link rel="import" href="../gc-styles/gc-shared-styles.html">
 <link rel="import" href="../gc-common/gc-api-ajax.html">
 
 <dom-module id="gc-account-setup">
   <template>
-    <style include="shared-styles"></style>
+    <style include="gc-styles"></style>
     <style>
     :host(:not([setup-required])) {
       opacity: 0;
@@ -24,8 +25,8 @@
     }
 
     :host {
-      @apply(--layout-fit);
-      @apply(--layout-vertical);
+      @apply --layout-fit;
+      @apply --layout-vertical;
       background-color: var(--default-primary-color);
       color: var(--dark-theme-text-color);
       z-index: 888888888;
@@ -36,6 +37,7 @@
       --paper-input-container-input-color: #fff;
     }
     </style>
+
     <facebook-pixel-event id="pixel" name="CompleteRegistration"></facebook-pixel-event>
 
     <gc-api-ajax id="get" url="/user/managed-accounts" last-response="{{managedAccount}}" on-response="_handleGetResponse"></gc-api-ajax>
@@ -44,7 +46,7 @@
     <h2>Hello!</h2>
     <p>To set up your account we just need your country:</p>
     <paper-dropdown-menu label="Country">
-      <paper-listbox id="countryListbox" class="dropdown-content" selected="0">
+      <paper-listbox id="countryListbox" slot="dropdown-content" selected="0">
         <template is="dom-repeat" items="[[countries]]">
           <paper-item country="[[item]]">[[item.name]]</paper-item>
         </template>
@@ -52,19 +54,14 @@
     </paper-dropdown-menu>
     <i>This information is crucial to propperly setup Stripe account and be able to send your donations back to you.</i>
     <i>Please select country that you have your bank account in.</i>
-    <div actions>
+    <div class="action-buttons">
       <paper-button on-tap="_submit">submit</paper-button>
     </div>
-
   </template>
   <script>
-  (() => {
-    'use strict';
-    class GcAccountSetup {
-      get is() {
-        return 'gc-account-setup';
-      }
-      get properties() {
+    class GcAccountSetup extends Polymer.Element {
+      static get is() { return 'gc-account-setup'; }
+      static get properties() {
         return {
           setupRequired: {
             type: Boolean,
@@ -153,6 +150,7 @@
         };
       }
       ready() {
+        super.ready();
         this.$.get.generateRequest();
       }
       _handleGetResponse() {
@@ -167,7 +165,7 @@
         this.$.pixel.fire();
       }
     }
-    Polymer(GcAccountSetup);
-  })();
+
+    window.customElements.define(GcAccountSetup.is, GcAccountSetup);
   </script>
 </dom-module>

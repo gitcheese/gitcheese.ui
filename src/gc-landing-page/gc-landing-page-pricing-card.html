@@ -1,21 +1,16 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../gc-styles/gc-shared-styles.html">
+<link rel="import" href="../gc-styles/gc-styles.html">
 <link rel="import" href="../facebook-pixel/facebook-pixel-event.html">
 
 <dom-module id="gc-landing-page-pricing-card">
   <template>
-    <style include="shared-styles"></style>
+    <style include="gc-styles"></style>
     <style>
     :host {
       display: block;
       width: 250px;
       margin: 1rem;
-    }
-
-    paper-material {
-      border-radius: 2px;
     }
 
     header {
@@ -45,7 +40,7 @@
     </style>
     <facebook-pixel-event id="pixel" name="Lead"></facebook-pixel-event>
 
-    <paper-material>
+    <div class="paper-material card" elevation="2">
       <header>FREE</header>
       <ul>
         <li>Unlimited Repos</li>
@@ -57,20 +52,16 @@
           <paper-button rised on-tap="_appLinkTap">Go For It!</paper-button>
         </a>
       </footer>
-    </paper-material>
+    </div>
   </template>
   <script>
-  (() => {
-    'use strict';
-    class GcLandingPagePricingCard {
-      get is() {
-        return 'gc-landing-page-pricing-card';
-      }
+    class GcLandingPagePricingCard extends Polymer.Element {
+      static get is() { return 'gc-landing-page-pricing-card'; }
       _appLinkTap() {
         this.$.pixel.fire();
       }
     }
-    Polymer(GcLandingPagePricingCard);
-  })();
+
+    window.customElements.define(GcLandingPagePricingCard.is, GcLandingPagePricingCard);
   </script>
 </dom-module>

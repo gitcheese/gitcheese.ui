@@ -1,4 +1,4 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/iron-icons/editor-icons.html">
@@ -8,27 +8,24 @@
 <link rel="import" href="../../bower_components/app-layout/app-header/app-header.html">
 <link rel="import" href="../../bower_components/app-layout/app-header-layout/app-header-layout.html">
 <link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
-<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../bower_components/paper-card/paper-card.html">
-<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
-<link rel="import" href="../gc-styles/gc-shared-styles.html">
+<link rel="import" href="../gc-styles/gc-styles.html">
 <link rel="import" href="../gc-landing-page/gc-landing-page-section.html">
 <link rel="import" href="../gc-landing-page/gc-landing-page-scroll-down-button.html">
 <link rel="import" href="../gc-landing-page/gc-landing-page-pricing-card.html">
 <link rel="import" href="../gc-common/gc-icons.html">
-<link rel="import" href="../facebook-pixel/facebook-pixel-event.html">
+<!-- <link rel="import" href="../facebook-pixel/facebook-pixel-event.html"> -->
 
 <dom-module id="gc-landing-page">
   <template>
-    <style include="shared-styles"></style>
+    <style include="gc-styles"></style>
     <style>
     :host {
       display: block;
@@ -42,8 +39,8 @@
 
     .hero-toolbar {
       height: calc(100vh - 128px);
-      @apply(--layout-vertical);
-      @apply(--layout-center-center);
+      @apply --layout-vertical;
+      @apply --layout-center-center;
       text-transform: uppercase;
       text-align: center;
     }
@@ -54,8 +51,8 @@
     }
 
     .supported-countries-list {
-      @apply(--layout-horizontal);
-      @apply(--layout-wrap);
+      @apply --layout-horizontal;
+      @apply --layout-wrap;
     }
 
     .supported-countries-list paper-icon-item {
@@ -68,24 +65,23 @@
       }
     }
 
-    #why paper-material {
+    #why .paper-material {
       flex-basis: 100%;
     }
 
     @media (min-width: 601px) {
-      #why paper-material {
+      #why .paper-material {
         flex-basis: 25%;
       }
     }
 
-    paper-material {
-      border-radius: 2px;
+    .paper-material {
       text-align: center;
       margin: 1rem;
       min-width: 200px;
     }
 
-    paper-material > header {
+    .paper-material > header {
       font-size: 1.5em;
       text-align: center;
     }
@@ -96,14 +92,7 @@
       border-radius: 2px;
     }
 
-    gc-landing-page-section[alt] paper-input,
-    gc-landing-page-section[alt] paper-textarea {
-      --paper-input-container-color: var(--dark-theme-text-color);
-      --paper-input-container-focus-color: var(--dark-theme-text-color);
-      --paper-input-container-input-color: var(--dark-theme-text-color);
-    }
-
-    paper-material > iron-image {
+    .paper-material > iron-image {
       height: 80px;
       width: 160px;
     }
@@ -123,17 +112,17 @@
     <facebook-pixel-event id="pixel" name="Lead"></facebook-pixel-event>
 
     <app-drawer-layout force-narrow>
-      <app-drawer id="drawer" swipe-to-open>
+      <app-drawer id="drawer" slot="drawer" swipe-to-open>
         <paper-menu>
-          <paper-item target="[[whatSection]]" on-tap="scroll">What</paper-item>
-          <paper-item target="[[whySection]]" on-tap="scroll">Why</paper-item>
-          <paper-item target="[[pricingSection]]" on-tap="scroll">How Much</paper-item>
-          <paper-item target="[[whereSection]]" on-tap="scroll">Where</paper-item>
-          <paper-item target="[[contactSection]]" on-tap="scroll">Contact</paper-item>
+          <paper-item target="what" on-tap="scroll">What</paper-item>
+          <paper-item target="why" on-tap="scroll">Why</paper-item>
+          <paper-item target="pricing" on-tap="scroll">How Much</paper-item>
+          <paper-item target="where" on-tap="scroll">Where</paper-item>
+          <paper-item target="contact" on-tap="scroll">Contact</paper-item>
         </paper-menu>
       </app-drawer>
       <app-header-layout>
-        <app-header condenses reveals shadow effects="waterfall">
+        <app-header slot="header" condenses reveals shadow effects="waterfall">
           <app-toolbar>
             <template is="dom-if" if="[[mobile]]">
               <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
@@ -143,11 +132,11 @@
             </div>
             <template is="dom-if" if="[[!mobile]]">
               <paper-tabs id="menuTabs" menu selected="0">
-                <paper-tab target="[[whatSection]]" on-tap="scroll">What</paper-tab>
-                <paper-tab target="[[whySection]]" on-tap="scroll">Why</paper-tab>
-                <paper-tab target="[[pricingSection]]" on-tap="scroll">How Much</paper-tab>
-                <paper-tab target="[[whereSection]]" on-tap="scroll">Where</paper-tab>
-                <paper-tab target="[[contactSection]]" on-tap="scroll">Contact</paper-tab>
+                <paper-tab target="what" on-tap="scroll">What</paper-tab>
+                <paper-tab target="why" on-tap="scroll">Why</paper-tab>
+                <paper-tab target="pricing" on-tap="scroll">How Much</paper-tab>
+                <paper-tab target="where" on-tap="scroll">Where</paper-tab>
+                <paper-tab target="contact" on-tap="scroll">Contact</paper-tab>
               </paper-tabs>
             </template>
           </app-toolbar>
@@ -167,20 +156,20 @@
               <div>
                 <p>Gitcheese is simple way to donate open source projects!</p>
                 <template is="dom-if" if="[[mobile]]">
-                  <iron-image class="crowd" src="/../../images/crowd.png"></iron-image>
+                  <iron-image class="crowd" src="[[importPath]]../../images/crowd.png"></iron-image>
                 </template>
                 <p>We believe that software should be free (as in free speech) but that doesn’t mean there is not a place for tips! And who hasn’t wanted to tip another developer some cheese for having an awesome solution.</p>
               </div>
               <template is="dom-if" if="[[!mobile]]">
                 <div>
-                  <iron-image class="crowd" src="/../../images/crowd.png"></iron-image>
+                  <iron-image class="crowd" src="[[importPath]]../../images/crowd.png"></iron-image>
                 </div>
               </template>
             </div>
           </gc-landing-page-section>
           <gc-landing-page-section id="why" title="Why Gitcheese" alt>
             <div class="layout horizontal wrap">
-              <paper-material elevation="2">
+              <div class="paper-material card" elevation="2">
                 <header>Simple</header>
                 <p>
                   2 steps - login and copy-paste badge. Done!
@@ -188,42 +177,42 @@
                 <p>
                   Our mission is to engage open source donations so it has to be simple!
                 </p>
-              </paper-material>
-              <paper-material elevation="2">
-                <iron-image class="mark-github" src="/../../images/mark-github.svg" sizing="contain"></iron-image>
+              </div>
+              <div class="paper-material card" elevation="2">
+                <iron-image class="mark-github" src="[[importPath]]../../images/mark-github.svg" sizing="contain"></iron-image>
                 <header>GitHub</header>
                 <p>
                   All you need is a GitHub acccount - just login and enjoy Gitcheese!
                 </p>
-              </paper-material>
-              <paper-material elevation="2">
-                <iron-image class="gitcheese-badge" src="/../../images/badge.svg" sizing="contain"></iron-image>
+              </div>
+              <div class="paper-material card" elevation="2">
+                <iron-image class="gitcheese-badge" src="[[importPath]]../../images/badge.svg" sizing="contain"></iron-image>
                 <header>Badge</header>
                 <p>
                   Gitcheese donate badge for your repo readme file.
                 </p>
-              </paper-material>
-              <paper-material elevation="2">
-                <iron-image class="stripe" src="/../../images/powered_by_stripe.svg" sizing="contain"></iron-image>
+              </div>
+              <div class="paper-material card" elevation="2">
+                <iron-image class="stripe" src="[[importPath]]../../images/powered_by_stripe.svg" sizing="contain"></iron-image>
                 <header>Powered by Stripe</header>
                 <p>
                   Thanks to Stripe everything is taken care of for you - just sit and wait for donations!
                 </p>
-              </paper-material>
+              </div>
 
-              <paper-material elevation="2">
+              <div class="paper-material card" elevation="2">
                 <header>Secure</header>
                 <p>
                   We don't store your sesitive data - we almost dont store any data!
                 </p>
-              </paper-material>
-              <paper-material elevation="2">
-                <iron-image class="opensource" src="/../../images/opensource.svg" sizing="contain"></iron-image>
+              </div>
+              <div class="paper-material card" elevation="2">
+                <iron-image class="opensource" src="[[importPath]]../../images/opensource.svg" sizing="contain"></iron-image>
                 <header>Open Source</header>
                 <p>
                   This platform is for you, so feel free to contribute to Gitcheese.
                 </p>
-              </paper-material>
+              </div>
             </div>
           </gc-landing-page-section>
           <gc-landing-page-section id="pricing" title="How Much">
@@ -248,22 +237,22 @@
             <div class="supported-countries-list">
               <template is="dom-repeat" items="[[supportedCountries]]" sort="_sortCountries">
                 <paper-icon-item>
-                  <iron-image item-icon class="flag" src="/../../bower_components/flag-icon-css/flags/1x1/[[item.code]].svg" preload sizing="cover"></iron-image>
+                  <iron-image slot="item-icon" class="flag" src="[[importPath]]../../bower_components/flag-icon-css/flags/1x1/[[item.code]].svg" preload sizing="cover"></iron-image>
                   [[item.name]]
                 </paper-icon-item>
               </template>
             </div>
           </gc-landing-page-section>
           <gc-landing-page-section id="contact" title="contact">
-            <p>If you have any questions, please do not hesitate and reach us on Twitter or create issue/pr on one of our repos!</p>
-            <div class="layout horizontal center-center">
-              <a href="https://twitter.com/gitcheese" tabindex="-1" target="_blank">
-                <paper-icon-button class="giant" icon="gc:twitter"></paper-icon-button>
-              </a>
-              <a href="https://github.com/gitcheese" tabindex="-1" target="_blank">
-                <paper-icon-button class="giant" icon="gc:github"></paper-icon-button>
-              </a>
-            </div>
+              <p>If you have any questions, please do not hesitate and reach us on Twitter or create issue/pr on one of our repos!</p>
+              <div class="layout horizontal center-center">
+                <a href="https://twitter.com/gitcheese" tabindex="-1" target="_blank">
+                  <paper-icon-button class="giant" icon="gc:twitter"></paper-icon-button>
+                </a>
+                <a href="https://github.com/gitcheese" tabindex="-1" target="_blank">
+                  <paper-icon-button class="giant" icon="gc:github"></paper-icon-button>
+                </a>
+              </div>
           </gc-landing-page-section>
         </div>
         <footer>
@@ -277,34 +266,10 @@
     </app-drawer-layout>
   </template>
   <script>
-  (() => {
-    'use strict';
-    class GcLandingPage {
-      get is() {
-        return 'gc-landing-page';
-      }
-      get properties() {
+    class GcLandingPage extends Polymer.Element {
+      static get is() { return 'gc-landing-page'; }
+      static get properties() {
         return {
-          whatSection: {
-            type: Object,
-            value: () => this.$.what
-          },
-          whySection: {
-            type: Object,
-            value: () => this.$.why
-          },
-          whereSection: {
-            type: Object,
-            value: () => this.$.where
-          },
-          pricingSection: {
-            type: Object,
-            value: () => this.$.pricing
-          },
-          contactSection: {
-            type: Object,
-            value: () => this.$.contact
-          },
           supportedCountries: {
             type: Array,
             value: [{
@@ -384,11 +349,14 @@
           }
         };
       }
+      ready() {
+        super.ready();
+      }
       scroll(e) {
         if (this.$.drawer.opened) {
           this.$.drawer.toggle();
         }
-        e.currentTarget.target.scrollIntoView({
+        this.$[e.currentTarget.attributes['target'].value].scrollIntoView({
           behavior: 'smooth'
         });
       }
@@ -399,7 +367,7 @@
         this.$.pixel.fire();
       }
     }
-    Polymer(GcLandingPage);
-  })();
+
+    window.customElements.define(GcLandingPage.is, GcLandingPage);
   </script>
 </dom-module>

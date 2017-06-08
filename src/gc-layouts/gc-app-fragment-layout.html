@@ -1,4 +1,4 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../../bower_components/app-layout/app-header-layout/app-header-layout.html">
 <link rel="import" href="../../bower_components/app-layout/app-header/app-header.html">
@@ -9,71 +9,74 @@
 <link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/paper-progress/paper-progress.html">
-<link rel="import" href="../gc-styles/gc-shared-styles.html">
+<link rel="import" href="../gc-styles/gc-styles.html">
+
 <dom-module id="gc-app-fragment-layout">
   <template>
-    <style include="shared-styles"></style>
+    <style include="gc-styles"></style>
     <style>
-      .content-wrapper {
-        @apply(--layout-horizontal);
-        @apply(--layout-center-justified);
-      }
+    .content-wrapper {
+      @apply --layout-horizontal;
+      @apply --layout-center-justified;
+    }
 
+    .content {
+      max-width: 841px;
+      @apply --layout-flex;
+    }
+
+    @media (min-width: 842px) {
       .content {
-        max-width: 841px;
-        @apply(--layout-flex);
+        padding: 1rem;
       }
+      [narrow-layout-hidden] {
+        display: none;
+      }
+    }
+    @media (max-width: 841px) {
+      .content {
+        padding: 0;
+      }
+    }
 
-      @media (min-width: 842px) {
-        .content {
-          padding: 1rem;
-        }
-      }
-      @media (max-width: 841px) {
-        .content {
-          padding: 0;
-        }
-      }
+    paper-progress {
+      background-color: var(--primary-background-color);
+      transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 100%;
+      margin-bottom: -4px;
+      z-index: 103;
+    }
 
-      paper-progress {
-        background-color: var(--primary-background-color);
-        transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        width: 100%;
-        margin-bottom: -4px;
-        z-index: 103;
-      }
+    [main-title] ::slotted(a){
+      pointer-events: all;
+    }
 
-      [main-title] ::slotted(a){
-        pointer-events: all;
-      }
+    paper-progress[hide] {
+      opacity: 0;
+      pointer-events: none;
+    }
 
-      paper-progress[hide] {
-        opacity: 0;
-        pointer-events: none;
-      }
+    iron-image {
+      --iron-image-height: 50px;
+    }
 
-      iron-image {
-        --iron-image-height: 50px;
-      }
-
-      app-header-layout[has-scrolling-region] {
-        height: 100vh;
-      }
+    app-header-layout[has-scrolling-region] {
+      height: 100vh;
+    }
     </style>
-    <iron-signals on-iron-signal-drawer-layout-narrow-changed="_handleNarrowLayoutChanged"></iron-signals>
 
-    <app-header-layout>
-      <app-header reveals effects="waterfall">
+    <app-header-layout has-scrolling-region>
+      <app-header slot="header" reveals effects="waterfall">
         <app-toolbar>
-          <template is="dom-if" if="[[_showBurgerButton]]">
-            <paper-icon-button icon="menu" on-tap="_toggleDrawer"></paper-icon-button>
+          <template is="dom-if" if="[[burgerButton]]">
+            <paper-icon-button narrow-layout-hidden icon="menu" on-tap="_handleDrawerToggleTap"></paper-icon-button>
           </template>
           <template is="dom-if" if="[[backButton]]">
             <paper-icon-button icon="arrow-back" on-tap="_handleBackTap"></paper-icon-button>
           </template>
           <div main-title>
-            {{title}}
-            <slot select="[title-addon]"></slot>
+            [[title]]
+            <slot name="toolbar-title-addon"></slot>
           </div>
           <template is="dom-if" if="[[_narrowLayout]]">
             <iron-image src="../../images/logo.svg"></iron-image>
@@ -83,21 +86,17 @@
       <paper-progress hide$="{{!loading}}" indeterminate></paper-progress>
       <div class="content-wrapper">
         <div class="content">
-          <slot></slot>
+          <slot name="layout-content"></slot>
         </div>
       </div>
     </app-header-layout>
-
   </template>
   <script>
-  (() => {
-    'use strict';
-    class GcAppFragmentLayout {
-      get is() {
-        return 'gc-app-fragment-layout';
-      }
-      get properties() {
+    class GcAppFragmentLayout extends Polymer.Element {
+      static get is() { return 'gc-app-fragment-layout'; }
+      static get properties() {
         return {
+          title: String,
           burgerButton: {
             type: Boolean,
             value: false
@@ -115,38 +114,17 @@
           _requestsCounter: {
             type: Number,
             value: 0
-          },
-          _showBurgerButton: {
-            type: Boolean,
-            computed: '_computeShowBurgerButton(burgerButton, _narrowLayout)'
           }
         };
       }
-      get listeners() {
-        return {
-          'iron-ajax-request': '_handleRequestStarted',
-          'iron-ajax-response': '_handleRequestEnded',
-          'iron-ajax-error': '_handleRequestEnded'
-        };
-      }
-      attached() {
-        this.fire('iron-signal', {
-          name: 'update-drawer-layout'
-        });
+      ready() {
+        super.ready();
+        this.addEventListener('iron-ajax-request', e => this._handleRequestStarted(e));
+        this.addEventListener('iron-ajax-response', e => this._handleRequestEnded(e));
+        this.addEventListener('iron-ajax-error', e => this._handleRequestEnded(e));
       }
       _handleBackTap() {
         window.history.back();
-      }
-      _toggleDrawer() {
-        this.fire('iron-signal', {
-          name: 'toggle-drawer'
-        });
-      }
-      _handleNarrowLayoutChanged(e, data) {
-        this._narrowLayout = data.narrow;
-      }
-      _computeShowBurgerButton(burgerButton, _narrowLayout) {
-        return burgerButton && _narrowLayout;
       }
       _handleRequestStarted() {
         this._requestsCounter++;
@@ -157,8 +135,13 @@
       _computeLoading(counter) {
         return counter > 0;
       }
+      _handleDrawerToggleTap() {
+        this.dispatchEvent(new CustomEvent('drawer-toggle-tap', {
+          bubbles: true, composed: true
+        }));
+      }
     }
-    new Polymer(GcAppFragmentLayout);
-  })();
+
+    window.customElements.define(GcAppFragmentLayout.is, GcAppFragmentLayout);
   </script>
 </dom-module>

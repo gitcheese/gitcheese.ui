@@ -1,20 +1,20 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/iron-collapse/iron-collapse.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="../../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/neon-animation/web-animations.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
-<link rel="import" href="../gc-styles/gc-shared-styles.html">
+<link rel="import" href="../gc-styles/gc-styles.html">
 <link rel="import" href="../gc-common/gc-api-ajax.html">
-<link rel="import" href="../gc-user/gc-user-managed-accounts-info-behavior.html">
+<link rel="import" href="../gc-user/gc-user-managed-accounts-info.html">
 
 <dom-module id="gc-user-managed-accounts-legal-entity-info">
   <template>
-    <style include="shared-styles"></style>
+    <style include="gc-styles"></style>
     <style>
     :host {
       cursor: pointer;
@@ -36,44 +36,33 @@
         <i>You already submited personal informations</i>
       </template>
       <template is="dom-if" if="[[fieldsMissing]]">
-        <form id="form" is="iron-form">
-          <div class="layout horizontal">
-            <paper-dropdown-menu class="flex" label="Type">
-              <paper-listbox class="dropdown-content" selected="0" on-selected-item-changed="_handleTypeChanged">
-                <paper-item type="individual">Individual</paper-item>
-                <paper-item type="company">Company</paper-item>
-              </paper-listbox>
-            </paper-dropdown-menu>
-          </div>
-          <div class="layout horizontal">
-            <paper-input class="flex" value="{{newInfo.legalEntityFirstName}}" label="First Name" required auto-validate error-message="First Name is required."></paper-input>
-            <paper-input class="flex" value="{{newInfo.legalEntityLastName}}" label="Last Name" required auto-validate error-message="Last Name is required."></paper-input>
-          </div>
-          <div class="layout horizontal flex">
-            <paper-input class="flex" value="{{newInfo.legalEntityDobDay}}" label="Date Of Birth - Day" type="number" required auto-validate error-message="Date Of Birth - Day is required."></paper-input>
-            <paper-input class="flex" value="{{newInfo.legalEntityDobMonth}}" label="Date Of Birth - Month" type="number" required auto-validate error-message="Date Of Birth - Month is required."></paper-input>
-            <paper-input class="flex" value="{{newInfo.legalEntityDobYear}}" label="Date Of Birth - Year" type="number" required auto-validate error-message="Date Of Birth - Year is required."></paper-input>
-          </div>
-          <div actions>
-            <paper-button on-tap="_submit">submit</paper-button>
-          </div>
-        </form>
+        <div class="layout horizontal">
+          <paper-dropdown-menu class="flex" label="Type">
+            <paper-listbox slot="dropdown-content" selected="0" on-selected-item-changed="_handleTypeChanged">
+              <paper-item type="individual">Individual</paper-item>
+              <paper-item type="company">Company</paper-item>
+            </paper-listbox>
+          </paper-dropdown-menu>
+        </div>
+        <div class="layout horizontal">
+          <paper-input class="flex" value="{{newInfo.legalEntityFirstName}}" label="First Name" required auto-validate error-message="First Name is required."></paper-input>
+          <paper-input class="flex" value="{{newInfo.legalEntityLastName}}" label="Last Name" required auto-validate error-message="Last Name is required."></paper-input>
+        </div>
+        <div class="layout horizontal flex">
+          <paper-input class="flex" value="{{newInfo.legalEntityDobDay}}" label="Date Of Birth - Day" type="number" required auto-validate error-message="Date Of Birth - Day is required."></paper-input>
+          <paper-input class="flex" value="{{newInfo.legalEntityDobMonth}}" label="Date Of Birth - Month" type="number" required auto-validate error-message="Date Of Birth - Month is required."></paper-input>
+          <paper-input class="flex" value="{{newInfo.legalEntityDobYear}}" label="Date Of Birth - Year" type="number" required auto-validate error-message="Date Of Birth - Year is required."></paper-input>
+        </div>
+        <div class="action-buttons">
+          <paper-button on-tap="_submit">submit</paper-button>
+        </div>
       </template>
     </iron-collapse>
   </template>
   <script>
-  (() => {
-    'use strict';
-    class GcUserManagedAccountsLegalEntityInfo {
-      get is() {
-        return 'gc-user-managed-accounts-legal-entity-info';
-      }
-      get behaviors() {
-        return [
-          GitcheeseBehaviors.UserManagedAccountsInfoBehavior
-        ];
-      }
-      get properties() {
+    class GcUserManagedAccountsLegalEntityInfo extends UserManagedAccountsInfo {
+      static get is() { return 'gc-user-managed-accounts-legal-entity-info'; }
+      static get properties() {
         return {
           newInfo: {
             type: Object,
@@ -82,6 +71,7 @@
         };
       }
       ready() {
+        super.ready();
         this.fields.push('legal_entity.last_name',
           'legal_entity.first_name',
           'legal_entity.dob.year',
@@ -93,11 +83,14 @@
         this.newInfo.legalEntityType = data.value.attributes['type'].value;
       }
       _submit() {
-        if (!this.$$('#form').validate()) return;
+        let valid = true;
+        this.shadowRoot.querySelectorAll('paper-input')
+          .forEach((f) => { valid = valid && f.validate(); });
+        if (!valid) return;
         this.$.put.generateRequest();
       }
     }
-    new Polymer(GcUserManagedAccountsLegalEntityInfo);
-  })();
+
+    window.customElements.define(GcUserManagedAccountsLegalEntityInfo.is, GcUserManagedAccountsLegalEntityInfo);
   </script>
 </dom-module>
