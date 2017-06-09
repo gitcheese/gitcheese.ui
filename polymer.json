@@ -21,7 +21,14 @@
   ],
   "extraDependencies": [
     "manifest.json",
-    "bower_components/webcomponentsjs/webcomponents-loader.js",
+    "bower_components/webcomponentsjs/**/*",
     "bower_components/flag-icon-css/**/*"
-  ]
+  ],
+  "builds": [{
+    "addServiceWorker": true,
+    "bundle": true,
+    "js": {"minify": true, "compile": true},
+    "css": {"minify": true},
+    "html": {"minify": true}
+  }]
 }

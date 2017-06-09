@@ -10,4 +10,4 @@ install:
 before_script:
   - npm run build
 script:
-  - aws s3 sync --acl public-read --delete build s3://gitcheese-ui-$TRAVIS_BRANCH
+  - aws s3 sync --acl public-read --delete build/default s3://gitcheese-ui-$TRAVIS_BRANCH
